@@ -16,7 +16,10 @@ core::scan_state::scan_state(const scan_state & state)
 
 wchar_t core::scan_state::get_char()
 {
-    return this->_input[_location];
+    if (this->_location > this->_input.size()) {
+        throw exceptions::argument_out_of_range(this->_location);
+    }
+    return this->_input[this->_location];
 }
 
 void core::scan_state::try_scan_integer()

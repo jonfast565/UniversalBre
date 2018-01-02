@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include "exceptions.h"
 
 namespace core {
     class scan_state

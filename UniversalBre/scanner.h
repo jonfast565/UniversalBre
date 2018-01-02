@@ -4,15 +4,16 @@
 #include <memory>
 #include "scan_state.h"
 
+using ref_scan_state = std::unique_ptr<core::scan_state>;
+
 namespace core {
     class scanner
     {
     private:
-        std::unique_ptr<scan_state> initial_state;
-        std::unique_ptr<scan_state> get_initial_state();
+        ref_scan_state get_initial_state(const std::wstring& input);
     public:
-        scanner(const std::wstring& input);
-        ~scanner();
+        scanner() {};
+        virtual ~scanner() {};
     };
 }
 
