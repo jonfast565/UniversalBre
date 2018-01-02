@@ -20,6 +20,7 @@ namespace core {
         scan_state(const scan_state& state);
 
         wchar_t get_char();
+        void skip_whitespace();
         void scan_integer();
 
         virtual ~scan_state();

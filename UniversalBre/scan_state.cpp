@@ -28,6 +28,17 @@ wchar_t core::scan_state::get_char()
     return this->_input[this->_location];
 }
 
+void core::scan_state::skip_whitespace()
+{
+    int temp_ctr = 0;
+    wchar_t c;
+    do {
+        c = get_char();
+        temp_ctr++;
+    } while (utility::is_whitespace(c));
+    increment_location(temp_ctr);
+}
+
 void core::scan_state::scan_integer()
 {
 

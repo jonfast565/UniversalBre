@@ -155,6 +155,7 @@
     <ClInclude Include="program_header.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="scan_state.h" />
+    <ClInclude Include="token.h" />
     <ClInclude Include="token_types.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="win_colors.h" />
