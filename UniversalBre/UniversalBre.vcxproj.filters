@@ -51,6 +51,12 @@
     <ClInclude Include="exceptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="program_header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="global_defines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -150,7 +150,9 @@
     <ClInclude Include="console_handler.h" />
     <ClInclude Include="console_waiter.h" />
     <ClInclude Include="exceptions.h" />
+    <ClInclude Include="global_defines.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="program_header.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="scan_state.h" />
     <ClInclude Include="token_types.h" />
