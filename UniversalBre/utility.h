@@ -1,6 +1,10 @@
 #pragma once
 
 #include <vector>
+#include <locale>
+#include <codecvt>
+#include <algorithm>
+#include <string>
 
 #include <stdio.h>
 #include <wchar.h>
@@ -23,6 +27,10 @@ public:
     // array utils
     template <typename T>
     static std::vector<T> array_to_vector(const T arr[]);
+
+    // string utils
+    static const char* wstring_to_cstr(std::wstring wide_string);
+    static std::wstring cstr_to_wstring(const char* c_str);
 };
 
 namespace core {

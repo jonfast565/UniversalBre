@@ -14,6 +14,7 @@ namespace core {
         virtual ~token() {};
 
         token_type get_type() { return _token_type; }
+        std::wstring get_lexeme() { return _lexeme; }
     };
 }
 

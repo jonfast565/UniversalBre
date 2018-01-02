@@ -13,7 +13,7 @@ namespace core {
     public:
         scanner() {};
         virtual ~scanner() {};
-        void scan_all(const std::wstring& input);
+        std::vector<core::token> scan_all(const std::wstring& input);
     };
 }
 

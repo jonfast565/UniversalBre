@@ -12,7 +12,8 @@ namespace core {
         MULTIPLY_OPERATOR,
         DIVIDE_OPERATOR,
         CONCAT_OPERATOR,
-        END_OF_FILE
+        END_OF_FILE,
+        INVALID
     };
 
     static std::wstring get_type_string(token_type type) {

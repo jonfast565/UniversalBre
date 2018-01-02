@@ -10,7 +10,7 @@ namespace exceptions {
         long _index = 0;
     public:
         argument_out_of_range(int index) : _index(index) {}
-        virtual const char* what() const throw() {
+        const char* what() const throw() {
             auto except_str = "Index " + std::to_string(this->_index) + " out of bounds";
             return except_str.c_str();
         }
@@ -22,7 +22,7 @@ namespace exceptions {
         std::string _token_name;
     public:
         scan_failure(std::string token_name) : _token_name(_token_name) {}
-        virtual const char* what() const throw() {
+        const char* what() const throw() {
             auto except_str = "Scan failure, tried " + _token_name;
             return except_str.c_str();
         }

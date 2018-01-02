@@ -57,3 +57,19 @@ bool utility::is_not_whitespace(const wchar_t possible_whitespace)
 {
     return !is_whitespace(possible_whitespace);
 }
+
+const char * utility::wstring_to_cstr(std::wstring wide_string)
+{
+    using convert_type = std::codecvt_utf8<wchar_t>;
+    std::wstring_convert<convert_type, wchar_t> converter;
+    std::string converted_str = converter.to_bytes(wide_string);
+    return converted_str.c_str();
+}
+
+std::wstring utility::cstr_to_wstring(const char * c_str)
+{
+    std::string intermediate(c_str);
+    std::wstring temp(intermediate.length(), L' ');
+    std::copy(intermediate.begin(), intermediate.end(), temp.begin());
+    return temp;
+}
