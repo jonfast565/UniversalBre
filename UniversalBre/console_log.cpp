@@ -48,6 +48,7 @@ void core::console_log::just_log(const std::wstring& message) {
 
 void core::console_log::set_console_font()
 {
+#ifdef _WIN32
     CONSOLE_FONT_INFOEX cfi;
     cfi.cbSize = sizeof(cfi);
     cfi.nFont = 0;
@@ -55,10 +56,9 @@ void core::console_log::set_console_font()
     cfi.dwFontSize.Y = 16;
     cfi.FontFamily = FF_DONTCARE;
     cfi.FontWeight = FW_NORMAL;
-#ifdef _WIN32
     wcsncpy_s(cfi.FaceName, DEFAULT_FONT, wcslen(DEFAULT_FONT));
-#else
-    std::wcscpy(cfi.FaceName, DEFAULT_FONT); // Choose your font
-#endif
     SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+#else
+    // TODO: IMPLEMENT MAC/LINUX SPECIFIC CODE HERE
+#endif
 }
