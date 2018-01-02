@@ -15,3 +15,45 @@ bool utility::is_alpha_digit(const wchar_t possible_alpha_digit)
 {
     return is_digit(possible_alpha_digit) || is_alpha(possible_alpha_digit);
 }
+
+bool utility::is_dot(const wchar_t possible_dot)
+{
+    return possible_dot == L'.';
+}
+
+bool utility::is_underscore(const wchar_t possible_underscore)
+{
+    return possible_underscore == L'_';
+}
+
+bool utility::is_specific_char(const wchar_t current_char, const wchar_t possible_specific_char, bool case_invariant)
+{
+    if (!case_invariant) {
+        return current_char == possible_specific_char;
+    }
+    return towlower(current_char) == towlower(possible_specific_char);
+}
+
+bool utility::is_charset(const wchar_t possible_charset, const std::vector<wchar_t> charset)
+{
+    for (auto char_iter : charset) {
+        if (possible_charset == char_iter)
+            return true;
+    }
+    return false;
+}
+
+bool utility::is_not_charset(const wchar_t possible_charset, const std::vector<wchar_t> charset)
+{
+    return !is_charset(possible_charset, charset);
+}
+
+bool utility::is_whitespace(const wchar_t possible_whitespace)
+{
+    return is_charset(possible_whitespace, array_to_vector<wchar_t>(core::whitespace_chars));
+}
+
+bool utility::is_not_whitespace(const wchar_t possible_whitespace)
+{
+    return !is_whitespace(possible_whitespace);
+}

@@ -1,10 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <memory>
 #include "scan_state.h"
-
-using ref_scan_state = std::unique_ptr<core::scan_state>;
 
 namespace core {
     class scanner
