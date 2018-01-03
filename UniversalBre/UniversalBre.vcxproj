@@ -153,6 +153,7 @@
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="global_defines.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="parser.h" />
     <ClInclude Include="program_header.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="scan_state.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="console_log.cpp" />
     <ClCompile Include="console_waiter.cpp" />
     <ClCompile Include="exceptions.cpp" />
+    <ClCompile Include="parser.cpp" />
     <ClCompile Include="scanner.cpp" />
     <ClCompile Include="scan_state.cpp" />
     <ClCompile Include="main.cpp" />

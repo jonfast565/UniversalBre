@@ -34,14 +34,27 @@ namespace core {
         void skip_whitespace();
 
         // scan methods
+        // literals
         token scan_integer_literal();
         token scan_string_literal();
         token scan_identifier();
+        token scan_float_literal();
+
+        // operators
         token scan_plus_operator();
         token scan_minus_operator();
         token scan_multiply_operator();
         token scan_divide_operator();
-        token scan_float_literal();
+
+        // parenthesis
+        token scan_left_parenthesis();
+        token scan_right_parenthesis();
+
+        // file delimiters
+        token scan_end_of_file();
+        
+        // scan delimiters
+        bool out_of_range();
     };
 }
 

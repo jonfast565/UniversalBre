@@ -21,6 +21,10 @@ namespace core {
         DIVIDE_OPERATOR,
         CONCAT_OPERATOR,
 
+        // parenthesis
+        LEFT_PARENTHESIS,
+        RIGHT_PARENTHESIS,
+
         // error state
         // used for initialization only
         INVALID

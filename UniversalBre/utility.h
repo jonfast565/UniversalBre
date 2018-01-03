@@ -2,6 +2,11 @@
 
 #include "global_defines.h"
 
+namespace core {
+    // initialize whitespace definition
+    const wchar_t whitespace_chars[] = { ' ', '\r\n', '\n', '\v', '\t' };
+}
+
 class utility {
 public:
     // scanner ops
@@ -27,11 +32,6 @@ public:
     // string concat utils
     static const void concat_in_place(const wchar_t ** result, const int count, ...);
 };
-
-namespace core {
-    // initialize whitespace definition
-    const wchar_t whitespace_chars[] = { ' ', '\r\n', '\n', '\v', '\t' };
-}
 
 template<typename T>
 inline std::vector<T> utility::array_to_vector(const T arr[])

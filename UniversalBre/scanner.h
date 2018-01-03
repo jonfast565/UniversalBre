@@ -10,12 +10,14 @@ namespace core {
     {
     private:
         log & _log_object;
-        scan_state get_initial_state(const std::wstring& input);
     public:
         // ctor/dtor
         scanner(core::log& log_object);
         virtual ~scanner();
         
+        // state fn
+        scan_state get_initial_state(const std::wstring& input);
+
         // get one
         token scan_one(scan_state& state, token_type type);
     };
