@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="atom_status.h" />
     <ClInclude Include="console_handler.h" />
     <ClInclude Include="console_waiter.h" />
     <ClInclude Include="exceptions.h" />
@@ -163,10 +164,15 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="atom_status.cpp" />
+    <ClCompile Include="console_handler.cpp" />
     <ClCompile Include="console_log.cpp" />
+    <ClCompile Include="console_waiter.cpp" />
+    <ClCompile Include="exceptions.cpp" />
     <ClCompile Include="scanner.cpp" />
     <ClCompile Include="scan_state.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="token.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

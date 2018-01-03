@@ -10,9 +10,6 @@ namespace core {
     public:
         console_waiter() {}
         virtual ~console_waiter() {}
-        void wait() {
-            std::cout << "Press any key to continue..." << std::endl;
-            _getch();
-        }
+        void wait();
     };
 }

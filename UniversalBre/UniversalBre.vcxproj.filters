@@ -57,6 +57,9 @@
     <ClInclude Include="token.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="atom_status.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -72,6 +75,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="exceptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="atom_status.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="console_waiter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="token.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="console_handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

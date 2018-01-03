@@ -5,6 +5,14 @@ core::scan_state core::scanner::get_initial_state(const std::wstring& input)
     return scan_state(std::wstring(input));
 }
 
+core::scanner::scanner(core::log & log_object) : _log_object(log_object)
+{
+}
+
+core::scanner::~scanner()
+{
+}
+
 core::token core::scanner::scan_one(scan_state& state, token_type type)
 {
     bool failed = false;

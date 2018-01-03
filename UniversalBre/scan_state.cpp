@@ -1,4 +1,5 @@
 #include "scan_state.h"
+#include "atom_status.h"
 
 void core::scan_state::increment_location(int increment)
 {
@@ -54,21 +55,55 @@ core::token core::scan_state::scan_integer_literal()
 {
     std::wstring result;
     while (true) {
-        auto is_digit = utility::is_digit(get_char());
-        auto is_whitespace = utility::is_whitespace(get_char());
-        if (!is_digit && !is_whitespace 
-            || is_whitespace && result.empty()) {
+        auto atom_status = core::atom_status(get_char());
+        if (!atom_status.is_digit() && !atom_status.is_whitespace()
+            || atom_status.is_digit() && atom_status.is_empty()) {
             throw exceptions::scan_failure(get_char(), L"integer");
         }
-        if (is_digit && !is_whitespace) {
+        if (atom_status.is_digit() && !atom_status.is_whitespace()) {
             result += get_char();
             increment_location(1);
         }
-        if (is_whitespace) {
+        if (atom_status.is_whitespace()) {
             break;
         }
     }
     return token(token_type::INTEGER_LITERAL, result);
+}
+
+core::token core::scan_state::scan_string_literal()
+{
+    return core::token(token_type::STRING_LITERAL);
+}
+
+core::token core::scan_state::scan_identifier()
+{
+    return core::token(token_type::IDENTIFIER);
+}
+
+core::token core::scan_state::scan_plus_operator()
+{
+    return core::token(token_type::PLUS_OPERATOR);
+}
+
+core::token core::scan_state::scan_minus_operator()
+{
+    return core::token(token_type::MINUS_OPERATOR);
+}
+
+core::token core::scan_state::scan_multiply_operator()
+{
+    return core::token(token_type::MULTIPLY_OPERATOR);
+}
+
+core::token core::scan_state::scan_divide_operator()
+{
+    return core::token(token_type::DIVIDE_OPERATOR);
+}
+
+core::token core::scan_state::scan_float_literal()
+{
+    return core::token(token_type::FLOAT_LITERAL);
 }
 
 core::scan_state::~scan_state()
