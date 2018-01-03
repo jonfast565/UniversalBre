@@ -14,5 +14,3 @@ namespace core {
         L"Author: Jon Fast " WIDE_NEWLINE
         L"Last Modified: 1/1/2018 " WIDE_NEWLINE;
 }
-
-#define PROGRAM_HEADER core::header

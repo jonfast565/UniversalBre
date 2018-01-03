@@ -1,25 +1,18 @@
 #pragma once
 
+#include "global_defines.h"
 #include "log.h"
-#include <iostream>
-
-#ifdef _WIN32
-#include <windows.h>
-#include "win_colors.h"
-#include <string.h>  
-#include <stdlib.h>  
-#include <stdio.h>  
-#include <errno.h>  
-#define DEFAULT_FONT L"Courier"
-#endif
 
 namespace core {
     class console_log :
         public log
     {
     public:
+        // ctor/dtor
         console_log() : log() {};
         ~console_log() {};
+
+        // same as described in interfaces
         void log_warning(const std::wstring& warn_message);
         void log_error(const std::wstring& error_message);
         void log_default(const std::wstring& message);

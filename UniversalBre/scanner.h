@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iostream>
+#include "global_defines.h"
 #include "scan_state.h"
 #include "token.h"
 

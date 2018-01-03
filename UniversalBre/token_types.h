@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include "global_defines.h"
 
 namespace core {
     enum token_type {

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "console_log.h"
 
 void core::console_log::log_default(const std::wstring& message) {

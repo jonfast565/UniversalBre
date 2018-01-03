@@ -1,14 +1,6 @@
 #pragma once
 
-#include <vector>
-#include <locale>
-#include <codecvt>
-#include <algorithm>
-#include <string>
-
-#include <stdio.h>
-#include <wchar.h>
-#include <wctype.h>
+#include "global_defines.h"
 
 class utility {
 public:

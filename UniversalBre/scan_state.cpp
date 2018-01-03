@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "scan_state.h"
 
 void core::scan_state::increment_location(int increment)
@@ -58,7 +57,7 @@ core::token core::scan_state::try_scan_integer()
         auto is_whitespace = utility::is_whitespace(get_char());
         if (!is_digit && !is_whitespace 
             || is_whitespace && result.empty()) {
-            throw exceptions::scan_failure("Expected integer, got " + get_char());
+            throw exceptions::scan_failure(L"Expected integer, got " + get_char());
         }
         if (is_digit && !is_whitespace) {
             result += get_char();

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "scanner.h"
 
 core::scan_state core::scanner::get_initial_state(const std::wstring& input)
@@ -19,7 +18,7 @@ core::token core::scanner::scan_one(scan_state& state)
     }
 
     if (failed) {
-        throw exceptions::scan_failure("FATAL");
+        throw exceptions::scan_failure(L"FATAL");
     }
 
     return tok;

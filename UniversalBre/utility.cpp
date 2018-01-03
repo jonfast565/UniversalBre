@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "utility.h"
 
 bool utility::is_digit(const wchar_t possible_digit)

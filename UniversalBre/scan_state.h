@@ -1,9 +1,9 @@
 #pragma once
 
-#include <iostream>
-#include <memory>
+#include "global_defines.h"
 #include "exceptions.h"
 #include "utility.h"
+
 #include "token_types.h"
 #include "token.h"
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "global_defines.h"
 #include "token_types.h"
 
 namespace core {

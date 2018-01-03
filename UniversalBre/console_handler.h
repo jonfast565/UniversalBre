@@ -1,14 +1,15 @@
 #pragma once
 
-#include <iostream>
-#include <string>
+#include "global_defines.h"
 
 namespace core {
     class console_handler {
     public:
+
         console_handler() {}
         virtual ~console_handler() {}
 
+        // for a single interactive input
         std::wstring get_interactive_input() {
             std::wcout << L"> ";
             std::wstring input;
@@ -16,6 +17,8 @@ namespace core {
             return input;
         }
 
+        // for multiple interactive inputs
+        // that two newlines terminate
         std::wstring get_interactive_multiple_input() {
             std::wstring result;
             std::wstring input;
