@@ -23,6 +23,9 @@ public:
     // string utils
     static const char* wstring_to_cstr(std::wstring wide_string);
     static std::wstring cstr_to_wstring(const char* c_str);
+
+    // string concat utils
+    static const void concat_in_place(const wchar_t ** result, const int count, ...);
 };
 
 namespace core {

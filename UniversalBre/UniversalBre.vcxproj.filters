@@ -24,9 +24,6 @@
     <ClInclude Include="console_log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="win_colors.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="console_waiter.h">
       <Filter>Header Files</Filter>
     </ClInclude>

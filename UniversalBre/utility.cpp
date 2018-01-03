@@ -72,3 +72,20 @@ std::wstring utility::cstr_to_wstring(const char * c_str)
     std::copy(intermediate.begin(), intermediate.end(), temp.begin());
     return temp;
 }
+
+const void utility::concat_in_place(const wchar_t ** result, const int count, ...)
+{
+    va_list list;
+    va_start(list, count);
+    std::wstring temp;
+    for (int i = 0; i < count; i++) {
+        auto argument = va_arg(list, const wchar_t *);
+        temp += std::wstring(argument);
+    }
+    va_end(list);
+
+    // Must free after using this method, srsly
+    // this is a bad pattern, exposing the caller to memory mgmt
+    // TODO: Implement something better
+    *result = _wcsdup(temp.c_str());
+}

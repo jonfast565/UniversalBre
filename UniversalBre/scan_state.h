@@ -25,7 +25,7 @@ namespace core {
         wchar_t get_char();
         wchar_t get_char(int offset);
         void skip_whitespace();
-        token try_scan_integer();
+        token scan_integer_literal();
 
         virtual ~scan_state();
     };

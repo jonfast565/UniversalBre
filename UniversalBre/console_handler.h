@@ -5,7 +5,7 @@
 namespace core {
     class console_handler {
     public:
-
+        // ctor/dtor
         console_handler() {}
         virtual ~console_handler() {}
 

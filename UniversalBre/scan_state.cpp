@@ -32,7 +32,8 @@ wchar_t core::scan_state::get_char()
 
 wchar_t core::scan_state::get_char(int offset)
 {
-    if (this->_location + offset >= this->_input.size() || this->_location + offset < 0) {
+    if (this->_location + offset >= this->_input.size() 
+        || this->_location + offset < 0) {
         throw exceptions::argument_out_of_range(this->_location + offset);
     }
     return this->_input[this->_location + offset];
@@ -49,7 +50,7 @@ void core::scan_state::skip_whitespace()
     increment_location(temp_ctr);
 }
 
-core::token core::scan_state::try_scan_integer()
+core::token core::scan_state::scan_integer_literal()
 {
     std::wstring result;
     while (true) {
@@ -57,7 +58,7 @@ core::token core::scan_state::try_scan_integer()
         auto is_whitespace = utility::is_whitespace(get_char());
         if (!is_digit && !is_whitespace 
             || is_whitespace && result.empty()) {
-            throw exceptions::scan_failure(L"Expected integer, got " + get_char());
+            throw exceptions::scan_failure(get_char(), L"integer");
         }
         if (is_digit && !is_whitespace) {
             result += get_char();

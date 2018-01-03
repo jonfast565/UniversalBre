@@ -9,6 +9,9 @@
 #define WIDE_NEWLINE L"\n"
 #endif
 
+// Defines: max constant string length
+#define MAX_STRING 10000
+
 // Defines: default console font
 #define DEFAULT_FONT L"Courier"
 
@@ -44,5 +47,21 @@
 #include <locale>
 #include <codecvt>
 #include <algorithm>
+#include <cstdarg>
+
+// Functionality: Cause Windows to properly handle assert()
+#ifdef EHA_SET
+
+// define a function that throws
+extern "C" void straight_to_debugger(unsigned int, EXCEPTION_POINTERS*)
+{
+    throw;
+}
+
+// set the intrinsic exception xlator to that one
+extern "C" void(*old_translator)(unsigned, EXCEPTION_POINTERS*)
+    = _set_se_translator(straight_to_debugger);
+
+#endif
 
 // Defines/Includes: add beneath this line
