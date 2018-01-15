@@ -9,17 +9,20 @@ namespace core {
     class scanner
     {
     private:
-        log & _log_object;
+        // scan logging
+        log_ptr_s _log_object;
+
+        // initial scanning + state ops
+        token scan_one(scan_state_ptr_s state);
+        scan_state get_initial_state(const std::wstring& input);
     public:
         // ctor/dtor
-        scanner(core::log& log_object);
+        scanner(core::log_ptr_s log_object);
         virtual ~scanner();
-        
-        // state fn
-        scan_state get_initial_state(const std::wstring& input);
 
-        // get one
-        token scan_one(scan_state& state, token_type type);
+        // scan and provide a vector
+        core::token_vecptr_s scan_all(const std::wstring& input);
     };
+    PTR_ALIAS(scanner)
 }
 

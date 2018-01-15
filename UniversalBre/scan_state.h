@@ -3,7 +3,7 @@
 #include "global_defines.h"
 #include "exceptions.h"
 #include "utility.h"
-
+#include "atom_status.h"
 #include "token_types.h"
 #include "token.h"
 
@@ -23,6 +23,7 @@ namespace core {
 
         // utilities
         void increment_location(int increment);
+        atom_status_ptr_s get_char_atom();
     public:
         scan_state(std::wstring input);
         scan_state(const scan_state& state);
@@ -35,26 +36,28 @@ namespace core {
 
         // scan methods
         // literals
-        token scan_integer_literal();
-        token scan_string_literal();
-        token scan_identifier();
-        token scan_float_literal();
+        token try_scan_integer_literal();
+        token try_scan_string_literal();
+        token try_scan_identifier();
+        token try_scan_float_literal();
 
         // operators
-        token scan_plus_operator();
-        token scan_minus_operator();
-        token scan_multiply_operator();
-        token scan_divide_operator();
+        token try_scan_plus_operator();
+        token try_scan_minus_operator();
+        token try_scan_multiply_operator();
+        token try_scan_divide_operator();
+        token try_scan_concat_operator();
 
         // parenthesis
-        token scan_left_parenthesis();
-        token scan_right_parenthesis();
+        token try_scan_left_parenthesis();
+        token try_scan_right_parenthesis();
 
         // file delimiters
-        token scan_end_of_file();
+        token try_scan_end_of_file();
         
         // scan delimiters
         bool out_of_range();
     };
+    PTR_ALIAS(scan_state)
 }
 

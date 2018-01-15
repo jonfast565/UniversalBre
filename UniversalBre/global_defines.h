@@ -24,11 +24,13 @@
 #define WIN_YELLOW 14
 #define WIN_RED 12
 #define WIN_WHITE 15
+#define WIN_GREEN 2
 #endif
 
 // Includes: Windows/Linux C library subsystem includes
 #ifdef _WIN32
 #include <windows.h>
+#include <conio.h>
 #endif
 
 // ... the rest ...
@@ -44,6 +46,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <map>
 #include <locale>
 #include <codecvt>
 #include <algorithm>
@@ -63,5 +66,18 @@ extern "C" void(*old_translator)(unsigned, EXCEPTION_POINTERS*)
     = _set_se_translator(straight_to_debugger);
 
 #endif
+
+// ptr macros
+#define UNIQUE_PTR_ALIAS(x) using x##_ptr_u = std::unique_ptr<x>; 
+#define UNIQUE_VECPTR_ALIAS(x) using x##_vecptr_u = std::unique_ptr<std::vector<x>>;
+#define SHARED_PTR_ALIAS(x) using x##_ptr_s = std::shared_ptr<x>;
+#define SHARED_VECPTR_ALIAS(x) using x##_vecptr_s = std::shared_ptr<std::vector<x>>;
+
+#define PTR_ALIAS(x) UNIQUE_PTR_ALIAS(x) \
+                     UNIQUE_VECPTR_ALIAS(x) \
+                     SHARED_PTR_ALIAS(x) \
+                     SHARED_VECPTR_ALIAS(x)
+
+# define VEC_ALIAS(x) using x##_vec = std::vector<x>;
 
 // Defines/Includes: add beneath this line

@@ -1,53 +1,76 @@
 #include "parser.h"
 
-core::parser::parser(scanner & s, std::wstring & input) :  _s(s),
-    _program_scan_state(_s.get_initial_state(input))
-{
-}
-
-core::parser::~parser()
-{
-}
-
 void core::parser::parse()
 {
+    _log_object->log_debug(L"Parse program");
     parse_program();
+}
+
+core::token_type core::parser::get_cur_type()
+{
+    return _tokens->at(_location).get_type();
+}
+
+core::token_type core::parser::get_next_type()
+{
+    // TODO: Naive, could cause major error 
+    // if bounds aren't properly checked
+    return _tokens->at(_location + 1).get_type();
+}
+
+void core::parser::match_increment(
+    token_type actual, 
+    token_type expected)
+{
+    auto actual_str_type = get_token_type_string(actual);
+    auto expected_str_type = get_token_type_string(expected);
+
+    if (actual == expected)
+        _log_object->log_success(L"Matched " + actual_str_type + L" with " + expected_str_type);
+
+    if (actual != expected) {
+        throw exceptions::parse_failure(
+            utility::wstring_to_wcstr(actual_str_type),
+            utility::wstring_to_wcstr(expected_str_type));
+    }
+    _location++;
 }
 
 void core::parser::parse_program()
 {
+    _log_object->log_debug(L"Parse expression");
     parse_expression();
 }
 
 void core::parser::parse_expression()
 {
-    switch (_program_scan_state.get_char()) {
-    case L'(':
-        _program_scan_state.scan_left_parenthesis();
-        parse_expression();
-        _program_scan_state.scan_right_parenthesis();
+    switch (get_cur_type()) {
+    case token_type::LEFT_PARENTHESIS:
+        match_increment(get_cur_type(), token_type::LEFT_PARENTHESIS);
+        parse_single_expression();
+        match_increment(get_cur_type(), token_type::RIGHT_PARENTHESIS);
         break;
     default:
         parse_single_expression();
     }
-    _program_scan_state.scan_end_of_file();
+    match_increment(get_cur_type(), token_type::END_OF_FILE);
 }
 
 void core::parser::parse_single_expression()
 {
-    _program_scan_state.scan_integer_literal();
-    switch (_program_scan_state.get_char()) {
-    case L'+':
-        _program_scan_state.scan_plus_operator();
+    _log_object->log_debug(L"Parse single expression");
+    match_increment(get_cur_type(), token_type::INTEGER_LITERAL);
+    switch (get_cur_type()) {
+    case token_type::PLUS_OPERATOR:
+        match_increment(get_cur_type(), token_type::PLUS_OPERATOR);
         break;
-    case L'-':
-        _program_scan_state.scan_minus_operator();
+    case token_type::MINUS_OPERATOR:
+        match_increment(get_cur_type(), token_type::MINUS_OPERATOR);
         break;
     default:
-        // TODO: should be parse exception type
         throw std::exception("Missing operand");
     }
-    _program_scan_state.scan_integer_literal();
+    match_increment(get_cur_type(), token_type::INTEGER_LITERAL);
 }
 
 void core::parser::parse_addition_subtraction()

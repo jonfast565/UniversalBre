@@ -57,12 +57,22 @@ bool utility::is_not_whitespace(const wchar_t possible_whitespace)
     return !is_whitespace(possible_whitespace);
 }
 
-const char * utility::wstring_to_cstr(std::wstring wide_string)
+bool utility::is_break_char(const wchar_t possible_break_char)
+{
+    return is_charset(possible_break_char, array_to_vector<wchar_t>(core::breaking_chars));
+}
+
+const char * utility::wstring_to_cstr(std::wstring& wide_string)
 {
     using convert_type = std::codecvt_utf8<wchar_t>;
     std::wstring_convert<convert_type, wchar_t> converter;
     std::string converted_str = converter.to_bytes(wide_string);
     return converted_str.c_str();
+}
+
+const wchar_t * utility::wstring_to_wcstr(std::wstring& wide_string)
+{
+    return wide_string.c_str();
 }
 
 std::wstring utility::cstr_to_wstring(const char * c_str)
@@ -88,4 +98,21 @@ const void utility::concat_in_place(const wchar_t ** result, const int count, ..
     // this is a bad pattern, exposing the caller to memory mgmt
     // TODO: Implement something better
     *result = _wcsdup(temp.c_str());
+}
+
+const void utility::concat_two(
+    const wchar_t ** result, 
+    const wchar_t * one, 
+    const wchar_t * two)
+{
+    concat_in_place(result, 2, one, two);
+}
+
+const void utility::concat_three(
+    const wchar_t ** result, 
+    const wchar_t * one, 
+    const wchar_t * two, 
+    const wchar_t * three)
+{
+    concat_in_place(result, 3, one, two, three);
 }

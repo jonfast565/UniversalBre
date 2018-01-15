@@ -5,7 +5,6 @@
 namespace core {
     enum token_type {
         // file markers
-        BEGIN_OF_FILE,
         END_OF_FILE,
 
         // literals
@@ -30,11 +29,34 @@ namespace core {
         INVALID
     };
 
+    static std::map<token_type, std::wstring> token_type_index = {
+        // file markers
+        { END_OF_FILE, L"End of file" },
+
+        // literals
+        { INTEGER_LITERAL, L"Integer literal" },
+        { STRING_LITERAL, L"String literal" },
+        { FLOAT_LITERAL, L"Float literal" },
+        { IDENTIFIER, L"Identifier" },
+
+        // operators
+        { PLUS_OPERATOR, L"Plus operator" },
+        { MINUS_OPERATOR, L"Minus operator" },
+        { MULTIPLY_OPERATOR, L"Multiply operator" },
+        { DIVIDE_OPERATOR, L"Divide operator" },
+        { CONCAT_OPERATOR, L"Concat operator" },
+
+        // parenthesis
+        { LEFT_PARENTHESIS, L"Left parenthesis" },
+        { RIGHT_PARENTHESIS, L"Right parenthesis" },
+
+        // error state
+        // used for initialization only
+        { INVALID, L"Invalid" }
+    };
+
     // TODO: IMPLEMENT COMPLETELY
-    static std::wstring get_type_string(token_type type) {
-        switch (type) {
-        case token_type::CONCAT_OPERATOR:
-            break;
-        }
+    static std::wstring get_token_type_string(token_type type) {
+        return token_type_index[type];
     }
 }

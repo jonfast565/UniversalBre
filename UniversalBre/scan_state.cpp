@@ -3,97 +3,111 @@
 
 void core::scan_state::increment_location(int increment)
 {
-    this->_location += increment;
-    this->_column += increment;
-    this->_input_left = _input.substr(_location, _input.length());
+    _location += increment;
+    _column += increment;
+    _input_left = _input.substr(_location, _input.length());
+}
+
+core::atom_status_ptr_s core::scan_state::get_char_atom()
+{
+    return utility::make_ptr_s(core::atom_status(get_char()));
 }
 
 core::scan_state::scan_state(std::wstring input)
 {
-    this->_input = input;
-    this->_input_left = std::wstring(input);
+    _input = input;
+    _input_left = std::wstring(input);
 }
 
 core::scan_state::scan_state(const scan_state & state)
 {
-    this->_column = state._column;
-    this->_line = state._line;
-    this->_location = state._location;
-    this->_input = state._input;
-    this->_input_left = state._input_left;
+    _column = state._column;
+    _line = state._line;
+    _location = state._location;
+    _input = state._input;
+    _input_left = state._input_left;
 }
 
 wchar_t core::scan_state::get_char()
 {
-    if (this->_location >= this->_input.size() || this->_location < 0) {
-        throw exceptions::argument_out_of_range(this->_location);
+    if (_location >= _input.size() || _location < 0) {
+        throw exceptions::argument_out_of_range(_location);
     }
-    return this->_input[this->_location];
+    return _input[_location];
 }
 
 wchar_t core::scan_state::get_char(int offset)
 {
-    if (this->_location + offset >= this->_input.size() 
-        || this->_location + offset < 0) {
-        throw exceptions::argument_out_of_range(this->_location + offset);
+    if (_location + offset >= _input.size() 
+        || _location + offset < 0) {
+        throw exceptions::argument_out_of_range(_location + offset);
     }
-    return this->_input[this->_location + offset];
+    return _input[_location + offset];
 }
 
 void core::scan_state::skip_whitespace()
 {
+    if (out_of_range()) return;
+
     int temp_ctr = 0;
     wchar_t c = get_char(temp_ctr);
-    while (utility::is_whitespace(c)) {
+    if (!utility::is_whitespace(c)) return;
+
+    while (true) {
         c = get_char(temp_ctr);
-        temp_ctr++;
+        if (utility::is_whitespace(c))
+            temp_ctr++;
+        else
+            break;
     }
+
     increment_location(temp_ctr);
 }
 
-core::token core::scan_state::scan_integer_literal()
+core::token core::scan_state::try_scan_integer_literal()
 {
-    skip_whitespace();
     std::wstring result;
-    while (true) {
-        auto atom_status = core::atom_status(get_char());
-        if (!atom_status.is_digit() && !atom_status.is_whitespace()
-            || !atom_status.is_digit() && atom_status.is_empty()) {
-            throw exceptions::scan_failure(get_char(), L"integer");
-        }
-        if (atom_status.is_digit() && !atom_status.is_whitespace()) {
+
+    auto first_char = core::atom_status(get_char());
+    if (!first_char.is_digit()) {
+        throw exceptions::scan_failure(get_char(), L"digit");
+    }
+
+    auto next_char = get_char_atom();
+    do {
+        if (next_char->is_digit()) {
             result += get_char();
             increment_location(1);
         }
-        if (atom_status.is_whitespace()) {
-            break;
+        else {
+            throw exceptions::scan_failure(get_char(), L"digit");
         }
-    }
-    skip_whitespace();
+        next_char = get_char_atom();
+    } while (!next_char->breaks_any());
+
     return token(token_type::INTEGER_LITERAL, result);
 }
 
-core::token core::scan_state::scan_string_literal()
+core::token core::scan_state::try_scan_string_literal()
 {
-    skip_whitespace();
+    throw exceptions::not_implemented_exception(L"string lit scan");
     return core::token(token_type::STRING_LITERAL);
 }
 
-core::token core::scan_state::scan_float_literal()
+core::token core::scan_state::try_scan_float_literal()
 {
-    skip_whitespace();
+    throw exceptions::not_implemented_exception(L"float lit scan");
     return core::token(token_type::FLOAT_LITERAL);
 }
 
-core::token core::scan_state::scan_identifier()
+core::token core::scan_state::try_scan_identifier()
 {
-    skip_whitespace();
+    throw exceptions::not_implemented_exception(L"id scan");
     return core::token(token_type::IDENTIFIER);
 }
 
-core::token core::scan_state::scan_plus_operator()
+core::token core::scan_state::try_scan_plus_operator()
 {
-    skip_whitespace();
     if (get_char() == L'+') {
         increment_location(1);
         return core::token(token_type::PLUS_OPERATOR);
@@ -103,9 +117,8 @@ core::token core::scan_state::scan_plus_operator()
     }
 }
 
-core::token core::scan_state::scan_minus_operator()
+core::token core::scan_state::try_scan_minus_operator()
 {
-    skip_whitespace();
     if (get_char() == L'-') {
         increment_location(1);
         return core::token(token_type::MINUS_OPERATOR);
@@ -115,9 +128,8 @@ core::token core::scan_state::scan_minus_operator()
     }
 }
 
-core::token core::scan_state::scan_multiply_operator()
+core::token core::scan_state::try_scan_multiply_operator()
 {
-    skip_whitespace();
     if (get_char() == L'*') {
         increment_location(1);
         return core::token(token_type::MULTIPLY_OPERATOR);
@@ -127,9 +139,8 @@ core::token core::scan_state::scan_multiply_operator()
     }
 }
 
-core::token core::scan_state::scan_divide_operator()
+core::token core::scan_state::try_scan_divide_operator()
 {
-    skip_whitespace();
     if (get_char() == L'/') {
         increment_location(1);
         return core::token(token_type::DIVIDE_OPERATOR);
@@ -139,9 +150,19 @@ core::token core::scan_state::scan_divide_operator()
     }
 }
 
-core::token core::scan_state::scan_left_parenthesis()
+core::token core::scan_state::try_scan_concat_operator()
 {
-    skip_whitespace();
+    if (get_char() == L'~') {
+        increment_location(1);
+        return core::token(token_type::CONCAT_OPERATOR);
+    }
+    else {
+        throw exceptions::scan_failure(get_char(), L"concat operator");
+    }
+}
+
+core::token core::scan_state::try_scan_left_parenthesis()
+{
     if (get_char() == L'(') {
         increment_location(1);
         return core::token(token_type::LEFT_PARENTHESIS);
@@ -151,9 +172,8 @@ core::token core::scan_state::scan_left_parenthesis()
     }
 }
 
-core::token core::scan_state::scan_right_parenthesis()
+core::token core::scan_state::try_scan_right_parenthesis()
 {
-    skip_whitespace();
     if (get_char() == L')') {
         increment_location(1);
         return core::token(token_type::RIGHT_PARENTHESIS);
@@ -163,9 +183,8 @@ core::token core::scan_state::scan_right_parenthesis()
     }
 }
 
-core::token core::scan_state::scan_end_of_file()
+core::token core::scan_state::try_scan_end_of_file()
 {
-    skip_whitespace();
     if (out_of_range()) {
         return core::token(token_type::END_OF_FILE);
     }
@@ -176,7 +195,7 @@ core::token core::scan_state::scan_end_of_file()
 
 bool core::scan_state::out_of_range()
 {
-    return _location >= _input.size() || _location < 0;
+    return _location >= _input.size() - 1 || _location < 0;
 }
 
 core::scan_state::~scan_state()

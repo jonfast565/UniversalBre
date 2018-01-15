@@ -1,9 +1,6 @@
 #pragma once
 
-#include <iostream>
-#ifdef _WIN32
-#include <conio.h>
-#endif
+#include "global_defines.h"
 
 namespace core {
     class console_waiter {
@@ -12,4 +9,5 @@ namespace core {
         virtual ~console_waiter() {}
         void wait();
     };
+    PTR_ALIAS(console_waiter)
 }

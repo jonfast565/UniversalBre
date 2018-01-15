@@ -50,24 +50,41 @@ exceptions::scan_failure::scan_failure(const wchar_t atom, const wchar_t * expec
         "'");
 }
 
-exceptions::scan_failure::scan_failure(const wchar_t * token_name, const wchar_t * expected_token_name)
-    : extended_exception()
+exceptions::scan_failure::scan_failure(const wchar_t unrecognized_atom)
 {
     utility::concat_in_place(
-        &except_wstr, 5,
-        L"Invalid token '",
-        token_name,
-        L"', expected '",
-        expected_token_name,
-        "'");
+        &except_wstr, 3,
+        L"Unrecognized atom '",
+        (std::wstring() + unrecognized_atom).c_str(),
+        L"'");
 }
 
 exceptions::scan_failure::scan_failure(const wchar_t * unrecognized_token)
     : extended_exception()
 {
     utility::concat_in_place(
-        &except_wstr, 5,
+        &except_wstr, 3,
         L"Unrecognized token '",
         unrecognized_token,
+        L"'");
+}
+
+exceptions::not_implemented_exception::not_implemented_exception(const wchar_t * not_implemented_thing)
+{
+    utility::concat_in_place(
+        &except_wstr, 3,
+        L"'",
+        not_implemented_thing,
+        L"' is not implemented");
+}
+
+exceptions::parse_failure::parse_failure(const wchar_t * actual, const wchar_t * expected)
+{
+    utility::concat_in_place(
+        &except_wstr, 5,
+        L"Got '",
+        actual,
+        L"' expected '",
+        expected,
         L"'");
 }

@@ -30,7 +30,21 @@ namespace exceptions {
         public extended_exception {
     public:
         explicit scan_failure(const wchar_t atom, const wchar_t* expected_atom);
-        explicit scan_failure(const wchar_t* token_name, const wchar_t* expected_token_name);
+        explicit scan_failure(const wchar_t unrecognized_atom);
         explicit scan_failure(const wchar_t* unrecognized_token);
+    };
+
+    // not implemented stuff
+    class not_implemented_exception :
+        public extended_exception {
+    public:
+        explicit not_implemented_exception(const wchar_t* not_implemented_thing);
+    };
+
+    // parse failure: for when you crapped tokens
+    class parse_failure :
+        public extended_exception {
+    public:
+        explicit parse_failure(const wchar_t* actual, const wchar_t* expected);
     };
 }
