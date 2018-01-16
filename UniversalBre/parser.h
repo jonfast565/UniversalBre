@@ -6,7 +6,7 @@
 #include "literal_expression_node.h"
 #include "singleop_expression_node.h"
 #include "binop_types.h"
-#include "boxed_value.h"
+#include "expression_pruner.h"
 
 namespace core {
     class parser

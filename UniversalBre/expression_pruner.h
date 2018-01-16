@@ -1,5 +1,6 @@
 #pragma once
 
+#include "global_defines.h"
 #include "expression_node.h"
 #include "binop_expression_node.h"
 #include "literal_expression_node.h"
@@ -13,5 +14,6 @@ namespace core {
         ~expression_pruner() { }
         expression_node_ptr_s prune(expression_node_ptr_s expression_root);
     };
+    PTR_ALIAS(expression_pruner)
 }
 

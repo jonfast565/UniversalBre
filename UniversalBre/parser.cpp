@@ -44,7 +44,6 @@ void core::parser::match_increment(
 core::expression_node_ptr_s core::parser::parse_program()
 {
     auto expression = parse_expression();
-    expression->print(0);
     match_increment(get_cur_type(), token_type::END_OF_FILE);
     return expression;
 }
@@ -54,7 +53,11 @@ core::expression_node_ptr_s core::parser::parse_expression()
     _log_object->log_debug(L"Parse expression");
     auto left = parse_precedence_expression();
     auto right = parse_addition_subtraction_expression();
-    return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_INVALID));
+    auto expression = utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_INVALID));
+    expression->print(0);
+    auto pruner = utility::make_ptr_s(expression_pruner());
+    auto new_expression = pruner->prune(expression);
+    return new_expression;
 }
 
 core::expression_node_ptr_s core::parser::parse_precedence_expression()
