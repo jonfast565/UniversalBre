@@ -148,15 +148,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="atom_status.h" />
+    <ClInclude Include="binop_expression_node.h" />
     <ClInclude Include="console_handler.h" />
     <ClInclude Include="console_waiter.h" />
     <ClInclude Include="exceptions.h" />
+    <ClInclude Include="expression_node.h" />
     <ClInclude Include="global_defines.h" />
+    <ClInclude Include="literal_expression_node.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="program_header.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="scan_state.h" />
+    <ClInclude Include="singleop_expression_node.h" />
     <ClInclude Include="token.h" />
     <ClInclude Include="token_types.h" />
     <ClInclude Include="utility.h" />
@@ -166,14 +170,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="atom_status.cpp" />
+    <ClCompile Include="binop_expression_node.cpp" />
     <ClCompile Include="console_handler.cpp" />
     <ClCompile Include="console_log.cpp" />
     <ClCompile Include="console_waiter.cpp" />
     <ClCompile Include="exceptions.cpp" />
+    <ClCompile Include="literal_expression_node.cpp" />
     <ClCompile Include="parser.cpp" />
     <ClCompile Include="scanner.cpp" />
     <ClCompile Include="scan_state.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="singleop_expression_node.cpp" />
     <ClCompile Include="token.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>

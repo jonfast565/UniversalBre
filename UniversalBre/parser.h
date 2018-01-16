@@ -1,6 +1,10 @@
 #pragma once
 
 #include "scanner.h"
+#include "expression_node.h"
+#include "binop_expression_node.h"
+#include "literal_expression_node.h"
+#include "singleop_expression_node.h"
 
 namespace core {
     class parser
@@ -12,14 +16,15 @@ namespace core {
 
         token_type get_cur_type();
         token_type get_next_type();
+        std::wstring get_cur_lexeme();
         void match_increment(token_type actual, token_type expected);
 
         void parse_program();
-        void parse_expression();
-        void parse_precedence_expression();
-        void parse_addition_subtraction_expression();
-        void parse_multiplication_division_expression();
-        void parse_subexpression();
+        expression_node_ptr_s parse_expression();
+        expression_node_ptr_s parse_precedence_expression();
+        expression_node_ptr_s parse_addition_subtraction_expression();
+        expression_node_ptr_s parse_multiplication_division_expression();
+        expression_node_ptr_s parse_subexpression();
     public:
         parser(token_vecptr_s tokens, log_ptr_s log_object) : _tokens(tokens), _log_object(log_object) {}
         virtual ~parser() { }

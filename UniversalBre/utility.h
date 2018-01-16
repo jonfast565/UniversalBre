@@ -34,6 +34,7 @@ public:
     static const char* wstring_to_cstr(std::wstring& wide_string);
     static const wchar_t* wstring_to_wcstr(std::wstring& wide_string);
     static std::wstring cstr_to_wstring(const char* c_str);
+    static std::wstring build_indent_str(int indent);
 
     // string concat utils
     static const void concat_in_place(const wchar_t ** result, const int count, ...);
@@ -68,4 +69,42 @@ template<typename T>
 inline std::unique_ptr<T> utility::make_ptr_u(T obj)
 {
     return std::move(std::make_unique<T>(obj));
+}
+
+// trim from start (in place)
+static inline void ltrim(std::wstring &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+        return !std::isspace(ch);
+    }));
+}
+
+// trim from end (in place)
+static inline void rtrim(std::wstring &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
+// trim from both ends (in place)
+static inline void trim(std::wstring &s) {
+    ltrim(s);
+    rtrim(s);
+}
+
+// trim from start (copying)
+static inline std::wstring ltrim_copy(std::wstring s) {
+    ltrim(s);
+    return s;
+}
+
+// trim from end (copying)
+static inline std::wstring rtrim_copy(std::wstring s) {
+    rtrim(s);
+    return s;
+}
+
+// trim from both ends (copying)
+static inline std::wstring trim_copy(std::wstring s) {
+    trim(s);
+    return s;
 }

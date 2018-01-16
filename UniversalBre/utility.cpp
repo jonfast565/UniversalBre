@@ -83,6 +83,15 @@ std::wstring utility::cstr_to_wstring(const char * c_str)
     return temp;
 }
 
+std::wstring utility::build_indent_str(int indent)
+{
+    auto s = std::wstring();
+    for (int i = 0; i < indent; i++) {
+        s += L"-";
+    }
+    return s;
+}
+
 const void utility::concat_in_place(const wchar_t ** result, const int count, ...)
 {
     va_list list;

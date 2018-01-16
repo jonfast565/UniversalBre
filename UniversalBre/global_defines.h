@@ -51,6 +51,8 @@
 #include <locale>
 #include <codecvt>
 #include <algorithm>
+#include <cctype>
+#include <locale>
 #include <cstdarg>
 
 // Functionality: Cause Windows to properly handle assert()
