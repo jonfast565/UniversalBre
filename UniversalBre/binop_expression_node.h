@@ -17,7 +17,9 @@ namespace core {
             expression_node_ptr_s left_node,
             expression_node_ptr_s right_node,
             binop_type op_type) : 
-            _left_node(left_node), _right_node(right_node), 
+            expression_node(NODE_TYPE_BINARY),
+            _left_node(left_node), 
+            _right_node(right_node), 
             _op_type(op_type) { }
         virtual ~binop_expression_node() {}
 

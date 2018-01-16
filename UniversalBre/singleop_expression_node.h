@@ -12,9 +12,13 @@ namespace core {
         binop_type _temp_op_type = OP_INVALID;
     public:
         singleop_expression_node(expression_node_ptr_s single_node, binop_type temp_op_type = OP_INVALID)
-            : _single_node(single_node), _temp_op_type(OP_INVALID) {}
+            : _single_node(single_node), 
+            _temp_op_type(OP_INVALID), 
+            expression_node(NODE_TYPE_SINGLE) {}
         ~singleop_expression_node() {}
+
         void print(int indent);
+
         expression_node_ptr_s get_single_node();
         void set_single_node(expression_node_ptr_s node);
     };
