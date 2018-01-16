@@ -5,8 +5,10 @@
 namespace core {
     // initialize whitespace definition
     const wchar_t whitespace_chars[] = { ' ', '\r\n', '\n', '\v', '\t' };
+    const int whitespace_chars_length = 5;
     // initialize breaking characters definition
     const wchar_t breaking_chars[] = { '(', ')', '+', '-', '*', '/', '~', '.' };
+    const int breaking_chars_length = 8;
 }
 
 class utility {
@@ -26,7 +28,7 @@ public:
 
     // array utils
     template <typename T>
-    static std::vector<T> array_to_vector(const T arr[]);
+    static std::vector<T> array_to_vector(const T arr[], const int arr_length);
 
     // string utils
     static const char* wstring_to_cstr(std::wstring& wide_string);
@@ -47,9 +49,13 @@ public:
 };
 
 template<typename T>
-inline std::vector<T> utility::array_to_vector(const T arr[])
+inline std::vector<T> utility::array_to_vector(const T arr[], const int arr_length)
 {
-    return std::vector<T>(arr, arr + sizeof arr / sizeof T);
+    auto new_vec = std::vector<T>();
+    for (int i = 0; i < arr_length; i++) {
+        new_vec.push_back(arr[i]);
+    }
+    return new_vec;
 }
 
 template<typename T>

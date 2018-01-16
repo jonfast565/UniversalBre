@@ -49,7 +49,7 @@ bool utility::is_not_charset(const wchar_t possible_charset, const std::vector<w
 
 bool utility::is_whitespace(const wchar_t possible_whitespace)
 {
-    return is_charset(possible_whitespace, array_to_vector<wchar_t>(core::whitespace_chars));
+    return is_charset(possible_whitespace, array_to_vector<wchar_t>(core::whitespace_chars, core::whitespace_chars_length));
 }
 
 bool utility::is_not_whitespace(const wchar_t possible_whitespace)
@@ -59,7 +59,7 @@ bool utility::is_not_whitespace(const wchar_t possible_whitespace)
 
 bool utility::is_break_char(const wchar_t possible_break_char)
 {
-    return is_charset(possible_break_char, array_to_vector<wchar_t>(core::breaking_chars));
+    return is_charset(possible_break_char, array_to_vector<wchar_t>(core::breaking_chars, core::breaking_chars_length));
 }
 
 const char * utility::wstring_to_cstr(std::wstring& wide_string)

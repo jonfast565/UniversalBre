@@ -45,6 +45,7 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include <iterator>
 #include <vector>
 #include <map>
 #include <locale>

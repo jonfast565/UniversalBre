@@ -19,10 +19,14 @@ core::token_vecptr_s core::scanner::scan_all(const std::wstring& input)
     auto start_state = utility::make_ptr_s(get_initial_state(input));
     token_ptr_s last_token = nullptr;
 
+    auto pass_ctr = 1;
+    _log_object->log_debug(L"Scan Pass #" + std::to_wstring(pass_ctr));
+
     while (last_token == nullptr || 
            last_token->get_type() != token_type::END_OF_FILE) {
         last_token = utility::make_ptr_s(scan_one(start_state));
         token_list_ptr->push_back(*last_token);
+        pass_ctr++;
     }
 
     return token_list_ptr;
