@@ -88,3 +88,10 @@ exceptions::parse_failure::parse_failure(const wchar_t * actual, const wchar_t *
         expected,
         L"'");
 }
+
+exceptions::parse_failure::parse_failure(const wchar_t * rule_failure)
+{
+    utility::concat_in_place(
+        &except_wstr, 1,
+        rule_failure);
+}

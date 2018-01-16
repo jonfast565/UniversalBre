@@ -38,47 +38,76 @@ void core::parser::match_increment(
 
 void core::parser::parse_program()
 {
-    _log_object->log_debug(L"Parse expression");
     parse_expression();
+    match_increment(get_cur_type(), token_type::END_OF_FILE);
 }
 
 void core::parser::parse_expression()
 {
-    switch (get_cur_type()) {
-    case token_type::LEFT_PARENTHESIS:
-        match_increment(get_cur_type(), token_type::LEFT_PARENTHESIS);
-        parse_single_expression();
-        match_increment(get_cur_type(), token_type::RIGHT_PARENTHESIS);
-        break;
-    default:
-        parse_single_expression();
-    }
-    match_increment(get_cur_type(), token_type::END_OF_FILE);
+    _log_object->log_debug(L"Parse expression");
+    parse_precedence_expression();
+    parse_addition_subtraction_expression();
 }
 
-void core::parser::parse_single_expression()
+void core::parser::parse_precedence_expression()
 {
-    _log_object->log_debug(L"Parse single expression");
-    match_increment(get_cur_type(), token_type::INTEGER_LITERAL);
+    parse_subexpression();
+    parse_multiplication_division_expression();
+}
+
+void core::parser::parse_addition_subtraction_expression()
+{
+    _log_object->log_debug(L"Parse addition/subtraction expression");
     switch (get_cur_type()) {
     case token_type::PLUS_OPERATOR:
         match_increment(get_cur_type(), token_type::PLUS_OPERATOR);
+        parse_precedence_expression();
+        parse_addition_subtraction_expression();
         break;
     case token_type::MINUS_OPERATOR:
         match_increment(get_cur_type(), token_type::MINUS_OPERATOR);
+        parse_precedence_expression();
+        parse_addition_subtraction_expression();
         break;
-    default:
-        throw std::exception("Missing operand");
     }
-    match_increment(get_cur_type(), token_type::INTEGER_LITERAL);
 }
 
-void core::parser::parse_addition_subtraction()
+void core::parser::parse_multiplication_division_expression()
 {
-
+    _log_object->log_debug(L"Parse multiplication/division expression");
+    switch (get_cur_type()) {
+    case token_type::MULTIPLY_OPERATOR:
+        match_increment(get_cur_type(), token_type::MULTIPLY_OPERATOR);
+        parse_subexpression();
+        parse_multiplication_division_expression();
+        break;
+    case token_type::DIVIDE_OPERATOR:
+        match_increment(get_cur_type(), token_type::DIVIDE_OPERATOR);
+        parse_subexpression();
+        parse_multiplication_division_expression();
+        break;
+    }
 }
 
-void core::parser::parse_multiplication_division()
+void core::parser::parse_subexpression()
 {
-
+    _log_object->log_debug(L"Parse sub-expression");
+    switch (get_cur_type()) {
+    case token_type::LEFT_PARENTHESIS:
+        match_increment(get_cur_type(), token_type::LEFT_PARENTHESIS);
+        parse_expression();
+        match_increment(get_cur_type(), token_type::RIGHT_PARENTHESIS);
+        break;
+    case token_type::INTEGER_LITERAL:
+        match_increment(get_cur_type(), token_type::INTEGER_LITERAL);
+        break;
+    case token_type::IDENTIFIER:
+        match_increment(get_cur_type(), token_type::IDENTIFIER);
+        break;
+    case token_type::MINUS_OPERATOR:
+        match_increment(get_cur_type(), token_type::MINUS_OPERATOR);
+        match_increment(get_cur_type(), token_type::INTEGER_LITERAL);
+    default:
+        _log_object->log_debug(L"Subexpression did not start with id, left parenthesis, or identifier");
+    }
 }

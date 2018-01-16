@@ -16,9 +16,10 @@ namespace core {
 
         void parse_program();
         void parse_expression();
-        void parse_single_expression();
-        void parse_addition_subtraction();
-        void parse_multiplication_division();
+        void parse_precedence_expression();
+        void parse_addition_subtraction_expression();
+        void parse_multiplication_division_expression();
+        void parse_subexpression();
     public:
         parser(token_vecptr_s tokens, log_ptr_s log_object) : _tokens(tokens), _log_object(log_object) {}
         virtual ~parser() { }

@@ -46,5 +46,6 @@ namespace exceptions {
         public extended_exception {
     public:
         explicit parse_failure(const wchar_t* actual, const wchar_t* expected);
+        explicit parse_failure(const wchar_t* rule_failure);
     };
 }
