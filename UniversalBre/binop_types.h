@@ -8,7 +8,8 @@ namespace core {
         OP_SUBTRACTION,
         OP_MULTIPLICATION,
         OP_DIVISION,
-        OP_INVALID
+        OP_INVALID,
+        OP_EXPR_PART
     };
 
     static std::map<binop_type, std::wstring> binop_type_index = {
@@ -16,7 +17,8 @@ namespace core {
         { OP_ADDITION, L"Add" },
         { OP_SUBTRACTION, L"Subtract" },
         { OP_MULTIPLICATION, L"Multiply" },
-        { OP_DIVISION, L"Divide" }
+        { OP_DIVISION, L"Divide" },
+        { OP_EXPR_PART, L"Expr Part" }
     };
 
     // TODO: IMPLEMENT COMPLETELY

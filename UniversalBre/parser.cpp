@@ -53,18 +53,32 @@ core::expression_node_ptr_s core::parser::parse_expression()
     _log_object->log_debug(L"Parse expression");
     auto left = parse_precedence_expression();
     auto right = parse_addition_subtraction_expression();
-    auto expression = utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_INVALID));
+
+    expression_node_ptr_s expression = nullptr;
+    if (right == nullptr) { 
+        return left;
+    }
+    else {
+        expression = utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_EXPR_PART));
+    }
+
     expression->print(0);
-    auto pruner = utility::make_ptr_s(expression_pruner());
-    auto new_expression = pruner->prune(expression);
-    return new_expression;
+    //auto pruner = utility::make_ptr_s(expression_pruner());
+    //auto new_expression = pruner->prune(expression);
+    //new_expression->print(0);
+    return expression;
 }
 
 core::expression_node_ptr_s core::parser::parse_precedence_expression()
 {
     auto left = parse_subexpression();
     auto right = parse_multiplication_division_expression();
-    return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_INVALID));
+    if (right == nullptr) {
+        return left;
+    }
+    else {
+        return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_EXPR_PART));
+    }
 }
 
 core::expression_node_ptr_s core::parser::parse_addition_subtraction_expression()
@@ -76,7 +90,12 @@ core::expression_node_ptr_s core::parser::parse_addition_subtraction_expression(
         match_increment(get_cur_type(), token_type::PLUS_OPERATOR);
         auto left = parse_precedence_expression();
         auto right = parse_addition_subtraction_expression();
-        return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_ADDITION));
+        if (right == nullptr) {
+            return utility::make_ptr_s(singleop_expression_node(left, binop_type::OP_ADDITION));
+        }
+        else {
+            return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_ADDITION));
+        }
     }
     break;
     case token_type::MINUS_OPERATOR:
@@ -84,7 +103,12 @@ core::expression_node_ptr_s core::parser::parse_addition_subtraction_expression(
         match_increment(get_cur_type(), token_type::MINUS_OPERATOR);
         auto left = parse_precedence_expression();
         auto right = parse_addition_subtraction_expression();
-        return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_SUBTRACTION));
+        if (right == nullptr) {
+            return utility::make_ptr_s(singleop_expression_node(left, binop_type::OP_SUBTRACTION));
+        }
+        else {
+            return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_SUBTRACTION));
+        }
     }
     break;
     default:
@@ -101,7 +125,12 @@ core::expression_node_ptr_s core::parser::parse_multiplication_division_expressi
         match_increment(get_cur_type(), token_type::MULTIPLY_OPERATOR);
         auto left = parse_subexpression();
         auto right = parse_multiplication_division_expression();
-        return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_MULTIPLICATION));
+        if (right == nullptr) {
+            return utility::make_ptr_s(singleop_expression_node(left, binop_type::OP_MULTIPLICATION));
+        }
+        else {
+            return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_MULTIPLICATION));
+        }
     }
     break;
     case token_type::DIVIDE_OPERATOR:
@@ -109,7 +138,12 @@ core::expression_node_ptr_s core::parser::parse_multiplication_division_expressi
         match_increment(get_cur_type(), token_type::DIVIDE_OPERATOR);
         auto left = parse_subexpression();
         auto right = parse_multiplication_division_expression();
-        return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_DIVISION));
+        if (right == nullptr) {
+            return utility::make_ptr_s(singleop_expression_node(left, binop_type::OP_DIVISION));
+        }
+        else {
+            return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_DIVISION));
+        }
     }
     break;
     default:
@@ -126,7 +160,7 @@ core::expression_node_ptr_s core::parser::parse_subexpression()
         match_increment(get_cur_type(), token_type::LEFT_PARENTHESIS);
         auto single = parse_expression();
         match_increment(get_cur_type(), token_type::RIGHT_PARENTHESIS);
-        return utility::make_ptr_s(singleop_expression_node(single));
+        return single;
     }
     break;
     case token_type::INTEGER_LITERAL:

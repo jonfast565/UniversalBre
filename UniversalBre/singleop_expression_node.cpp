@@ -6,7 +6,7 @@ void core::singleop_expression_node::print(int indent)
         std::wcout << utility::build_indent_str(indent) << " SINGLEOP: NULL" << std::endl;
     }
     else {
-        _single_node->print(++indent);
+        _single_node->print(indent);
     }
 }
 
