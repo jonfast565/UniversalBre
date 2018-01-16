@@ -21,7 +21,7 @@ namespace core {
         std::wstring get_cur_lexeme();
         void match_increment(token_type actual, token_type expected);
 
-        void parse_program();
+        expression_node_ptr_s parse_program();
         expression_node_ptr_s parse_expression();
         expression_node_ptr_s parse_precedence_expression();
         expression_node_ptr_s parse_addition_subtraction_expression(boxed_value<binop_type>& value);
@@ -30,7 +30,7 @@ namespace core {
     public:
         parser(token_vecptr_s tokens, log_ptr_s log_object) : _tokens(tokens), _log_object(log_object) {}
         virtual ~parser() { }
-        void parse();
+        expression_node_ptr_s parse();
         void reset() { _location = 0; }
     };
     PTR_ALIAS(parser)

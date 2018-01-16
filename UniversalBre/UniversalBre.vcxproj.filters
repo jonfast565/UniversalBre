@@ -87,9 +87,6 @@
     <ClInclude Include="instruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="one_operand_instruction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="two_operand_instruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -138,9 +135,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code_generator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="one_operand_instruction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="two_operand_instruction.cpp">

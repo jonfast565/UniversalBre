@@ -1,12 +1,11 @@
 #include "two_operand_instruction.h"
 
-
-
-two_operand_instruction::two_operand_instruction()
+std::wstring core::two_operand_instruction::get_code()
 {
+    return get_binop_type_string(_operator) + L" " + _operand1 + L", " + _operand2;
 }
 
-
-two_operand_instruction::~two_operand_instruction()
+void core::two_operand_instruction::print_code()
 {
+    std::wcout << get_code() << std::endl;
 }

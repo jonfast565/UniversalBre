@@ -1,9 +1,9 @@
 #include "parser.h"
 
-void core::parser::parse()
+core::expression_node_ptr_s core::parser::parse()
 {
     _log_object->log_debug(L"Parse program");
-    parse_program();
+    return parse_program();
 }
 
 core::token_type core::parser::get_cur_type()
@@ -41,11 +41,12 @@ void core::parser::match_increment(
     _location++;
 }
 
-void core::parser::parse_program()
+core::expression_node_ptr_s core::parser::parse_program()
 {
     auto expression = parse_expression();
     expression->print(0);
     match_increment(get_cur_type(), token_type::END_OF_FILE);
+    return expression;
 }
 
 core::expression_node_ptr_s core::parser::parse_expression()

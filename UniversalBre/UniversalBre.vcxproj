@@ -160,7 +160,6 @@
     <ClInclude Include="instruction.h" />
     <ClInclude Include="literal_expression_node.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="one_operand_instruction.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="program_header.h" />
     <ClInclude Include="scanner.h" />
@@ -183,7 +182,6 @@
     <ClCompile Include="console_waiter.cpp" />
     <ClCompile Include="exceptions.cpp" />
     <ClCompile Include="literal_expression_node.cpp" />
-    <ClCompile Include="one_operand_instruction.cpp" />
     <ClCompile Include="parser.cpp" />
     <ClCompile Include="scanner.cpp" />
     <ClCompile Include="scan_state.cpp" />
