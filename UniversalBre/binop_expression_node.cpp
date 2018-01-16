@@ -2,13 +2,13 @@
 
 void core::binop_expression_node::print(int indent)
 {
+    std::wcout << utility::build_indent_str(indent) << get_binop_type_string(_op_type) << std::endl;
     if (_left_node == nullptr) {
         std::wcout << utility::build_indent_str(indent) << " BINOP LEFT: NULL" << std::endl;
     }
     else {
         _left_node->print(indent + 1);
     }
-    std::wcout << utility::build_indent_str(indent) << get_binop_type_string(_op_type) << std::endl;
     if (_right_node == nullptr) {
         std::wcout << utility::build_indent_str(indent) << " BINOP RIGHT: NULL" << std::endl;
     }
@@ -17,45 +17,42 @@ void core::binop_expression_node::print(int indent)
     }
 }
 
-core::expression_node_ptr_s core::binop_expression_node::fold_nodes(
-    expression_node_ptr_s left_node,
-    expression_node_ptr_s right_node)
-{
-    if (left_node != nullptr && right_node != nullptr) {
-        return utility::make_ptr_s(binop_expression_node(left_node, right_node, OP_INVALID));
-    }
-    if (left_node == nullptr && right_node != nullptr) {
-        return right_node;
-    }
-    else if (left_node != nullptr && right_node == nullptr) {
-        return left_node;
-    }
-    else {
-        return nullptr;
-    }
-}
-
-// It's important to remove all the nasty nulls before continuing to generate code
-core::expression_node_ptr_s core::binop_expression_node::fold_nodes(
-    expression_node_ptr_s left_node, 
-    expression_node_ptr_s right_node,
-    binop_type op_type)
-{
-    if (left_node != nullptr && right_node != nullptr) {
-        return utility::make_ptr_s(binop_expression_node(left_node, right_node, op_type));
-    }
-    else if (left_node == nullptr && right_node != nullptr) {
-        return right_node;
-    }
-    else if (left_node != nullptr && right_node == nullptr) {
-        return left_node;
-    }
-    else {
-        return nullptr;
-    }
-}
-
 core::binop_type core::binop_expression_node::get_op_type()
 {
     return _op_type;
+}
+
+bool core::binop_expression_node::one_node_populated()
+{
+    return _left_node == nullptr && _right_node != nullptr || _left_node != nullptr && _right_node == nullptr;
+}
+
+bool core::binop_expression_node::left_node_populated()
+{
+    return _left_node != nullptr;
+}
+
+bool core::binop_expression_node::right_node_populated()
+{
+    return _right_node != nullptr;
+}
+
+core::expression_node_ptr_s core::binop_expression_node::get_left_node()
+{
+    return _left_node;
+}
+
+core::expression_node_ptr_s core::binop_expression_node::get_right_node()
+{
+    return _right_node;
+}
+
+void core::binop_expression_node::set_left_node(expression_node_ptr_s node)
+{
+    _left_node = node;
+}
+
+void core::binop_expression_node::set_right_node(expression_node_ptr_s node)
+{
+    _right_node = node;
 }

@@ -24,8 +24,8 @@ namespace core {
         expression_node_ptr_s parse_program();
         expression_node_ptr_s parse_expression();
         expression_node_ptr_s parse_precedence_expression();
-        expression_node_ptr_s parse_addition_subtraction_expression(boxed_value<binop_type>& value);
-        expression_node_ptr_s parse_multiplication_division_expression(boxed_value<binop_type>& value);
+        expression_node_ptr_s parse_addition_subtraction_expression();
+        expression_node_ptr_s parse_multiplication_division_expression();
         expression_node_ptr_s parse_subexpression();
     public:
         parser(token_vecptr_s tokens, log_ptr_s log_object) : _tokens(tokens), _log_object(log_object) {}

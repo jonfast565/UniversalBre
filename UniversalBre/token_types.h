@@ -26,7 +26,7 @@ namespace core {
 
         // error state
         // used for initialization only
-        INVALID = 0
+        INVALID
     };
 
     static std::map<token_type, std::wstring> token_type_index = {
