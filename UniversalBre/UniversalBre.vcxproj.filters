@@ -90,6 +90,9 @@
     <ClInclude Include="two_operand_instruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="expression_pruner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -138,6 +141,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="two_operand_instruction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="expression_pruner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
