@@ -122,19 +122,24 @@ core::expression_node_ptr_s core::parser::parse_subexpression()
     }
     case token_type::INTEGER_LITERAL:
     {
+        auto cur_lexeme = get_cur_lexeme();
         match_increment(get_cur_type(), token_type::INTEGER_LITERAL);
-        return utility::make_ptr_s(literal_expression_node(get_cur_lexeme()));
+        return utility::make_ptr_s(literal_expression_node(cur_lexeme));
     }
     case token_type::IDENTIFIER:
     {
+        auto cur_lexeme = get_cur_lexeme();
         match_increment(get_cur_type(), token_type::IDENTIFIER);
-        return utility::make_ptr_s(literal_expression_node(get_cur_lexeme()));
+        return utility::make_ptr_s(literal_expression_node(cur_lexeme));
     }
     case token_type::MINUS_OPERATOR:
     {
         match_increment(get_cur_type(), token_type::MINUS_OPERATOR);
+        auto cur_lexeme = L"-" + get_cur_lexeme();
         match_increment(get_cur_type(), token_type::INTEGER_LITERAL);
-        return utility::make_ptr_s(literal_expression_node(get_cur_lexeme()));
+        // TODO: Fix this shit, we're appending contextual information in the parser
+        // as if it is scanning... dreadful.
+        return utility::make_ptr_s(literal_expression_node(cur_lexeme));
     }
     default:
         _log_object->log_debug(L"Subexpression did not start with id, left parenthesis, or identifier");

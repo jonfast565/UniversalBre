@@ -7,9 +7,9 @@ namespace core {
         public expression_node
     {
     private:
-        std::wstring _value = 0;
+        std::wstring _value;
     public:
-        literal_expression_node(std::wstring value) : _value(value) {};
+        literal_expression_node(std::wstring& value) : _value(value) {};
         virtual ~literal_expression_node() {}
         void print(int indent);
     };

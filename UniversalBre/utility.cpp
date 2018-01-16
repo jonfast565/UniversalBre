@@ -87,7 +87,7 @@ std::wstring utility::build_indent_str(int indent)
 {
     auto s = std::wstring();
     for (int i = 0; i < indent; i++) {
-        s += L"-";
+        s += L"_";
     }
     return s;
 }
