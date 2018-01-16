@@ -9,3 +9,14 @@ void core::singleop_expression_node::print(int indent)
         _single_node->print(++indent);
     }
 }
+
+core::expression_node_ptr_s core::singleop_expression_node::get_single_node()
+{
+    assert(_single_node != nullptr);
+    return _single_node;
+}
+
+void core::singleop_expression_node::set_single_node(expression_node_ptr_s node)
+{
+    _single_node = node;
+}

@@ -25,11 +25,13 @@ namespace core {
         void print(int indent);
 
         bool one_node_populated();
+        bool two_nodes_populated();
         bool left_node_populated();
         bool right_node_populated();
 
         expression_node_ptr_s get_left_node();
         expression_node_ptr_s get_right_node();
+        expression_node_ptr_s get_populated_node();
 
         void set_left_node(expression_node_ptr_s node);
         void set_right_node(expression_node_ptr_s node);

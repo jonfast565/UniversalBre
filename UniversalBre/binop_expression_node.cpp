@@ -24,7 +24,15 @@ core::binop_type core::binop_expression_node::get_op_type()
 
 bool core::binop_expression_node::one_node_populated()
 {
-    return _left_node == nullptr && _right_node != nullptr || _left_node != nullptr && _right_node == nullptr;
+    return _left_node == nullptr 
+        && _right_node != nullptr 
+        || _left_node != nullptr 
+        && _right_node == nullptr;
+}
+
+bool core::binop_expression_node::two_nodes_populated()
+{
+    return _left_node != nullptr && _right_node != nullptr;
 }
 
 bool core::binop_expression_node::left_node_populated()
@@ -39,12 +47,28 @@ bool core::binop_expression_node::right_node_populated()
 
 core::expression_node_ptr_s core::binop_expression_node::get_left_node()
 {
+    assert(_left_node != nullptr);
     return _left_node;
 }
 
 core::expression_node_ptr_s core::binop_expression_node::get_right_node()
 {
+    assert(_right_node != nullptr);
     return _right_node;
+}
+
+core::expression_node_ptr_s core::binop_expression_node::get_populated_node()
+{
+    assert(one_node_populated());
+    if (left_node_populated()) {
+        return _left_node;
+    }
+    if (right_node_populated()) {
+        return _right_node;
+    }
+
+    // SHOULD NEVER HAPPEN (assert)
+    return nullptr;
 }
 
 void core::binop_expression_node::set_left_node(expression_node_ptr_s node)
