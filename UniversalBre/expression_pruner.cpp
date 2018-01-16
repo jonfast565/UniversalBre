@@ -1,7 +1,12 @@
 #include "expression_pruner.h"
 
-core::expression_node_ptr_s core::expression_pruner::prune(core::expression_node_ptr_s expression_root)
+core::expression_node_ptr_s core::expression_pruner::prune(
+    core::expression_node_ptr_s current_expression, 
+    core::expression_node_ptr_s expression_parent)
 {
-    // TODO: Consider using std::move
-    return expression_root;
+    if (current_expression == nullptr) {
+        return nullptr;
+    }
+
+    return current_expression;
 }

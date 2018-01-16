@@ -12,7 +12,9 @@ namespace core {
     public:
         expression_pruner() { }
         ~expression_pruner() { }
-        expression_node_ptr_s prune(expression_node_ptr_s expression_root);
+        expression_node_ptr_s prune(
+            expression_node_ptr_s current_expression,
+            expression_node_ptr_s expression_parent = nullptr);
     };
     PTR_ALIAS(expression_pruner)
 }
