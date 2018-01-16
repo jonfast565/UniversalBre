@@ -75,6 +75,24 @@
     <ClInclude Include="singleop_expression_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="binop_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boxed_value.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code_generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="instruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="one_operand_instruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="two_operand_instruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -117,6 +135,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="singleop_expression_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code_generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="one_operand_instruction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="two_operand_instruction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -52,6 +52,7 @@
 #include <codecvt>
 #include <algorithm>
 #include <cctype>
+#include <cassert>
 #include <locale>
 #include <cstdarg>
 

@@ -52,18 +52,20 @@ core::expression_node_ptr_s core::parser::parse_expression()
 {
     _log_object->log_debug(L"Parse expression");
     auto left = parse_precedence_expression();
-    auto right = parse_addition_subtraction_expression();
-    return utility::make_ptr_s(binop_expression_node(left, right));
+    auto binop_value = boxed_value<binop_type>(OP_INVALID);
+    auto right = parse_addition_subtraction_expression(binop_value);
+    return binop_expression_node::fold_nodes(left, right, binop_value.get_value());
 }
 
 core::expression_node_ptr_s core::parser::parse_precedence_expression()
 {
     auto left = parse_subexpression();
-    auto right = parse_multiplication_division_expression();
-    return utility::make_ptr_s(binop_expression_node(left, right));
+    auto binop_value = boxed_value<binop_type>(OP_INVALID);
+    auto right = parse_multiplication_division_expression(binop_value);
+    return binop_expression_node::fold_nodes(left, right, binop_value.get_value());
 }
 
-core::expression_node_ptr_s core::parser::parse_addition_subtraction_expression()
+core::expression_node_ptr_s core::parser::parse_addition_subtraction_expression(boxed_value<binop_type>& value)
 {
     _log_object->log_debug(L"Parse addition/subtraction expression");
     switch (get_cur_type()) {
@@ -71,22 +73,24 @@ core::expression_node_ptr_s core::parser::parse_addition_subtraction_expression(
     {
         match_increment(get_cur_type(), token_type::PLUS_OPERATOR);
         auto left = parse_precedence_expression();
-        auto right = parse_addition_subtraction_expression();
-        return utility::make_ptr_s(binop_expression_node(left, right));
+        auto right = parse_addition_subtraction_expression(value);
+        value.set_value(OP_ADDITION);
+        return binop_expression_node::fold_nodes(left, right, binop_type::OP_ADDITION);
     }
     case token_type::MINUS_OPERATOR:
     {
         match_increment(get_cur_type(), token_type::MINUS_OPERATOR);
         auto left = parse_precedence_expression();
-        auto right = parse_addition_subtraction_expression();
-        return utility::make_ptr_s(binop_expression_node(left, right));
+        auto right = parse_addition_subtraction_expression(value);
+        value.set_value(OP_SUBTRACTION);
+        return binop_expression_node::fold_nodes(left, right, binop_type::OP_SUBTRACTION);
     }
     default:
         return nullptr;
     }
 }
 
-core::expression_node_ptr_s core::parser::parse_multiplication_division_expression()
+core::expression_node_ptr_s core::parser::parse_multiplication_division_expression(boxed_value<binop_type>& value)
 {
     _log_object->log_debug(L"Parse multiplication/division expression");
     switch (get_cur_type()) {
@@ -94,15 +98,17 @@ core::expression_node_ptr_s core::parser::parse_multiplication_division_expressi
     {
         match_increment(get_cur_type(), token_type::MULTIPLY_OPERATOR);
         auto left = parse_subexpression();
-        auto right = parse_multiplication_division_expression();
-        return utility::make_ptr_s(binop_expression_node(left, right));
+        auto right = parse_multiplication_division_expression(value);
+        value.set_value(OP_MULTIPLICATION);
+        return binop_expression_node::fold_nodes(left, right, binop_type::OP_MULTIPLICATION);
     }
     case token_type::DIVIDE_OPERATOR:
     {
         match_increment(get_cur_type(), token_type::DIVIDE_OPERATOR);
         auto left = parse_subexpression();
-        auto right = parse_multiplication_division_expression();
-        return utility::make_ptr_s(binop_expression_node(left, right));
+        auto right = parse_multiplication_division_expression(value);
+        value.set_value(OP_DIVISION);
+        return binop_expression_node::fold_nodes(left, right, binop_type::OP_DIVISION);
     }
     default:
         return nullptr;

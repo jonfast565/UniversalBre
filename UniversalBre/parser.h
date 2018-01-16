@@ -5,6 +5,8 @@
 #include "binop_expression_node.h"
 #include "literal_expression_node.h"
 #include "singleop_expression_node.h"
+#include "binop_types.h"
+#include "boxed_value.h"
 
 namespace core {
     class parser
@@ -22,8 +24,8 @@ namespace core {
         void parse_program();
         expression_node_ptr_s parse_expression();
         expression_node_ptr_s parse_precedence_expression();
-        expression_node_ptr_s parse_addition_subtraction_expression();
-        expression_node_ptr_s parse_multiplication_division_expression();
+        expression_node_ptr_s parse_addition_subtraction_expression(boxed_value<binop_type>& value);
+        expression_node_ptr_s parse_multiplication_division_expression(boxed_value<binop_type>& value);
         expression_node_ptr_s parse_subexpression();
     public:
         parser(token_vecptr_s tokens, log_ptr_s log_object) : _tokens(tokens), _log_object(log_object) {}
