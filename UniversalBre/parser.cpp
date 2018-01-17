@@ -45,11 +45,10 @@ core::expression_node_ptr_s core::parser::parse_program()
 {
     auto expression = parse_expression();
     match_increment(get_cur_type(), token_type::END_OF_FILE);
-    expression->print(0);
-    //auto pruner = utility::make_ptr_s(expression_pruner());
-    //auto new_expression = pruner->prune(expression);
-    //new_expression->print(0);
-    return expression;
+    auto pruner = utility::make_ptr_s(expression_pruner());
+    auto new_expression = pruner->prune(expression);
+    new_expression->print(0);
+    return new_expression;
 }
 
 core::expression_node_ptr_s core::parser::parse_expression()
@@ -188,7 +187,6 @@ core::expression_node_ptr_s core::parser::parse_subexpression()
     }
     break;
     default:
-        _log_object->log_debug(L"Subexpression did not start with id, left parenthesis, or identifier");
-        return nullptr;
+        throw exceptions::parse_failure(L"Subexpression did not start with id, left parenthesis, or identifier");
     }
 }

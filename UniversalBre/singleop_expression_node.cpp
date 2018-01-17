@@ -11,6 +11,16 @@ void core::singleop_expression_node::print(int indent)
     }
 }
 
+core::binop_type core::singleop_expression_node::get_op_type()
+{
+    return _temp_op_type;
+}
+
+void core::singleop_expression_node::set_op_type(binop_type type)
+{
+    _temp_op_type = type;
+}
+
 core::expression_node_ptr_s core::singleop_expression_node::get_single_node()
 {
     assert(_single_node != nullptr);

@@ -22,6 +22,11 @@ core::binop_type core::binop_expression_node::get_op_type()
     return _op_type;
 }
 
+void core::binop_expression_node::set_op_type(binop_type type)
+{
+    _op_type = type;
+}
+
 bool core::binop_expression_node::one_node_populated()
 {
     return _left_node == nullptr 

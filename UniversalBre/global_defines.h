@@ -10,7 +10,7 @@
 #endif
 
 // Defines: max constant string length
-#define MAX_STRING 10000
+#define MAX_STRING 100000
 
 // Defines: default console font
 #define DEFAULT_FONT L"Courier"
@@ -74,13 +74,17 @@ extern "C" void(*old_translator)(unsigned, EXCEPTION_POINTERS*)
 // ptr macros
 #define UNIQUE_PTR_ALIAS(x) using x##_ptr_u = std::unique_ptr<x>; 
 #define UNIQUE_VECPTR_ALIAS(x) using x##_vecptr_u = std::unique_ptr<std::vector<x>>;
+#define UNIQUE_VECPTRPTR_ALIAS(x) using x##_vecptrptr_u = std::unique_ptr<std::vector<std::unique_ptr<x>>>;
 #define SHARED_PTR_ALIAS(x) using x##_ptr_s = std::shared_ptr<x>;
 #define SHARED_VECPTR_ALIAS(x) using x##_vecptr_s = std::shared_ptr<std::vector<x>>;
+#define SHARED_VECPTRPTR_ALIAS(x) using x##_vecptrptr_s = std::shared_ptr<std::vector<std::shared_ptr<x>>>;
 
 #define PTR_ALIAS(x) UNIQUE_PTR_ALIAS(x) \
                      UNIQUE_VECPTR_ALIAS(x) \
                      SHARED_PTR_ALIAS(x) \
-                     SHARED_VECPTR_ALIAS(x)
+                     SHARED_VECPTR_ALIAS(x) \
+                     UNIQUE_VECPTRPTR_ALIAS(x) \
+                     SHARED_VECPTRPTR_ALIAS(x)
 
 # define VEC_ALIAS(x) using x##_vec = std::vector<x>;
 

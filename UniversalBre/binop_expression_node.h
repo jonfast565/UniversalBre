@@ -24,6 +24,8 @@ namespace core {
         virtual ~binop_expression_node() {}
 
         binop_type get_op_type();
+        void set_op_type(binop_type type);
+
         void print(int indent);
 
         bool one_node_populated();

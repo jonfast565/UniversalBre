@@ -19,6 +19,9 @@ namespace core {
 
         void print(int indent);
 
+        binop_type get_op_type();
+        void set_op_type(binop_type type);
+
         expression_node_ptr_s get_single_node();
         void set_single_node(expression_node_ptr_s node);
     };
