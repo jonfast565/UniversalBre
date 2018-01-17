@@ -13,7 +13,7 @@ namespace core {
     public:
         singleop_expression_node(expression_node_ptr_s single_node, binop_type temp_op_type = OP_INVALID)
             : _single_node(single_node), 
-            _temp_op_type(OP_INVALID), 
+            _temp_op_type(temp_op_type), 
             expression_node(NODE_TYPE_SINGLE) {}
         ~singleop_expression_node() {}
 

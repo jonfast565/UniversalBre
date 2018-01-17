@@ -45,6 +45,10 @@ core::expression_node_ptr_s core::parser::parse_program()
 {
     auto expression = parse_expression();
     match_increment(get_cur_type(), token_type::END_OF_FILE);
+    expression->print(0);
+    //auto pruner = utility::make_ptr_s(expression_pruner());
+    //auto new_expression = pruner->prune(expression);
+    //new_expression->print(0);
     return expression;
 }
 
@@ -62,10 +66,6 @@ core::expression_node_ptr_s core::parser::parse_expression()
         expression = utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_EXPR_PART));
     }
 
-    expression->print(0);
-    //auto pruner = utility::make_ptr_s(expression_pruner());
-    //auto new_expression = pruner->prune(expression);
-    //new_expression->print(0);
     return expression;
 }
 
