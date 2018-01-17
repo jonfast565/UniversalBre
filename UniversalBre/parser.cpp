@@ -43,6 +43,7 @@ void core::parser::match_increment(
 
 core::expression_node_ptr_s core::parser::parse_program()
 {
+    _log_object->log_debug(L"Parse program");
     auto expression = parse_expression();
     match_increment(get_cur_type(), token_type::END_OF_FILE);
     _log_object->log_debug(L"AST side-view");
@@ -60,7 +61,8 @@ core::expression_node_ptr_s core::parser::parse_expression()
         return left;
     }
     else {
-        auto expression = utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_EXPR_PART));
+        auto expression = utility::make_ptr_s(
+            binop_expression_node(left, right, binop_type::OP_EXPR_PART));
         expression->fold_expr_node();
         return expression;
     }
@@ -74,7 +76,8 @@ core::expression_node_ptr_s core::parser::parse_precedence_expression()
         return left;
     }
     else {
-        auto expression = utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_EXPR_PART));
+        auto expression = utility::make_ptr_s(
+            binop_expression_node(left, right, binop_type::OP_EXPR_PART));
         expression->fold_expr_node();
         return expression;
     }
@@ -90,10 +93,12 @@ core::expression_node_ptr_s core::parser::parse_addition_subtraction_expression(
         auto left = parse_precedence_expression();
         auto right = parse_addition_subtraction_expression();
         if (right == nullptr) {
-            return utility::make_ptr_s(singleop_expression_node(left, binop_type::OP_ADDITION));
+            return utility::make_ptr_s(
+                singleop_expression_node(left, binop_type::OP_ADDITION));
         }
         else {
-            return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_ADDITION));
+            return utility::make_ptr_s(
+                binop_expression_node(left, right, binop_type::OP_ADDITION));
         }
     }
     break;
@@ -103,10 +108,12 @@ core::expression_node_ptr_s core::parser::parse_addition_subtraction_expression(
         auto left = parse_precedence_expression();
         auto right = parse_addition_subtraction_expression();
         if (right == nullptr) {
-            return utility::make_ptr_s(singleop_expression_node(left, binop_type::OP_SUBTRACTION));
+            return utility::make_ptr_s(
+                singleop_expression_node(left, binop_type::OP_SUBTRACTION));
         }
         else {
-            return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_SUBTRACTION));
+            return utility::make_ptr_s(
+                binop_expression_node(left, right, binop_type::OP_SUBTRACTION));
         }
     }
     break;
@@ -125,10 +132,12 @@ core::expression_node_ptr_s core::parser::parse_multiplication_division_expressi
         auto left = parse_subexpression();
         auto right = parse_multiplication_division_expression();
         if (right == nullptr) {
-            return utility::make_ptr_s(singleop_expression_node(left, binop_type::OP_MULTIPLICATION));
+            return utility::make_ptr_s(
+                singleop_expression_node(left, binop_type::OP_MULTIPLICATION));
         }
         else {
-            return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_MULTIPLICATION));
+            return utility::make_ptr_s(
+                binop_expression_node(left, right, binop_type::OP_MULTIPLICATION));
         }
     }
     break;
@@ -138,10 +147,12 @@ core::expression_node_ptr_s core::parser::parse_multiplication_division_expressi
         auto left = parse_subexpression();
         auto right = parse_multiplication_division_expression();
         if (right == nullptr) {
-            return utility::make_ptr_s(singleop_expression_node(left, binop_type::OP_DIVISION));
+            return utility::make_ptr_s(
+                singleop_expression_node(left, binop_type::OP_DIVISION));
         }
         else {
-            return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_DIVISION));
+            return utility::make_ptr_s(
+                binop_expression_node(left, right, binop_type::OP_DIVISION));
         }
     }
     break;
