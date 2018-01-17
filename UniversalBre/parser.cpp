@@ -45,10 +45,9 @@ core::expression_node_ptr_s core::parser::parse_program()
 {
     auto expression = parse_expression();
     match_increment(get_cur_type(), token_type::END_OF_FILE);
-    auto pruner = utility::make_ptr_s(expression_pruner());
-    auto new_expression = pruner->prune(expression);
-    new_expression->print(0);
-    return new_expression;
+    _log_object->log_debug(L"AST side-view");
+    expression->print(0);
+    return expression;
 }
 
 core::expression_node_ptr_s core::parser::parse_expression()
@@ -57,15 +56,14 @@ core::expression_node_ptr_s core::parser::parse_expression()
     auto left = parse_precedence_expression();
     auto right = parse_addition_subtraction_expression();
 
-    expression_node_ptr_s expression = nullptr;
     if (right == nullptr) { 
         return left;
     }
     else {
-        expression = utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_EXPR_PART));
+        auto expression = utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_EXPR_PART));
+        expression->fold_expr_node();
+        return expression;
     }
-
-    return expression;
 }
 
 core::expression_node_ptr_s core::parser::parse_precedence_expression()
@@ -76,7 +74,9 @@ core::expression_node_ptr_s core::parser::parse_precedence_expression()
         return left;
     }
     else {
-        return utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_EXPR_PART));
+        auto expression = utility::make_ptr_s(binop_expression_node(left, right, binop_type::OP_EXPR_PART));
+        expression->fold_expr_node();
+        return expression;
     }
 }
 

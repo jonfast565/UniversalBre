@@ -6,7 +6,6 @@
 #include "literal_expression_node.h"
 #include "singleop_expression_node.h"
 #include "binop_types.h"
-#include "expression_pruner.h"
 
 namespace core {
     class parser
@@ -28,7 +27,8 @@ namespace core {
         expression_node_ptr_s parse_multiplication_division_expression();
         expression_node_ptr_s parse_subexpression();
     public:
-        parser(token_vecptr_s tokens, log_ptr_s log_object) : _tokens(tokens), _log_object(log_object) {}
+        parser(token_vecptr_s tokens, log_ptr_s log_object) : 
+            _tokens(tokens), _log_object(log_object) {}
         virtual ~parser() { }
         expression_node_ptr_s parse();
         void reset() { _location = 0; }

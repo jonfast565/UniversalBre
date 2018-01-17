@@ -2,6 +2,7 @@
 
 #include "expression_node.h"
 #include "literal_expression_node.h"
+#include "singleop_expression_node.h"
 #include "binop_types.h"
 
 namespace core {
@@ -27,6 +28,7 @@ namespace core {
         void set_op_type(binop_type type);
 
         void print(int indent);
+        void fold_expr_node();
 
         bool one_node_populated();
         bool two_nodes_populated();

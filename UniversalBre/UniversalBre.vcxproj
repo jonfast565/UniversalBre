@@ -156,7 +156,6 @@
     <ClInclude Include="console_waiter.h" />
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="expression_node.h" />
-    <ClInclude Include="expression_pruner.h" />
     <ClInclude Include="global_defines.h" />
     <ClInclude Include="instruction.h" />
     <ClInclude Include="literal_expression_node.h" />
@@ -182,7 +181,6 @@
     <ClCompile Include="console_log.cpp" />
     <ClCompile Include="console_waiter.cpp" />
     <ClCompile Include="exceptions.cpp" />
-    <ClCompile Include="expression_pruner.cpp" />
     <ClCompile Include="literal_expression_node.cpp" />
     <ClCompile Include="parser.cpp" />
     <ClCompile Include="scanner.cpp" />
