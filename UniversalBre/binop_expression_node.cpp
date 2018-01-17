@@ -2,15 +2,29 @@
 
 void core::binop_expression_node::print(int indent)
 {
-    std::wcout << utility::build_indent_str(indent) << get_binop_type_string(_op_type) << std::endl;
     if (_left_node == nullptr) {
-        std::wcout << utility::build_indent_str(indent) << " BINOP LEFT: NULL" << std::endl;
+        std::wcout
+            << indent
+            << utility::build_indent_str(indent + 1) 
+            << "N/A"
+            << std::endl;
     }
     else {
         _left_node->print(indent + 1);
     }
+
+    std::wcout
+        << indent
+        << utility::build_indent_str(indent)
+        << get_binop_type_string(_op_type)
+        << std::endl;
+
     if (_right_node == nullptr) {
-        std::wcout << utility::build_indent_str(indent) << " BINOP RIGHT: NULL" << std::endl;
+        std::wcout 
+            << indent
+            << utility::build_indent_str(indent + 1) 
+            << "N/A"
+            << std::endl;
     }
     else {
         _right_node->print(indent + 1);
@@ -19,6 +33,7 @@ void core::binop_expression_node::print(int indent)
 
 void core::binop_expression_node::fold_expr_node()
 {
+    /*
     if (_right_node->get_node_type() == NODE_TYPE_SINGLE
         && _op_type == OP_EXPR_PART) {
         auto singleop_ptr =
@@ -26,6 +41,15 @@ void core::binop_expression_node::fold_expr_node()
         _op_type = singleop_ptr->get_op_type();
         _right_node = singleop_ptr->get_single_node();
     }
+
+    if (_right_node->get_node_type() == NODE_TYPE_BINARY
+        && _op_type == OP_EXPR_PART) {
+        auto binaryop_ptr =
+            std::static_pointer_cast<binop_expression_node>(_right_node);
+        _op_type = binaryop_ptr->get_op_type();
+        _right_node = binaryop_ptr;
+    }
+    */
 }
 
 core::binop_type core::binop_expression_node::get_op_type()

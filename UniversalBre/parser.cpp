@@ -55,35 +55,24 @@ core::expression_node_ptr_s core::parser::parse_expression()
 {
     _log_object->log_debug(L"Parse expression");
     auto left = parse_precedence_expression();
-    auto right = parse_addition_subtraction_expression();
-
-    if (right == nullptr) { 
-        return left;
-    }
-    else {
-        auto expression = utility::make_ptr_s(
-            binop_expression_node(left, right, binop_type::OP_EXPR_PART));
-        expression->fold_expr_node();
-        return expression;
-    }
+    auto right = parse_optional_addition_subtraction_expression();
+    auto expression = utility::make_ptr_s(
+        binop_expression_node(left, right, binop_type::OP_EXPR_PART));
+    // expression->fold_expr_node();
+    return expression;
 }
 
 core::expression_node_ptr_s core::parser::parse_precedence_expression()
 {
     auto left = parse_subexpression();
-    auto right = parse_multiplication_division_expression();
-    if (right == nullptr) {
-        return left;
-    }
-    else {
-        auto expression = utility::make_ptr_s(
-            binop_expression_node(left, right, binop_type::OP_EXPR_PART));
-        expression->fold_expr_node();
-        return expression;
-    }
+    auto right = parse_optional_multiplication_division_expression();
+    auto expression = utility::make_ptr_s(
+        binop_expression_node(left, right, binop_type::OP_EXPR_PART));
+    // expression->fold_expr_node();
+    return expression;
 }
 
-core::expression_node_ptr_s core::parser::parse_addition_subtraction_expression()
+core::expression_node_ptr_s core::parser::parse_optional_addition_subtraction_expression()
 {
     _log_object->log_debug(L"Parse addition/subtraction expression");
     switch (get_cur_type()) {
@@ -91,30 +80,18 @@ core::expression_node_ptr_s core::parser::parse_addition_subtraction_expression(
     {
         match_increment(get_cur_type(), token_type::PLUS_OPERATOR);
         auto left = parse_precedence_expression();
-        auto right = parse_addition_subtraction_expression();
-        if (right == nullptr) {
-            return utility::make_ptr_s(
-                singleop_expression_node(left, binop_type::OP_ADDITION));
-        }
-        else {
-            return utility::make_ptr_s(
-                binop_expression_node(left, right, binop_type::OP_ADDITION));
-        }
+        auto right = parse_optional_addition_subtraction_expression();
+        return utility::make_ptr_s(
+            binop_expression_node(left, right, binop_type::OP_ADDITION));
     }
     break;
     case token_type::MINUS_OPERATOR:
     {
         match_increment(get_cur_type(), token_type::MINUS_OPERATOR);
         auto left = parse_precedence_expression();
-        auto right = parse_addition_subtraction_expression();
-        if (right == nullptr) {
-            return utility::make_ptr_s(
-                singleop_expression_node(left, binop_type::OP_SUBTRACTION));
-        }
-        else {
-            return utility::make_ptr_s(
-                binop_expression_node(left, right, binop_type::OP_SUBTRACTION));
-        }
+        auto right = parse_optional_addition_subtraction_expression();
+        return utility::make_ptr_s(
+            binop_expression_node(left, right, binop_type::OP_SUBTRACTION));
     }
     break;
     default:
@@ -122,7 +99,7 @@ core::expression_node_ptr_s core::parser::parse_addition_subtraction_expression(
     }
 }
 
-core::expression_node_ptr_s core::parser::parse_multiplication_division_expression()
+core::expression_node_ptr_s core::parser::parse_optional_multiplication_division_expression()
 {
     _log_object->log_debug(L"Parse multiplication/division expression");
     switch (get_cur_type()) {
@@ -130,30 +107,18 @@ core::expression_node_ptr_s core::parser::parse_multiplication_division_expressi
     {
         match_increment(get_cur_type(), token_type::MULTIPLY_OPERATOR);
         auto left = parse_subexpression();
-        auto right = parse_multiplication_division_expression();
-        if (right == nullptr) {
-            return utility::make_ptr_s(
-                singleop_expression_node(left, binop_type::OP_MULTIPLICATION));
-        }
-        else {
-            return utility::make_ptr_s(
-                binop_expression_node(left, right, binop_type::OP_MULTIPLICATION));
-        }
+        auto right = parse_optional_multiplication_division_expression();
+        return utility::make_ptr_s(
+            binop_expression_node(left, right, binop_type::OP_MULTIPLICATION));
     }
     break;
     case token_type::DIVIDE_OPERATOR:
     {
         match_increment(get_cur_type(), token_type::DIVIDE_OPERATOR);
         auto left = parse_subexpression();
-        auto right = parse_multiplication_division_expression();
-        if (right == nullptr) {
-            return utility::make_ptr_s(
-                singleop_expression_node(left, binop_type::OP_DIVISION));
-        }
-        else {
-            return utility::make_ptr_s(
-                binop_expression_node(left, right, binop_type::OP_DIVISION));
-        }
+        auto right = parse_optional_multiplication_division_expression();
+        return utility::make_ptr_s(
+            binop_expression_node(left, right, binop_type::OP_DIVISION));
     }
     break;
     default:

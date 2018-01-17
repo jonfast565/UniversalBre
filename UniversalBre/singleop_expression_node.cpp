@@ -3,10 +3,19 @@
 void core::singleop_expression_node::print(int indent)
 {
     if (_single_node == nullptr) {
-        std::wcout << utility::build_indent_str(indent) << " SINGLEOP: NULL" << std::endl;
+        std::wcout 
+            << indent
+            << utility::build_indent_str(indent + 1) 
+            << "N/A" 
+            << std::endl;
     }
     else {
-        std::wcout << utility::build_indent_str(indent) << get_binop_type_string(_temp_op_type) << std::endl;
+        std::wcout 
+            << indent
+            << utility::build_indent_str(indent) 
+            << get_binop_type_string(_temp_op_type) 
+            << std::endl;
+
         _single_node->print(indent + 1);
     }
 }

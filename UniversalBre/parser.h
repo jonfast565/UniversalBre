@@ -23,8 +23,8 @@ namespace core {
         expression_node_ptr_s parse_program();
         expression_node_ptr_s parse_expression();
         expression_node_ptr_s parse_precedence_expression();
-        expression_node_ptr_s parse_addition_subtraction_expression();
-        expression_node_ptr_s parse_multiplication_division_expression();
+        expression_node_ptr_s parse_optional_addition_subtraction_expression();
+        expression_node_ptr_s parse_optional_multiplication_division_expression();
         expression_node_ptr_s parse_subexpression();
     public:
         parser(token_vecptr_s tokens, log_ptr_s log_object) : 
