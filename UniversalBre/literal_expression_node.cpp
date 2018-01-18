@@ -3,7 +3,7 @@
 void core::literal_expression_node::print(int indent)
 {
     std::wcout 
-        << indent
+        << indent << " "
         << utility::build_indent_str(indent) 
         << _value 
         << std::endl;

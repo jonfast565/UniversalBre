@@ -4,7 +4,7 @@ void core::binop_expression_node::print(int indent)
 {
     if (_left_node == nullptr) {
         std::wcout
-            << indent
+            << indent << " "
             << utility::build_indent_str(indent + 1) 
             << "N/A"
             << std::endl;
@@ -14,14 +14,14 @@ void core::binop_expression_node::print(int indent)
     }
 
     std::wcout
-        << indent
+        << indent << " "
         << utility::build_indent_str(indent)
-        << get_binop_type_string(_op_type)
+        << get_op_type_string(_op_type)
         << std::endl;
 
     if (_right_node == nullptr) {
         std::wcout 
-            << indent
+            << indent << " "
             << utility::build_indent_str(indent + 1) 
             << "N/A"
             << std::endl;
@@ -52,12 +52,12 @@ void core::binop_expression_node::fold_expr_node()
     */
 }
 
-core::binop_type core::binop_expression_node::get_op_type()
+core::op_type core::binop_expression_node::get_op_type()
 {
     return _op_type;
 }
 
-void core::binop_expression_node::set_op_type(binop_type type)
+void core::binop_expression_node::set_op_type(op_type type)
 {
     _op_type = type;
 }

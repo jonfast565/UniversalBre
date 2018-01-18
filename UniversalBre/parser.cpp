@@ -64,7 +64,7 @@ core::expression_node_ptr_s core::parser::parse_expression_internal()
     auto left_node = parse_term();
     while (lookahead() == token_type::PLUS_OPERATOR
         || lookahead() == token_type::MINUS_OPERATOR) {
-        binop_type type = OP_INVALID;
+        op_type type = OP_INVALID;
         switch (lookahead()) {
         case PLUS_OPERATOR:
             eat_token(lookahead(), token_type::PLUS_OPERATOR);
@@ -88,7 +88,7 @@ core::expression_node_ptr_s core::parser::parse_term()
     auto left_node = parse_factor();
     while (lookahead() == token_type::MULTIPLY_OPERATOR
         || lookahead() == token_type::DIVIDE_OPERATOR) {
-        binop_type type = OP_INVALID;
+        op_type type = OP_INVALID;
         switch (lookahead()) {
         case MULTIPLY_OPERATOR:
             eat_token(lookahead(), token_type::MULTIPLY_OPERATOR);

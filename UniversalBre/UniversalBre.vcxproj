@@ -149,7 +149,7 @@
   <ItemGroup>
     <ClInclude Include="atom_status.h" />
     <ClInclude Include="binop_expression_node.h" />
-    <ClInclude Include="binop_types.h" />
+    <ClInclude Include="op_types.h" />
     <ClInclude Include="boxed_value.h" />
     <ClInclude Include="code_generator.h" />
     <ClInclude Include="console_handler.h" />
@@ -161,13 +161,14 @@
     <ClInclude Include="literal_expression_node.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="parser.h" />
+    <ClInclude Include="printable.h" />
     <ClInclude Include="program_header.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="scan_state.h" />
     <ClInclude Include="singleop_expression_node.h" />
+    <ClInclude Include="ssa_instruction.h" />
     <ClInclude Include="token.h" />
     <ClInclude Include="token_types.h" />
-    <ClInclude Include="two_operand_instruction.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="console_log.h" />
     <ClInclude Include="log.h" />
@@ -187,8 +188,8 @@
     <ClCompile Include="scan_state.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="singleop_expression_node.cpp" />
+    <ClCompile Include="ssa_instruction.cpp" />
     <ClCompile Include="token.cpp" />
-    <ClCompile Include="two_operand_instruction.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

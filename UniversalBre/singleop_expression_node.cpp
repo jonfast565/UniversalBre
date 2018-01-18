@@ -4,28 +4,28 @@ void core::singleop_expression_node::print(int indent)
 {
     if (_single_node == nullptr) {
         std::wcout 
-            << indent
+            << indent << " "
             << utility::build_indent_str(indent + 1) 
             << "N/A" 
             << std::endl;
     }
     else {
         std::wcout 
-            << indent
+            << indent << " "
             << utility::build_indent_str(indent) 
-            << get_binop_type_string(_temp_op_type) 
+            << get_op_type_string(_temp_op_type) 
             << std::endl;
 
         _single_node->print(indent + 1);
     }
 }
 
-core::binop_type core::singleop_expression_node::get_op_type()
+core::op_type core::singleop_expression_node::get_op_type()
 {
     return _temp_op_type;
 }
 
-void core::singleop_expression_node::set_op_type(binop_type type)
+void core::singleop_expression_node::set_op_type(op_type type)
 {
     _temp_op_type = type;
 }
