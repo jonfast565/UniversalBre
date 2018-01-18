@@ -6,24 +6,17 @@ core::expression_node_ptr_s core::parser::parse()
     return parse_program();
 }
 
-core::token_type core::parser::get_cur_type()
+core::token_type core::parser::lookahead()
 {
     return _tokens->at(_location).get_type();
 }
 
-core::token_type core::parser::get_next_type()
+core::token core::parser::get_token()
 {
-    // TODO: Naive, could cause major error 
-    // if bounds aren't properly checked
-    return _tokens->at(_location + 1).get_type();
+    return _tokens->at(_location);
 }
 
-std::wstring core::parser::get_cur_lexeme()
-{
-    return _tokens->at(_location).get_lexeme();
-}
-
-void core::parser::match_increment(
+void core::parser::eat_token(
     token_type actual,
     token_type expected)
 {
@@ -44,119 +37,106 @@ void core::parser::match_increment(
 core::expression_node_ptr_s core::parser::parse_program()
 {
     _log_object->log_debug(L"Parse program");
-    auto expression = parse_expression();
-    match_increment(get_cur_type(), token_type::END_OF_FILE);
+    auto expression = parse_expression_internal();
+    eat_token(lookahead(), token_type::END_OF_FILE);
     _log_object->log_debug(L"AST side-view");
     expression->print(0);
     return expression;
 }
 
+/*
+expr   : term((PLUS | MINUS) term)*
+    term : factor((MUL | DIV) factor)*
+    factor : INTEGER | LPAREN expr RPAREN
+*/
+
 core::expression_node_ptr_s core::parser::parse_expression()
 {
     _log_object->log_debug(L"Parse expression");
-    auto left = parse_precedence_expression();
-    auto right = parse_optional_addition_subtraction_expression();
-    auto expression = utility::make_ptr_s(
-        binop_expression_node(left, right, binop_type::OP_EXPR_PART));
-    // expression->fold_expr_node();
-    return expression;
+    auto result = parse_expression_internal();
+    result->print(0);
+    return result;
 }
 
-core::expression_node_ptr_s core::parser::parse_precedence_expression()
+core::expression_node_ptr_s core::parser::parse_expression_internal()
 {
-    auto left = parse_subexpression();
-    auto right = parse_optional_multiplication_division_expression();
-    auto expression = utility::make_ptr_s(
-        binop_expression_node(left, right, binop_type::OP_EXPR_PART));
-    // expression->fold_expr_node();
-    return expression;
+    _log_object->log_debug(L"Parse term expression");
+    auto left_node = parse_term();
+    while (lookahead() == token_type::PLUS_OPERATOR
+        || lookahead() == token_type::MINUS_OPERATOR) {
+        binop_type type = OP_INVALID;
+        switch (lookahead()) {
+        case PLUS_OPERATOR:
+            eat_token(lookahead(), token_type::PLUS_OPERATOR);
+            type = OP_ADDITION;
+            break;
+        case MINUS_OPERATOR:
+            type = OP_SUBTRACTION;
+            eat_token(lookahead(), token_type::MINUS_OPERATOR);
+            break;
+        }
+        auto right_node = parse_term();
+        left_node = utility::make_ptr_s(
+            binop_expression_node(left_node, right_node, type));
+    }
+    return left_node;
 }
 
-core::expression_node_ptr_s core::parser::parse_optional_addition_subtraction_expression()
+core::expression_node_ptr_s core::parser::parse_term()
 {
-    _log_object->log_debug(L"Parse addition/subtraction expression");
-    switch (get_cur_type()) {
-    case token_type::PLUS_OPERATOR:
-    {
-        match_increment(get_cur_type(), token_type::PLUS_OPERATOR);
-        auto left = parse_precedence_expression();
-        auto right = parse_optional_addition_subtraction_expression();
-        return utility::make_ptr_s(
-            binop_expression_node(left, right, binop_type::OP_ADDITION));
+    _log_object->log_debug(L"Parse factor expression");
+    auto left_node = parse_factor();
+    while (lookahead() == token_type::MULTIPLY_OPERATOR
+        || lookahead() == token_type::DIVIDE_OPERATOR) {
+        binop_type type = OP_INVALID;
+        switch (lookahead()) {
+        case MULTIPLY_OPERATOR:
+            eat_token(lookahead(), token_type::MULTIPLY_OPERATOR);
+            type = OP_MULTIPLICATION;
+            break;
+        case DIVIDE_OPERATOR:
+            type = OP_DIVISION;
+            eat_token(lookahead(), token_type::DIVIDE_OPERATOR);
+            break;
+        }
+        auto right_node = parse_factor();
+        left_node = utility::make_ptr_s(
+            binop_expression_node(left_node, right_node, type));
     }
-    break;
-    case token_type::MINUS_OPERATOR:
-    {
-        match_increment(get_cur_type(), token_type::MINUS_OPERATOR);
-        auto left = parse_precedence_expression();
-        auto right = parse_optional_addition_subtraction_expression();
-        return utility::make_ptr_s(
-            binop_expression_node(left, right, binop_type::OP_SUBTRACTION));
-    }
-    break;
-    default:
-        return nullptr;
-    }
+    return left_node;
 }
 
-core::expression_node_ptr_s core::parser::parse_optional_multiplication_division_expression()
-{
-    _log_object->log_debug(L"Parse multiplication/division expression");
-    switch (get_cur_type()) {
-    case token_type::MULTIPLY_OPERATOR:
-    {
-        match_increment(get_cur_type(), token_type::MULTIPLY_OPERATOR);
-        auto left = parse_subexpression();
-        auto right = parse_optional_multiplication_division_expression();
-        return utility::make_ptr_s(
-            binop_expression_node(left, right, binop_type::OP_MULTIPLICATION));
-    }
-    break;
-    case token_type::DIVIDE_OPERATOR:
-    {
-        match_increment(get_cur_type(), token_type::DIVIDE_OPERATOR);
-        auto left = parse_subexpression();
-        auto right = parse_optional_multiplication_division_expression();
-        return utility::make_ptr_s(
-            binop_expression_node(left, right, binop_type::OP_DIVISION));
-    }
-    break;
-    default:
-        return nullptr;
-    }
-}
-
-core::expression_node_ptr_s core::parser::parse_subexpression()
+core::expression_node_ptr_s core::parser::parse_factor()
 {
     _log_object->log_debug(L"Parse sub-expression");
-    switch (get_cur_type()) {
+    switch (lookahead()) {
     case token_type::LEFT_PARENTHESIS:
     {
-        match_increment(get_cur_type(), token_type::LEFT_PARENTHESIS);
-        auto single = parse_expression();
-        match_increment(get_cur_type(), token_type::RIGHT_PARENTHESIS);
+        eat_token(lookahead(), token_type::LEFT_PARENTHESIS);
+        auto single = parse_expression_internal();
+        eat_token(lookahead(), token_type::RIGHT_PARENTHESIS);
         return single;
     }
     break;
     case token_type::INTEGER_LITERAL:
     {
-        auto cur_lexeme = get_cur_lexeme();
-        match_increment(get_cur_type(), token_type::INTEGER_LITERAL);
+        auto cur_lexeme = get_token().get_lexeme();
+        eat_token(lookahead(), token_type::INTEGER_LITERAL);
         return utility::make_ptr_s(literal_expression_node(cur_lexeme));
     }
     break;
     case token_type::IDENTIFIER:
     {
-        auto cur_lexeme = get_cur_lexeme();
-        match_increment(get_cur_type(), token_type::IDENTIFIER);
+        auto cur_lexeme = get_token().get_lexeme();
+        eat_token(lookahead(), token_type::IDENTIFIER);
         return utility::make_ptr_s(literal_expression_node(cur_lexeme));
     }
     break;
     case token_type::MINUS_OPERATOR:
     {
-        match_increment(get_cur_type(), token_type::MINUS_OPERATOR);
-        auto cur_lexeme = L"-" + get_cur_lexeme();
-        match_increment(get_cur_type(), token_type::INTEGER_LITERAL);
+        eat_token(lookahead(), token_type::MINUS_OPERATOR);
+        auto cur_lexeme = L"-" + get_token().get_lexeme();
+        eat_token(lookahead(), token_type::INTEGER_LITERAL);
         // TODO: Fix this shit, we're appending contextual information in the parser
         // as if it is scanning... dreadful.
         return utility::make_ptr_s(literal_expression_node(cur_lexeme));

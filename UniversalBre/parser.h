@@ -15,17 +15,15 @@ namespace core {
         token_vecptr_s _tokens;
         log_ptr_s _log_object;
 
-        token_type get_cur_type();
-        token_type get_next_type();
-        std::wstring get_cur_lexeme();
-        void match_increment(token_type actual, token_type expected);
+        token_type lookahead();
+        token get_token();
+        void eat_token(token_type actual, token_type expected);
 
         expression_node_ptr_s parse_program();
         expression_node_ptr_s parse_expression();
-        expression_node_ptr_s parse_precedence_expression();
-        expression_node_ptr_s parse_optional_addition_subtraction_expression();
-        expression_node_ptr_s parse_optional_multiplication_division_expression();
-        expression_node_ptr_s parse_subexpression();
+        expression_node_ptr_s parse_expression_internal();
+        expression_node_ptr_s parse_term();
+        expression_node_ptr_s parse_factor();
     public:
         parser(token_vecptr_s tokens, log_ptr_s log_object) : 
             _tokens(tokens), _log_object(log_object) {}
