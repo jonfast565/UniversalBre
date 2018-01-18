@@ -43,19 +43,21 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_success(L"EOF scanned");
         return t;
     }
-    catch (exceptions::extended_exception& e) {
+    catch (exceptions::extended_exception&) {
         _log_object->log_debug(L"EOF not scanned");
     }
 
     // save state to ensure we can rewind
     auto save_state = scan_state(*state);
+    scan_state_ptr_s old_state = nullptr;
 
     try {
         auto t = state->try_scan_integer_literal();
         _log_object->log_success(L"Integer literal scanned");
         return t;
     }
-    catch (exceptions::extended_exception& e) {
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Integer literal not scanned");
     }
@@ -65,7 +67,8 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_success(L"Float literal scanned");
         return t;
     }
-    catch (exceptions::extended_exception& e) {
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Float literal not scanned");
     }
@@ -75,8 +78,8 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_success(L"Left parenthesis scanned");
         return t;
     }
-    catch (exceptions::extended_exception& e) {
-        *state = save_state;
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
         _log_object->log_debug(L"Left parenthesis not scanned");
     }
 
@@ -85,7 +88,8 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_success(L"Right parenthesis scanned");
         return t;
     }
-    catch (exceptions::extended_exception& e) {
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Right parenthesis not scanned");
     }
@@ -95,7 +99,8 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_success(L"Plus operator scanned");
         return t;
     }
-    catch (exceptions::extended_exception& e) {
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Plus operator not scanned");
     }
@@ -105,7 +110,8 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_success(L"Minus operator scanned");
         return t;
     }
-    catch (exceptions::extended_exception& e) {
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Minus operator not scanned");
     }
@@ -115,7 +121,8 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_success(L"Multiply operator scanned");
         return t;
     }
-    catch (exceptions::extended_exception& e) {
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Multiply operator not scanned");
     }
@@ -125,7 +132,8 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_success(L"Divide operator scanned");
         return t;
     }
-    catch (exceptions::extended_exception& e) {
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Divide operator not scanned");
     }
@@ -135,7 +143,8 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_success(L"Concat operator scanned");
         return t;
     }
-    catch (exceptions::extended_exception& e) {
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Concat operator not scanned");
     }
@@ -145,7 +154,8 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_success(L"Identifier scanned");
         return t;
     }
-    catch (exceptions::extended_exception& e) {
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Identifier not scanned");
     }

@@ -72,7 +72,12 @@ bool utility::is_break_char(const wchar_t possible_break_char)
 
 bool utility::is_integer_break_char(const wchar_t possible_break_char)
 {
-    return is_charset(possible_break_char, array_to_vector<wchar_t>(core::integer_breaking_chars, core::integer_breaking_chars_length));;
+    return is_charset(possible_break_char, array_to_vector<wchar_t>(core::integer_breaking_chars, core::integer_breaking_chars_length));
+}
+
+bool utility::is_newline_char(const wchar_t possible_newline_char)
+{
+    return is_charset(possible_newline_char, array_to_vector<wchar_t>(core::newline_chars, core::newline_chars_length));
 }
 
 const char * utility::wstring_to_cstr(std::wstring& wide_string)

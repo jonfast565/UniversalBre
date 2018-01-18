@@ -55,8 +55,13 @@ void core::scan_state::skip_whitespace()
 
     while (true) {
         c = get_char(temp_ctr);
-        if (utility::is_whitespace(c))
+        if (utility::is_whitespace(c)) {
             temp_ctr++;
+            if (utility::is_newline_char(c)) {
+                _line++;
+                _column = 0;
+            }
+        }
         else
             break;
     }

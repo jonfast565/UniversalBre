@@ -6,10 +6,17 @@ namespace core {
     // initialize whitespace definition
     const wchar_t whitespace_chars[] = { ' ', '\r\n', '\n', '\v', '\t' };
     const int whitespace_chars_length = 5;
+
+    // initialize newline whitespace chars
+    const wchar_t newline_chars[] = { '\r\n', '\n' };
+    const int newline_chars_length = 2;
+
     // initialize breaking characters definition
     const wchar_t breaking_chars[] = { '(', ')', '+', '-', '*', '/', '~', '.' };
-    const wchar_t integer_breaking_chars[] = { '(', ')', '+', '-', '*', '/', '~' };
     const int breaking_chars_length = 8;
+
+    // initialize breaking characters specifically for numeric scanning
+    const wchar_t integer_breaking_chars[] = { '(', ')', '+', '-', '*', '/', '~' };
     const int integer_breaking_chars_length = 7;
 }
 
@@ -28,6 +35,7 @@ public:
     static bool is_not_whitespace(const wchar_t possible_whitespace);
     static bool is_break_char(const wchar_t possible_break_char);
     static bool is_integer_break_char(const wchar_t possible_break_char);
+    static bool is_newline_char(const wchar_t possible_newline_char);
 
     // array utils
     template <typename T>
