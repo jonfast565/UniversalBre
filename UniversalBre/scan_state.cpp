@@ -83,7 +83,7 @@ core::token core::scan_state::try_scan_integer_literal()
             throw exceptions::scan_failure(get_char(), L"digit");
         }
         next_char = get_char_atom();
-    } while (!next_char->breaks_any());
+    } while (!next_char->breaks_any_integer());
 
     return token(token_type::INTEGER_LITERAL, result);
 }
@@ -96,8 +96,32 @@ core::token core::scan_state::try_scan_string_literal()
 
 core::token core::scan_state::try_scan_float_literal()
 {
-    throw exceptions::not_implemented_exception(L"float lit scan");
-    return core::token(token_type::FLOAT_LITERAL);
+    std::wstring result;
+
+    auto first_char = core::atom_status(get_char());
+    if (!first_char.is_digit()) {
+        throw exceptions::scan_failure(get_char(), L"digit");
+    }
+
+    auto next_char = get_char_atom();
+    bool precision_part = false;
+    do {
+        if (next_char->is_digit()) {
+            result += get_char();
+            increment_location(1);
+        }
+        else if (next_char->is_dot() && precision_part == false) {
+            result += get_char();
+            increment_location(1);
+            precision_part = true;
+        }
+        else {
+            throw exceptions::scan_failure(get_char(), L"digit");
+        }
+        next_char = get_char_atom();
+    } while (!next_char->breaks_any_integer());
+
+    return core::token(token_type::FLOAT_LITERAL, result);
 }
 
 core::token core::scan_state::try_scan_identifier()

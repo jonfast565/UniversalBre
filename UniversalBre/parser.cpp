@@ -44,12 +44,6 @@ core::expression_node_ptr_s core::parser::parse_program()
     return expression;
 }
 
-/*
-expr   : term((PLUS | MINUS) term)*
-    term : factor((MUL | DIV) factor)*
-    factor : INTEGER | LPAREN expr RPAREN
-*/
-
 core::expression_node_ptr_s core::parser::parse_expression()
 {
     _log_object->log_debug(L"Parse expression");
@@ -125,6 +119,13 @@ core::expression_node_ptr_s core::parser::parse_factor()
         return utility::make_ptr_s(literal_expression_node(cur_lexeme));
     }
     break;
+    case token_type::FLOAT_LITERAL:
+    {
+        auto cur_lexeme = get_token().get_lexeme();
+        eat_token(lookahead(), token_type::FLOAT_LITERAL);
+        return utility::make_ptr_s(literal_expression_node(cur_lexeme));
+    }
+    break;
     case token_type::IDENTIFIER:
     {
         auto cur_lexeme = get_token().get_lexeme();
@@ -143,6 +144,6 @@ core::expression_node_ptr_s core::parser::parse_factor()
     }
     break;
     default:
-        throw exceptions::parse_failure(L"Subexpression did not start with id, left parenthesis, or identifier");
+        throw exceptions::parse_failure(L"Subexpression did not start with id, left parenthesis, identifier, or numeric constant");
     }
 }

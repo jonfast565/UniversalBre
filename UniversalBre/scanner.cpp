@@ -61,6 +61,16 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
     }
 
     try {
+        auto t = state->try_scan_float_literal();
+        _log_object->log_success(L"Float literal scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception& e) {
+        *state = save_state;
+        _log_object->log_debug(L"Float literal not scanned");
+    }
+
+    try {
         auto t = state->try_scan_left_parenthesis();
         _log_object->log_success(L"Left parenthesis scanned");
         return t;

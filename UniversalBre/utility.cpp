@@ -70,6 +70,11 @@ bool utility::is_break_char(const wchar_t possible_break_char)
     return is_charset(possible_break_char, array_to_vector<wchar_t>(core::breaking_chars, core::breaking_chars_length));
 }
 
+bool utility::is_integer_break_char(const wchar_t possible_break_char)
+{
+    return is_charset(possible_break_char, array_to_vector<wchar_t>(core::integer_breaking_chars, core::integer_breaking_chars_length));;
+}
+
 const char * utility::wstring_to_cstr(std::wstring& wide_string)
 {
     using convert_type = std::codecvt_utf8<wchar_t>;
