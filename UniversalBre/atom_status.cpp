@@ -6,7 +6,7 @@ core::atom_status::atom_status(const wchar_t atom) : _atom(atom)
     _is_whitespace = utility::is_whitespace(atom);
     _is_alpha = utility::is_alpha(atom);
     _is_alpha_digit = utility::is_alpha_digit(atom);
-    _is_alpha_digit_underscore = false; // TODO: FIX
+    _is_alpha_digit_underscore = utility::is_alpha_digit(atom) || is_underscore();
     _is_break_char = utility::is_break_char(atom);
 }
 
@@ -53,4 +53,14 @@ bool core::atom_status::is_empty_or_whitespace()
 bool core::atom_status::breaks_any()
 {
     return is_empty() || is_whitespace() || is_break_char();
+}
+
+bool core::atom_status::is_underscore()
+{
+    return _atom == '_';
+}
+
+bool core::atom_status::is_identifier_char()
+{
+    return is_alpha_digit_underscore();
 }

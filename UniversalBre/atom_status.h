@@ -25,6 +25,8 @@ namespace core {
         bool is_empty();
         bool is_empty_or_whitespace();
         bool breaks_any();
+        bool is_underscore();
+        bool is_identifier_char();
     };
     PTR_ALIAS(atom_status)
 }

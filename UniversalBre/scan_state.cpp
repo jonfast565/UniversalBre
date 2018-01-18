@@ -102,8 +102,25 @@ core::token core::scan_state::try_scan_float_literal()
 
 core::token core::scan_state::try_scan_identifier()
 {
-    throw exceptions::not_implemented_exception(L"id scan");
-    return core::token(token_type::IDENTIFIER);
+    std::wstring result;
+
+    auto first_char = core::atom_status(get_char());
+    if (!first_char.is_identifier_char()) {
+        throw exceptions::scan_failure(get_char(), L"letter, digit, underscore");
+    }
+
+    auto next_char = get_char_atom();
+    do {
+        if (next_char->is_identifier_char()) {
+            result += get_char();
+            increment_location(1);
+        }
+        else {
+            throw exceptions::scan_failure(get_char(), L"letter, digit, underscore");
+        }
+        next_char = get_char_atom();
+    } while (!next_char->breaks_any());
+    return core::token(token_type::IDENTIFIER, result);
 }
 
 core::token core::scan_state::try_scan_plus_operator()
