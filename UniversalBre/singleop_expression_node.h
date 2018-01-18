@@ -9,11 +9,11 @@ namespace core {
     {
     private:
         expression_node_ptr_s _single_node = nullptr;
-        op_type _temp_op_type = OP_INVALID;
+        op_type _temp_op_type = op_type::OP_INVALID;
     public:
         singleop_expression_node(
             expression_node_ptr_s single_node, 
-            op_type temp_op_type = OP_INVALID)
+            op_type temp_op_type = op_type::OP_INVALID)
             : _single_node(single_node), 
             _temp_op_type(temp_op_type), 
             expression_node(NODE_TYPE_SINGLE) {}

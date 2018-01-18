@@ -37,7 +37,7 @@ void core::parser::eat_token(
 core::expression_node_ptr_s core::parser::parse_program()
 {
     _log_object->log_debug(L"Parse program");
-    auto expression = parse_expression_internal();
+    auto expression = parse_math_expression();
     eat_token(lookahead(), token_type::END_OF_FILE);
     _log_object->log_debug(L"AST side-view");
     expression->print(0);
@@ -47,25 +47,25 @@ core::expression_node_ptr_s core::parser::parse_program()
 core::expression_node_ptr_s core::parser::parse_expression()
 {
     _log_object->log_debug(L"Parse expression");
-    auto result = parse_expression_internal();
+    auto result = parse_math_expression();
     result->print(0);
     return result;
 }
 
-core::expression_node_ptr_s core::parser::parse_expression_internal()
+core::expression_node_ptr_s core::parser::parse_math_expression()
 {
     _log_object->log_debug(L"Parse term expression");
     auto left_node = parse_term();
     while (lookahead() == token_type::PLUS_OPERATOR
         || lookahead() == token_type::MINUS_OPERATOR) {
-        op_type type = OP_INVALID;
+        op_type type = op_type::OP_INVALID;
         switch (lookahead()) {
-        case PLUS_OPERATOR:
+        case token_type::PLUS_OPERATOR:
             eat_token(lookahead(), token_type::PLUS_OPERATOR);
-            type = OP_ADDITION;
+            type = op_type::OP_ADDITION;
             break;
-        case MINUS_OPERATOR:
-            type = OP_SUBTRACTION;
+        case token_type::MINUS_OPERATOR:
+            type = op_type::OP_SUBTRACTION;
             eat_token(lookahead(), token_type::MINUS_OPERATOR);
             break;
         }
@@ -82,14 +82,14 @@ core::expression_node_ptr_s core::parser::parse_term()
     auto left_node = parse_factor();
     while (lookahead() == token_type::MULTIPLY_OPERATOR
         || lookahead() == token_type::DIVIDE_OPERATOR) {
-        op_type type = OP_INVALID;
+        op_type type = op_type::OP_INVALID;
         switch (lookahead()) {
-        case MULTIPLY_OPERATOR:
+        case token_type::MULTIPLY_OPERATOR:
             eat_token(lookahead(), token_type::MULTIPLY_OPERATOR);
-            type = OP_MULTIPLICATION;
+            type = op_type::OP_MULTIPLICATION;
             break;
-        case DIVIDE_OPERATOR:
-            type = OP_DIVISION;
+        case token_type::DIVIDE_OPERATOR:
+            type = op_type::OP_DIVISION;
             eat_token(lookahead(), token_type::DIVIDE_OPERATOR);
             break;
         }
@@ -107,7 +107,7 @@ core::expression_node_ptr_s core::parser::parse_factor()
     case token_type::LEFT_PARENTHESIS:
     {
         eat_token(lookahead(), token_type::LEFT_PARENTHESIS);
-        auto single = parse_expression_internal();
+        auto single = parse_math_expression();
         eat_token(lookahead(), token_type::RIGHT_PARENTHESIS);
         return single;
     }

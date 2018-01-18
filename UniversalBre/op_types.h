@@ -3,7 +3,7 @@
 #include "global_defines.h"
 
 namespace core {
-    enum op_type {
+    enum class op_type {
         // binary operations
         OP_ADDITION,
         OP_SUBTRACTION,
@@ -19,15 +19,15 @@ namespace core {
     };
 
     static std::map<op_type, std::wstring> op_type_index = {
-        { OP_ADDITION, L"Add" },
-        { OP_SUBTRACTION, L"Subtract" },
-        { OP_MULTIPLICATION, L"Multiply" },
-        { OP_DIVISION, L"Divide" },
+        { op_type::OP_ADDITION, L"Add" },
+        { op_type::OP_SUBTRACTION, L"Subtract" },
+        { op_type::OP_MULTIPLICATION, L"Multiply" },
+        { op_type::OP_DIVISION, L"Divide" },
 
-        { OP_JUMP_UNCONDITIONAL , L"Jump Unconditional" },
-        { OP_BREAK, L"Break" },
+        { op_type::OP_JUMP_UNCONDITIONAL , L"Jump Unconditional" },
+        { op_type::OP_BREAK, L"Break" },
 
-        { OP_INVALID, L"Invalid" }
+        { op_type::OP_INVALID, L"Invalid" }
     };
 
     // TODO: IMPLEMENT COMPLETELY

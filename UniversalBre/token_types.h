@@ -3,7 +3,7 @@
 #include "global_defines.h"
 
 namespace core {
-    enum token_type {
+    enum class token_type {
         // file markers
         END_OF_FILE,
 
@@ -31,28 +31,28 @@ namespace core {
 
     static std::map<token_type, std::wstring> token_type_index = {
         // file markers
-        { END_OF_FILE, L"End of file" },
+        { token_type::END_OF_FILE, L"End of file" },
 
         // literals
-        { INTEGER_LITERAL, L"Integer literal" },
-        { STRING_LITERAL, L"String literal" },
-        { FLOAT_LITERAL, L"Float literal" },
-        { IDENTIFIER, L"Identifier" },
+        { token_type::INTEGER_LITERAL, L"Integer literal" },
+        { token_type::STRING_LITERAL, L"String literal" },
+        { token_type::FLOAT_LITERAL, L"Float literal" },
+        { token_type::IDENTIFIER, L"Identifier" },
 
         // operators
-        { PLUS_OPERATOR, L"Plus operator" },
-        { MINUS_OPERATOR, L"Minus operator" },
-        { MULTIPLY_OPERATOR, L"Multiply operator" },
-        { DIVIDE_OPERATOR, L"Divide operator" },
-        { CONCAT_OPERATOR, L"Concat operator" },
+        { token_type::PLUS_OPERATOR, L"Plus operator" },
+        { token_type::MINUS_OPERATOR, L"Minus operator" },
+        { token_type::MULTIPLY_OPERATOR, L"Multiply operator" },
+        { token_type::DIVIDE_OPERATOR, L"Divide operator" },
+        { token_type::CONCAT_OPERATOR, L"Concat operator" },
 
         // parenthesis
-        { LEFT_PARENTHESIS, L"Left parenthesis" },
-        { RIGHT_PARENTHESIS, L"Right parenthesis" },
+        { token_type::LEFT_PARENTHESIS, L"Left parenthesis" },
+        { token_type::RIGHT_PARENTHESIS, L"Right parenthesis" },
 
         // error state
         // used for initialization only
-        { INVALID, L"Invalid" }
+        { token_type::INVALID, L"Invalid" }
     };
 
     // TODO: IMPLEMENT COMPLETELY

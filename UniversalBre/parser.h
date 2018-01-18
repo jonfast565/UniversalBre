@@ -21,7 +21,7 @@ namespace core {
 
         expression_node_ptr_s parse_program();
         expression_node_ptr_s parse_expression();
-        expression_node_ptr_s parse_expression_internal();
+        expression_node_ptr_s parse_math_expression();
         expression_node_ptr_s parse_term();
         expression_node_ptr_s parse_factor();
     public:
