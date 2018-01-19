@@ -226,7 +226,7 @@ core::expression_node_ptr_s core::parser::parse_factor()
     case token_type::LEFT_PARENTHESIS:
     {
         eat_token(lookahead(), token_type::LEFT_PARENTHESIS);
-        auto single = parse_math_expression();
+        auto single = parse_boolean_or_expression();
         eat_token(lookahead(), token_type::RIGHT_PARENTHESIS);
         return single;
     }
