@@ -44,16 +44,136 @@ core::expression_node_ptr_s core::parser::parse_program()
     return expression;
 }
 
+core::expression_node_ptr_s core::parser::parse_assignment_statement()
+{
+    return expression_node_ptr_s();
+}
+
 core::expression_node_ptr_s core::parser::parse_expression()
 {
     _log_object->log_debug(L"Parse expression");
-    auto result = parse_math_expression();
+    auto result = parse_boolean_or_expression();
     return result;
+}
+
+core::expression_node_ptr_s core::parser::parse_boolean_or_expression()
+{
+    _log_object->log_debug(L"Parse boolean or expression");
+    auto left_node = parse_boolean_and_expression();
+    while (lookahead() == token_type::BOOLEAN_OR_OPERATOR) {
+        op_type type = op_type::OP_INVALID;
+        switch (lookahead()) {
+        case token_type::BOOLEAN_OR_OPERATOR:
+            eat_token(lookahead(), token_type::BOOLEAN_OR_OPERATOR);
+            type = op_type::OP_BOOLEAN_OR;
+            break;
+        }
+        auto right_node = parse_boolean_and_expression();
+        left_node = utility::make_ptr_s(
+            binop_expression_node(left_node, right_node, type));
+    }
+    return left_node;
+}
+
+core::expression_node_ptr_s core::parser::parse_boolean_and_expression()
+{
+    _log_object->log_debug(L"Parse boolean and expression");
+    auto left_node = parse_boolean_comparison_expression();
+    while (lookahead() == token_type::BOOLEAN_AND_OPERATOR) {
+        op_type type = op_type::OP_INVALID;
+        switch (lookahead()) {
+        case token_type::BOOLEAN_AND_OPERATOR:
+            eat_token(lookahead(), token_type::BOOLEAN_AND_OPERATOR);
+            type = op_type::OP_BOOLEAN_AND;
+            break;
+        }
+        auto right_node = parse_boolean_comparison_expression();
+        left_node = utility::make_ptr_s(
+            binop_expression_node(left_node, right_node, type));
+    }
+    return left_node;
+}
+
+core::expression_node_ptr_s core::parser::parse_boolean_comparison_expression()
+{
+    _log_object->log_debug(L"Parse boolean comparison expression");
+    auto left_node = parse_boolean_equality_expression();
+    while (lookahead() == token_type::BOOLEAN_GT_OPERATOR
+        || lookahead() == token_type::BOOLEAN_LT_OPERATOR
+        || lookahead() == token_type::BOOLEAN_GTE_OPERATOR
+        || lookahead() == token_type::BOOLEAN_LTE_OPERATOR) {
+        op_type type = op_type::OP_INVALID;
+        switch (lookahead()) {
+        case token_type::BOOLEAN_GT_OPERATOR:
+            eat_token(lookahead(), token_type::BOOLEAN_GT_OPERATOR);
+            type = op_type::OP_BOOLEAN_GT;
+            break;
+        case token_type::BOOLEAN_LT_OPERATOR:
+            eat_token(lookahead(), token_type::BOOLEAN_LT_OPERATOR);
+            type = op_type::OP_BOOLEAN_LT;
+            break;
+        case token_type::BOOLEAN_LTE_OPERATOR:
+            eat_token(lookahead(), token_type::BOOLEAN_LTE_OPERATOR);
+            type = op_type::OP_BOOLEAN_LTE;
+            break;
+        case token_type::BOOLEAN_GTE_OPERATOR:
+            eat_token(lookahead(), token_type::BOOLEAN_GTE_OPERATOR);
+            type = op_type::OP_BOOLEAN_GTE;
+            break;
+        }
+        auto right_node = parse_boolean_equality_expression();
+        left_node = utility::make_ptr_s(
+            binop_expression_node(left_node, right_node, type));
+    }
+    return left_node;
+}
+
+core::expression_node_ptr_s core::parser::parse_boolean_equality_expression()
+{
+    _log_object->log_debug(L"Parse boolean equality expression");
+    auto left_node = parse_concat_expression();
+    while (lookahead() == token_type::BOOLEAN_EQ_OPERATOR
+        || lookahead() == token_type::BOOLEAN_NE_OPERATOR) {
+        op_type type = op_type::OP_INVALID;
+        switch (lookahead()) {
+        case token_type::BOOLEAN_EQ_OPERATOR:
+            eat_token(lookahead(), token_type::BOOLEAN_EQ_OPERATOR);
+            type = op_type::OP_BOOLEAN_EQ;
+            break;
+        case token_type::BOOLEAN_NE_OPERATOR:
+            eat_token(lookahead(), token_type::BOOLEAN_NE_OPERATOR);
+            type = op_type::OP_BOOLEAN_NE;
+            break;
+        }
+        auto right_node = parse_concat_expression();
+        left_node = utility::make_ptr_s(
+            binop_expression_node(left_node, right_node, type));
+    }
+    return left_node;
+}
+
+core::expression_node_ptr_s core::parser::parse_concat_expression()
+{
+    _log_object->log_debug(L"Parse concat expression");
+    auto left_node = parse_math_expression();
+    while (lookahead() == token_type::CONCAT_OPERATOR) {
+        op_type type = op_type::OP_INVALID;
+        switch (lookahead()) {
+        case token_type::CONCAT_OPERATOR:
+            eat_token(lookahead(), token_type::CONCAT_OPERATOR);
+            type = op_type::OP_CONCAT_STRINGS;
+            break;
+        }
+        auto right_node = parse_math_expression();
+        left_node = utility::make_ptr_s(
+            binop_expression_node(left_node, right_node, type));
+    }
+    return left_node;
 }
 
 core::expression_node_ptr_s core::parser::parse_math_expression()
 {
-    _log_object->log_debug(L"Parse term expression");
+    _log_object->log_debug(L"Parse mathematical expression");
     auto left_node = parse_term();
     while (lookahead() == token_type::PLUS_OPERATOR
         || lookahead() == token_type::MINUS_OPERATOR) {
@@ -77,7 +197,7 @@ core::expression_node_ptr_s core::parser::parse_math_expression()
 
 core::expression_node_ptr_s core::parser::parse_term()
 {
-    _log_object->log_debug(L"Parse factor expression");
+    _log_object->log_debug(L"Parse term expression");
     auto left_node = parse_factor();
     while (lookahead() == token_type::MULTIPLY_OPERATOR
         || lookahead() == token_type::DIVIDE_OPERATOR) {
@@ -101,7 +221,7 @@ core::expression_node_ptr_s core::parser::parse_term()
 
 core::expression_node_ptr_s core::parser::parse_factor()
 {
-    _log_object->log_debug(L"Parse sub-expression");
+    _log_object->log_debug(L"Parse factor/sub-expression");
     switch (lookahead()) {
     case token_type::LEFT_PARENTHESIS:
     {
@@ -129,6 +249,16 @@ core::expression_node_ptr_s core::parser::parse_factor()
     {
         auto cur_lexeme = get_token().get_lexeme();
         eat_token(lookahead(), token_type::IDENTIFIER);
+        return utility::make_ptr_s(literal_expression_node(cur_lexeme));
+    }
+    break;
+    case token_type::STRING_LITERAL:
+    {
+        // The grammar can allow this kind of interleaved expression
+        // however, semantic analysis should provide errors on invalid operations
+        // even though concatenation makes sense in this case
+        auto cur_lexeme = get_token().get_lexeme();
+        eat_token(lookahead(), token_type::STRING_LITERAL);
         return utility::make_ptr_s(literal_expression_node(cur_lexeme));
     }
     break;

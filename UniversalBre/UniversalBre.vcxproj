@@ -158,7 +158,6 @@
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="expression_node.h" />
     <ClInclude Include="global_defines.h" />
-    <ClInclude Include="instruction.h" />
     <ClInclude Include="literal_expression_node.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="parser.h" />

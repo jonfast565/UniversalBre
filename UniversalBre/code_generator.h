@@ -1,7 +1,6 @@
 #pragma once
 
 #include "expression_node.h"
-#include "instruction.h"
 #include "utility.h"
 #include "ssa_instruction.h"
 

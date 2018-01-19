@@ -29,8 +29,10 @@ namespace core {
         bool is_empty_or_whitespace();
         bool breaks_any();
         bool breaks_any_integer();
+        bool breaks_any_string();
         bool is_underscore();
         bool is_identifier_char();
+        wchar_t get_atom();
     };
     PTR_ALIAS(atom_status)
 }

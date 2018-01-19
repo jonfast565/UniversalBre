@@ -51,6 +51,7 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
     auto save_state = scan_state(*state);
     scan_state_ptr_s old_state = nullptr;
 
+    // literals
     try {
         auto t = state->try_scan_integer_literal();
         _log_object->log_success(L"Integer literal scanned");
@@ -73,6 +74,7 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_debug(L"Float literal not scanned");
     }
 
+    // parenthesis
     try {
         auto t = state->try_scan_left_parenthesis();
         _log_object->log_success(L"Left parenthesis scanned");
@@ -94,6 +96,97 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_debug(L"Right parenthesis not scanned");
     }
 
+    // double char boolean operators
+    try {
+        auto t = state->try_scan_boolean_and_operator();
+        _log_object->log_success(L"Boolean and operator scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"Boolean and operator not scanned");
+    }
+
+    try {
+        auto t = state->try_scan_boolean_or_operator();
+        _log_object->log_success(L"Boolean or operator scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"Boolean or operator not scanned");
+    }
+
+    try {
+        auto t = state->try_scan_boolean_gte_operator();
+        _log_object->log_success(L"Boolean or operator scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"Boolean greater-than-equal operator not scanned");
+    }
+
+    try {
+        auto t = state->try_scan_boolean_lte_operator();
+        _log_object->log_success(L"Boolean less-than-equal operator scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"Boolean less-than-equal operator not scanned");
+    }
+
+    try {
+        auto t = state->try_scan_boolean_eq_operator();
+        _log_object->log_success(L"Boolean equals operator scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"Boolean equals operator not scanned");
+    }
+
+    try {
+        auto t = state->try_scan_boolean_ne_operator();
+        _log_object->log_success(L"Boolean not-equals operator scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"Boolean not-equals operator not scanned");
+    }
+
+    // single char boolean operators
+    try {
+        auto t = state->try_scan_boolean_lt_operator();
+        _log_object->log_success(L"Boolean less than operator scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"Boolean less than operator not scanned");
+    }
+
+    try {
+        auto t = state->try_scan_boolean_gt_operator();
+        _log_object->log_success(L"Boolean greater than operator scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"Boolean greater than operator not scanned");
+    }
+
+    // single char operators for math
     try {
         auto t = state->try_scan_plus_operator();
         _log_object->log_success(L"Plus operator scanned");
@@ -138,6 +231,7 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_debug(L"Divide operator not scanned");
     }
 
+    // special operators
     try {
         auto t = state->try_scan_concat_operator();
         _log_object->log_success(L"Concat operator scanned");
@@ -149,6 +243,7 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_debug(L"Concat operator not scanned");
     }
 
+    // ids
     try {
         auto t = state->try_scan_identifier();
         _log_object->log_success(L"Identifier scanned");
@@ -160,5 +255,18 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         _log_object->log_debug(L"Identifier not scanned");
     }
 
+    // string literals
+    try {
+        auto t = state->try_scan_string_literal();
+        _log_object->log_success(L"String literal scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"String literal not scanned");
+    }
+
+    // error case
     throw exceptions::scan_failure(state->get_char());
 }

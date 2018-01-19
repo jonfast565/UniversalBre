@@ -41,6 +41,20 @@ namespace core {
         token try_scan_identifier();
         token try_scan_float_literal();
 
+        // boolean equality operators 
+        token try_scan_boolean_eq_operator();
+        token try_scan_boolean_ne_operator();
+
+        // boolean and/or operators
+        token try_scan_boolean_and_operator();
+        token try_scan_boolean_or_operator();
+        
+        // boolean comparison operators
+        token try_scan_boolean_gt_operator();
+        token try_scan_boolean_lt_operator();
+        token try_scan_boolean_gte_operator();
+        token try_scan_boolean_lte_operator();
+
         // operators
         token try_scan_plus_operator();
         token try_scan_minus_operator();

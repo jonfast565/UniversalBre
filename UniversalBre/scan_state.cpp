@@ -95,8 +95,23 @@ core::token core::scan_state::try_scan_integer_literal()
 
 core::token core::scan_state::try_scan_string_literal()
 {
-    throw exceptions::not_implemented_exception(L"string lit scan");
-    return core::token(token_type::STRING_LITERAL);
+    std::wstring result;
+
+    auto first_char = core::atom_status(get_char());
+    if (!first_char.breaks_any_string()) {
+        throw exceptions::scan_failure(get_char(), L"quotation");
+    }
+
+    auto next_char = get_char_atom();
+    do {
+        result += get_char();
+        increment_location(1);
+        next_char = get_char_atom();
+    } while (!next_char->breaks_any_string());
+
+    result += get_char();
+    increment_location(1);
+    return core::token(token_type::STRING_LITERAL, result);
 }
 
 core::token core::scan_state::try_scan_float_literal()
@@ -127,6 +142,116 @@ core::token core::scan_state::try_scan_float_literal()
     } while (!next_char->breaks_any_integer());
 
     return core::token(token_type::FLOAT_LITERAL, result);
+}
+
+core::token core::scan_state::try_scan_boolean_eq_operator()
+{
+    auto first_char = core::atom_status(get_char());
+    if (first_char.get_atom() != L'=') {
+        throw exceptions::scan_failure(get_char(), L"=");
+    }
+    increment_location(1);
+    auto second_char = core::atom_status(get_char());
+    if (second_char.get_atom() != L'=') {
+        throw exceptions::scan_failure(get_char(), L"=");
+    }
+    increment_location(1);
+    return core::token(token_type::BOOLEAN_EQ_OPERATOR);
+}
+
+core::token core::scan_state::try_scan_boolean_ne_operator()
+{
+    auto first_char = core::atom_status(get_char());
+    if (first_char.get_atom() != L'!') {
+        throw exceptions::scan_failure(get_char(), L"!");
+    }
+    increment_location(1);
+    auto second_char = core::atom_status(get_char());
+    if (second_char.get_atom() != L'=') {
+        throw exceptions::scan_failure(get_char(), L"=");
+    }
+    increment_location(1);
+    return core::token(token_type::BOOLEAN_NE_OPERATOR);
+}
+
+core::token core::scan_state::try_scan_boolean_and_operator()
+{
+    auto first_char = core::atom_status(get_char());
+    if (first_char.get_atom() != L'&') {
+        throw exceptions::scan_failure(get_char(), L"&");
+    }
+    increment_location(1);
+    auto second_char = core::atom_status(get_char());
+    if (second_char.get_atom() != L'&') {
+        throw exceptions::scan_failure(get_char(), L"&");
+    }
+    increment_location(1);
+    return core::token(token_type::BOOLEAN_AND_OPERATOR);
+}
+
+core::token core::scan_state::try_scan_boolean_or_operator()
+{
+    auto first_char = core::atom_status(get_char());
+    if (first_char.get_atom() != L'|') {
+        throw exceptions::scan_failure(get_char(), L"|");
+    }
+    increment_location(1);
+    auto second_char = core::atom_status(get_char());
+    if (second_char.get_atom() != L'|') {
+        throw exceptions::scan_failure(get_char(), L"|");
+    }
+    increment_location(1);
+    return core::token(token_type::BOOLEAN_OR_OPERATOR);
+}
+
+core::token core::scan_state::try_scan_boolean_gt_operator()
+{
+    auto first_char = core::atom_status(get_char());
+    if (first_char.get_atom() != L'>') {
+        throw exceptions::scan_failure(get_char(), L">");
+    }
+    increment_location(1);
+    return core::token(token_type::BOOLEAN_GT_OPERATOR);
+}
+
+core::token core::scan_state::try_scan_boolean_lt_operator()
+{
+    auto first_char = core::atom_status(get_char());
+    if (first_char.get_atom() != L'<') {
+        throw exceptions::scan_failure(get_char(), L"<");
+    }
+    increment_location(1);
+    return core::token(token_type::BOOLEAN_LT_OPERATOR);
+}
+
+core::token core::scan_state::try_scan_boolean_gte_operator()
+{
+    auto first_char = core::atom_status(get_char());
+    if (first_char.get_atom() != L'>') {
+        throw exceptions::scan_failure(get_char(), L">");
+    }
+    increment_location(1);
+    auto second_char = core::atom_status(get_char());
+    if (second_char.get_atom() != L'=') {
+        throw exceptions::scan_failure(get_char(), L"=");
+    }
+    increment_location(1);
+    return core::token(token_type::BOOLEAN_GTE_OPERATOR);
+}
+
+core::token core::scan_state::try_scan_boolean_lte_operator()
+{
+    auto first_char = core::atom_status(get_char());
+    if (first_char.get_atom() != L'<') {
+        throw exceptions::scan_failure(get_char(), L"<");
+    }
+    increment_location(1);
+    auto second_char = core::atom_status(get_char());
+    if (second_char.get_atom() != L'=') {
+        throw exceptions::scan_failure(get_char(), L"=");
+    }
+    increment_location(1);
+    return core::token(token_type::BOOLEAN_LTE_OPERATOR);
 }
 
 core::token core::scan_state::try_scan_identifier()

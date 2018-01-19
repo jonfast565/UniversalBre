@@ -71,6 +71,11 @@ bool core::atom_status::breaks_any_integer()
     return is_empty() || is_whitespace() || is_integer_break_char();
 }
 
+bool core::atom_status::breaks_any_string()
+{
+    return _atom == '"';
+}
+
 bool core::atom_status::is_underscore()
 {
     return _atom == '_';
@@ -79,4 +84,9 @@ bool core::atom_status::is_underscore()
 bool core::atom_status::is_identifier_char()
 {
     return is_alpha_digit_underscore();
+}
+
+wchar_t core::atom_status::get_atom()
+{
+    return _atom;
 }

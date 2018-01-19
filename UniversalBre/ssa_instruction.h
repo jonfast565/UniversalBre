@@ -1,7 +1,6 @@
 #pragma once
 
 #include "global_defines.h"
-#include "instruction.h"
 #include "op_types.h"
 
 namespace core {

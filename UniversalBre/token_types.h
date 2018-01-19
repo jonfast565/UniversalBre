@@ -20,6 +20,20 @@ namespace core {
         DIVIDE_OPERATOR,
         CONCAT_OPERATOR,
 
+        // boolean equality operators
+        BOOLEAN_EQ_OPERATOR, // equal to
+        BOOLEAN_NE_OPERATOR, // not equal to
+
+        // boolean comparison operators
+        BOOLEAN_GT_OPERATOR, // greater than
+        BOOLEAN_LT_OPERATOR, // less than
+        BOOLEAN_LTE_OPERATOR, // less than or equal to
+        BOOLEAN_GTE_OPERATOR, // greater than or equal to
+
+        // boolean combinators
+        BOOLEAN_AND_OPERATOR,
+        BOOLEAN_OR_OPERATOR,
+
         // parenthesis
         LEFT_PARENTHESIS,
         RIGHT_PARENTHESIS,

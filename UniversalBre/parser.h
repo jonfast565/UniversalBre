@@ -20,7 +20,13 @@ namespace core {
         void eat_token(token_type actual, token_type expected);
 
         expression_node_ptr_s parse_program();
+        expression_node_ptr_s parse_assignment_statement();
         expression_node_ptr_s parse_expression();
+        expression_node_ptr_s parse_boolean_or_expression();
+        expression_node_ptr_s parse_boolean_and_expression();
+        expression_node_ptr_s parse_boolean_comparison_expression();
+        expression_node_ptr_s parse_boolean_equality_expression();
+        expression_node_ptr_s parse_concat_expression();
         expression_node_ptr_s parse_math_expression();
         expression_node_ptr_s parse_term();
         expression_node_ptr_s parse_factor();

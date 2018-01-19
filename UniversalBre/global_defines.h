@@ -71,7 +71,7 @@ extern "C" void(*old_translator)(unsigned, EXCEPTION_POINTERS*)
 
 #endif
 
-// ptr macros
+// ptr macros for coming up with using defs to shorten declarations
 #define UNIQUE_PTR_ALIAS(x) using x##_ptr_u = std::unique_ptr<x>; 
 #define UNIQUE_VECPTR_ALIAS(x) using x##_vecptr_u = std::unique_ptr<std::vector<x>>;
 #define UNIQUE_VECPTRPTR_ALIAS(x) using x##_vecptrptr_u = std::unique_ptr<std::vector<std::unique_ptr<x>>>;

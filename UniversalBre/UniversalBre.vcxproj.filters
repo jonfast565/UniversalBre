@@ -81,9 +81,6 @@
     <ClInclude Include="code_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="instruction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ssa_instruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
