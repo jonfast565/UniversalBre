@@ -5,9 +5,11 @@
 namespace core {
     class log
     {
+    protected:
+        bool _debug_mode;
     public:
         // ctor/dtor
-        log() {}
+        log(bool debug_mode) : _debug_mode(debug_mode) {}
         virtual ~log() {}
 
         // logging a warning
@@ -24,6 +26,10 @@ namespace core {
         virtual void log_debug(const std::wstring& message) = 0;
         // TODO: Move platform specific method to global inline method
         virtual void set_console_font() = 0;
+
+        void set_debug(bool debug_mode) {
+            _debug_mode = debug_mode;
+        }
     };
     PTR_ALIAS(log)
 }

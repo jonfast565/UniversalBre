@@ -25,7 +25,7 @@ void core::console_log::log_warning(const std::wstring& warn_message) {
 
 void core::console_log::log_success(const std::wstring & success_message)
 {
-    if (_debugging_enabled) {
+    if (_debug_mode) {
 #ifdef _WIN32
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(hConsole, WIN_GREEN);
@@ -61,7 +61,7 @@ void core::console_log::just_log(const std::wstring& message) {
 
 void core::console_log::log_debug(const std::wstring & message)
 {
-    if (_debugging_enabled) {
+    if (_debug_mode) {
 #ifdef _WIN32
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(hConsole, WIN_WHITE);

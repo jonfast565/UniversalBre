@@ -7,11 +7,9 @@ namespace core {
     class console_log :
         public log
     {
-    private:
-        bool _debugging_enabled = false;
     public:
         // ctor/dtor
-        console_log(bool debug) : log(), _debugging_enabled(debug) {};
+        console_log(bool debug) : log(debug) {};
         ~console_log() {};
 
         // same as described in interfaces
