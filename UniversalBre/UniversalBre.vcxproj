@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="assignment_node.h" />
     <ClInclude Include="atom_status.h" />
     <ClInclude Include="binop_expression_node.h" />
     <ClInclude Include="op_types.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="assignment_node.cpp" />
     <ClCompile Include="atom_status.cpp" />
     <ClCompile Include="binop_expression_node.cpp" />
     <ClCompile Include="code_generator.cpp" />

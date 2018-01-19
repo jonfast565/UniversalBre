@@ -93,6 +93,9 @@
     <ClInclude Include="op_types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="assignment_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -141,6 +144,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ssa_instruction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assignment_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
