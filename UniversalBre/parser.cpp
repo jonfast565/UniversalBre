@@ -37,7 +37,7 @@ void core::parser::eat_token(
 core::expression_node_ptr_s core::parser::parse_program()
 {
     _log_object->log_debug(L"Parse program");
-    auto expression = parse_math_expression();
+    auto expression = parse_expression();
     eat_token(lookahead(), token_type::END_OF_FILE);
     _log_object->log_debug(L"AST side-view");
     expression->print(0);
@@ -48,7 +48,6 @@ core::expression_node_ptr_s core::parser::parse_expression()
 {
     _log_object->log_debug(L"Parse expression");
     auto result = parse_math_expression();
-    result->print(0);
     return result;
 }
 
@@ -136,10 +135,25 @@ core::expression_node_ptr_s core::parser::parse_factor()
     case token_type::MINUS_OPERATOR:
     {
         eat_token(lookahead(), token_type::MINUS_OPERATOR);
-        auto cur_lexeme = L"-" + get_token().get_lexeme();
-        eat_token(lookahead(), token_type::INTEGER_LITERAL);
+
         // TODO: Fix this shit, we're appending contextual information in the parser
         // as if it is scanning... dreadful.
+        auto cur_lexeme = L"-" + get_token().get_lexeme();
+
+        switch (lookahead()) {
+        case token_type::INTEGER_LITERAL:
+            eat_token(lookahead(), token_type::INTEGER_LITERAL);
+            break;
+        case token_type::FLOAT_LITERAL:
+            eat_token(lookahead(), token_type::FLOAT_LITERAL);
+            break;
+        case token_type::IDENTIFIER:
+            eat_token(lookahead(), token_type::IDENTIFIER);
+            break;
+        default:
+            auto error_str = L"Negative subexpression not allowed for " + cur_lexeme;
+            throw exceptions::parse_failure(error_str.c_str());
+        }
         return utility::make_ptr_s(literal_expression_node(cur_lexeme));
     }
     break;
