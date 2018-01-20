@@ -90,16 +90,38 @@ core::assignment_node_ptr_s core::parser::parse_assignment_statement()
 core::function_expression_node_ptr_s core::parser::parse_function_expression()
 {
     eat_token(lookahead(), token_type::FUNCTION_KEYWORD);
+    // optional argument list
+    if (lookahead() == token_type::LEFT_PARENTHESIS) {
+        auto argument_list = parse_argument_list();
+    }
     eat_token(lookahead(), token_type::SCOPE_BEGIN_OPERATOR);
+    while (lookahead() != token_type::SCOPE_END_OPERATOR) {
+        auto assignment = parse_assignment_statement();
+        // TODO: Add to function expression node
+    }
     eat_token(lookahead(), token_type::SCOPE_END_OPERATOR);
     return function_expression_node_ptr_s();
+}
+
+core::argument_list_node_ptr_s core::parser::parse_argument_list()
+{
+    eat_token(lookahead(), token_type::LEFT_PARENTHESIS);
+    auto argument_list = utility::make_ptr_s(argument_list_node());
+    while (lookahead() == token_type::IDENTIFIER) {
+        // TODO: Add id to argument list
+        eat_token(lookahead(), token_type::IDENTIFIER);
+        if (lookahead() != token_type::RIGHT_PARENTHESIS) {
+            eat_token(lookahead(), token_type::LIST_DELIMITER);
+        }
+    }
+    eat_token(lookahead(), token_type::RIGHT_PARENTHESIS);
+    return argument_list;
 }
 
 core::expression_node_ptr_s core::parser::parse_expression()
 {
     _log_object->log_debug(L"Parse expression");
     auto result = parse_boolean_or_expression();
-
     return result;
 }
 
@@ -296,6 +318,7 @@ core::expression_node_ptr_s core::parser::parse_factor()
     {
         auto cur_lexeme = get_token().get_lexeme();
         eat_token(lookahead(), token_type::IDENTIFIER);
+        // TODO: Allow parsing of function calls
         return utility::make_ptr_s(literal_expression_node(cur_lexeme));
     }
     break;
@@ -320,18 +343,20 @@ core::expression_node_ptr_s core::parser::parse_factor()
         switch (lookahead()) {
         case token_type::INTEGER_LITERAL:
             eat_token(lookahead(), token_type::INTEGER_LITERAL);
+            return utility::make_ptr_s(literal_expression_node(cur_lexeme));
             break;
         case token_type::FLOAT_LITERAL:
             eat_token(lookahead(), token_type::FLOAT_LITERAL);
+            return utility::make_ptr_s(literal_expression_node(cur_lexeme));
             break;
         case token_type::IDENTIFIER:
             eat_token(lookahead(), token_type::IDENTIFIER);
+            return utility::make_ptr_s(literal_expression_node(cur_lexeme));
             break;
         default:
             auto error_str = L"Negative subexpression not allowed for " + cur_lexeme;
             throw exceptions::parse_failure(error_str.c_str());
         }
-        return utility::make_ptr_s(literal_expression_node(cur_lexeme));
     }
     break;
     default:

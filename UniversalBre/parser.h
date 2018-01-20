@@ -7,6 +7,7 @@
 #include "literal_expression_node.h"
 
 #include "assignment_node.h"
+#include "argument_list_node.h"
 
 #include "op_types.h"
 
@@ -27,6 +28,7 @@ namespace core {
         assignment_node_vecptrptr_s parse_program();
         assignment_node_ptr_s parse_assignment_statement();
         function_expression_node_ptr_s parse_function_expression();
+        argument_list_node_ptr_s parse_argument_list();
         expression_node_ptr_s parse_expression();
         expression_node_ptr_s parse_boolean_or_expression();
         expression_node_ptr_s parse_boolean_and_expression();
