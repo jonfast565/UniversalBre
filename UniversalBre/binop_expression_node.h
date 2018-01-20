@@ -2,7 +2,6 @@
 
 #include "expression_node.h"
 #include "literal_expression_node.h"
-#include "singleop_expression_node.h"
 #include "op_types.h"
 
 namespace core {
