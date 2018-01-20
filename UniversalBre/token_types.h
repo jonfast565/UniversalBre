@@ -7,6 +7,10 @@ namespace core {
         // file markers
         END_OF_FILE,
 
+        // scoping
+        SCOPE_BEGIN_OPERATOR,
+        SCOPE_END_OPERATOR,
+
         // literals
         INTEGER_LITERAL,
         STRING_LITERAL,
@@ -43,6 +47,9 @@ namespace core {
 
         // program delimiters
         SEMICOLON,
+        LIST_DELIMITER,
+
+        // keywords
         FUNCTION_KEYWORD,
         INFINITE_KEYWORD,
         BREAK_KEYWORD,
@@ -55,6 +62,10 @@ namespace core {
     static std::map<token_type, std::wstring> token_type_index = {
         // file markers
         { token_type::END_OF_FILE, L"End of file" },
+
+        // keywords
+        { token_type::FUNCTION_KEYWORD, L"Function" },
+        { token_type::LIST_DELIMITER, L"List delimiter" },
 
         // literals
         { token_type::INTEGER_LITERAL, L"Integer literal" },

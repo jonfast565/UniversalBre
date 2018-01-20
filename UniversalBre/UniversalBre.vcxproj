@@ -150,6 +150,7 @@
     <ClInclude Include="assignment_node.h" />
     <ClInclude Include="atom_status.h" />
     <ClInclude Include="binop_expression_node.h" />
+    <ClInclude Include="function_expression_node.h" />
     <ClInclude Include="op_types.h" />
     <ClInclude Include="boxed_value.h" />
     <ClInclude Include="code_generator.h" />

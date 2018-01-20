@@ -65,8 +65,50 @@ void core::scan_state::skip_whitespace()
         else
             break;
     }
-
     increment_location(temp_ctr);
+}
+
+core::token core::scan_state::try_scan_function_keyword()
+{
+    auto first_char = core::atom_status(get_char());
+    if (!(first_char.get_atom() == L'f'
+        || first_char.get_atom() == L'F')) {
+        throw exceptions::scan_failure(get_char(), L"f");
+    }
+    increment_location(1);
+    auto second_char = core::atom_status(get_char());
+    if (!(second_char.get_atom() != L'i'
+        || second_char.get_atom() != L'I')) {
+        throw exceptions::scan_failure(get_char(), L"i");
+    }
+    increment_location(1);
+    auto third_char = core::atom_status(get_char());
+    if (!(third_char.get_atom() != L'n'
+        || third_char.get_atom() != L'N')) {
+        throw exceptions::scan_failure(get_char(), L"n");
+    }
+    increment_location(1);
+    return core::token(token_type::FUNCTION_KEYWORD);
+}
+
+core::token core::scan_state::try_scan_begin_scope_operator()
+{
+    auto first_char = core::atom_status(get_char());
+    if (first_char.get_atom() != L'{') {
+        throw exceptions::scan_failure(get_char(), L"{");
+    }
+    increment_location(1);
+    return core::token(token_type::SCOPE_BEGIN_OPERATOR);
+}
+
+core::token core::scan_state::try_scan_end_scope_operator()
+{
+    auto first_char = core::atom_status(get_char());
+    if (first_char.get_atom() != L'}') {
+        throw exceptions::scan_failure(get_char(), L"}");
+    }
+    increment_location(1);
+    return core::token(token_type::SCOPE_END_OPERATOR);
 }
 
 core::token core::scan_state::try_scan_integer_literal()
@@ -373,6 +415,17 @@ core::token core::scan_state::try_scan_semicolon()
     }
     else {
         throw exceptions::scan_failure(get_char(), L"semicolon");
+    }
+}
+
+core::token core::scan_state::try_scan_list_delimiter()
+{
+    if (get_char() == L',') {
+        increment_location(1);
+        return core::token(token_type::LIST_DELIMITER);
+    }
+    else {
+        throw exceptions::scan_failure(get_char(), L"list delimiter");
     }
 }
 

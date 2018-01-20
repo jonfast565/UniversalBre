@@ -93,6 +93,9 @@
     <ClInclude Include="assignment_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="function_expression_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

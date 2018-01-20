@@ -51,7 +51,17 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
     auto save_state = scan_state(*state);
     scan_state_ptr_s old_state = nullptr;
 
-    // keywords... coming soon
+    // keywords
+    try {
+        auto t = state->try_scan_function_keyword();
+        _log_object->log_success(L"Function keyword scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"Function keyword not scanned");
+    }
 
     // literals
     try {
@@ -96,6 +106,28 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Right parenthesis not scanned");
+    }
+
+    // scoping
+    try {
+        auto t = state->try_scan_begin_scope_operator();
+        _log_object->log_success(L"Begin scope operator scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        _log_object->log_debug(L"Begin scope operator not scanned");
+    }
+
+    try {
+        auto t = state->try_scan_end_scope_operator();
+        _log_object->log_success(L"End scope operator scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"End scope operator not scanned");
     }
 
     // double char boolean operators
@@ -254,6 +286,17 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Semicolon not scanned");
+    }
+
+    try {
+        auto t = state->try_scan_list_delimiter();
+        _log_object->log_success(L"List delimiter scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"List delimiter not scanned");
     }
 
     try {

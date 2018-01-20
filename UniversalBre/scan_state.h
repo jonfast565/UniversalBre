@@ -37,9 +37,18 @@ namespace core {
         // scan methods
 
         // keywords
-        // token try_scan_function_keyword();
+        // functions
+        token try_scan_function_keyword();
+        // loops
         // token try_scan_infinite_keyword();
         // token try_scan_break_keyword();
+        // language features
+        // token try_scan_feature_keyword();
+        // token try_scan_autobreak_keyword();
+
+        // brackets
+        token try_scan_begin_scope_operator();
+        token try_scan_end_scope_operator();
 
         // literals
         token try_scan_integer_literal();
@@ -75,6 +84,7 @@ namespace core {
 
         // program delimiters
         token try_scan_semicolon();
+        token try_scan_list_delimiter();
 
         // file delimiters
         token try_scan_end_of_file();
