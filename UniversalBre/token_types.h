@@ -43,6 +43,9 @@ namespace core {
 
         // program delimiters
         SEMICOLON,
+        FUNCTION_KEYWORD,
+        INFINITE_KEYWORD,
+        BREAK_KEYWORD,
 
         // error state
         // used for initialization only

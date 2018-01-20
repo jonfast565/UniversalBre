@@ -35,6 +35,12 @@ namespace core {
         void skip_whitespace();
 
         // scan methods
+
+        // keywords
+        // token try_scan_function_keyword();
+        // token try_scan_infinite_keyword();
+        // token try_scan_break_keyword();
+
         // literals
         token try_scan_integer_literal();
         token try_scan_string_literal();

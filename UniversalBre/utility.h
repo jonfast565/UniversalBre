@@ -12,12 +12,12 @@ namespace core {
     const int newline_chars_length = 2;
 
     // initialize breaking characters definition
-    const wchar_t breaking_chars[] = { '(', ')', '+', '-', '*', '/', '~', '.', '<', '>', '=', '&', '|', ';'};
-    const int breaking_chars_length = 14;
+    const wchar_t breaking_chars[] = { '(', ')', '+', '-', '*', '/', '~', '.', '<', '>', '=', '&', '|', ';', '{', '}'};
+    const int breaking_chars_length = 16;
 
     // initialize breaking characters specifically for numeric scanning
-    const wchar_t integer_breaking_chars[] = { '(', ')', '+', '-', '*', '/', '~', '<', '>', '=', '&', '|', ';' };
-    const int integer_breaking_chars_length = 13;
+    const wchar_t integer_breaking_chars[] = { '(', ')', '+', '-', '*', '/', '~', '<', '>', '=', '&', '|', ';', '{', '}' };
+    const int integer_breaking_chars_length = 15;
 }
 
 class utility {
