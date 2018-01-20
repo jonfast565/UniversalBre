@@ -246,6 +246,17 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
     }
 
     try {
+        auto t = state->try_scan_semicolon();
+        _log_object->log_success(L"Semicolon scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"Semicolon not scanned");
+    }
+
+    try {
         auto t = state->try_scan_assignment_operator();
         _log_object->log_success(L"Assignment operator scanned");
         return t;
