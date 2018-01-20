@@ -38,6 +38,12 @@ namespace core {
         LEFT_PARENTHESIS,
         RIGHT_PARENTHESIS,
 
+        // operators for special operations
+        ASSIGNMENT_OPERATOR,
+
+        // program delimiters
+        SEMICOLON,
+
         // error state
         // used for initialization only
         INVALID
@@ -63,6 +69,11 @@ namespace core {
         // parenthesis
         { token_type::LEFT_PARENTHESIS, L"Left parenthesis" },
         { token_type::RIGHT_PARENTHESIS, L"Right parenthesis" },
+
+        { token_type::ASSIGNMENT_OPERATOR, L"Assignment operator" },
+
+        // program delimiters
+        { token_type::SEMICOLON, L"Semicolon" },
 
         // error state
         // used for initialization only

@@ -1,10 +1,14 @@
 #pragma once
 
 #include "scanner.h"
+
 #include "expression_node.h"
 #include "binop_expression_node.h"
 #include "literal_expression_node.h"
 #include "singleop_expression_node.h"
+
+#include "assignment_node.h"
+
 #include "op_types.h"
 
 namespace core {
@@ -17,10 +21,12 @@ namespace core {
 
         token_type lookahead();
         token get_token();
-        void eat_token(token_type actual, token_type expected);
 
-        expression_node_ptr_s parse_program();
-        expression_node_ptr_s parse_assignment_statement();
+        void eat_token(token_type actual, token_type expected);
+        void print_expression(core::expression_node_ptr_s &expression);
+
+        assignment_node_vecptrptr_s parse_program();
+        assignment_node_ptr_s parse_assignment_statement();
         expression_node_ptr_s parse_expression();
         expression_node_ptr_s parse_boolean_or_expression();
         expression_node_ptr_s parse_boolean_and_expression();

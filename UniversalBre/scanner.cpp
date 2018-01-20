@@ -51,6 +51,8 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
     auto save_state = scan_state(*state);
     scan_state_ptr_s old_state = nullptr;
 
+    // keywords... coming soon
+
     // literals
     try {
         auto t = state->try_scan_integer_literal();
@@ -241,6 +243,17 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
         old_state = utility::make_ptr_s(scan_state(*state));
         *state = save_state;
         _log_object->log_debug(L"Concat operator not scanned");
+    }
+
+    try {
+        auto t = state->try_scan_assignment_operator();
+        _log_object->log_success(L"Assignment operator scanned");
+        return t;
+    }
+    catch (exceptions::extended_exception&) {
+        old_state = utility::make_ptr_s(scan_state(*state));
+        *state = save_state;
+        _log_object->log_debug(L"Assignment operator not scanned");
     }
 
     // ids

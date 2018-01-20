@@ -8,14 +8,15 @@ namespace core {
     {
     private:
         std::wstring _variable_name;
-        binop_expression_node_ptr_s _expression;
+        expression_node_ptr_s _expression;
     public:
         assignment_node(
             std::wstring variable_name, 
-            binop_expression_node_ptr_s expression) : 
+            expression_node_ptr_s expression) : 
             _variable_name(variable_name), 
             _expression(expression) {}
         virtual ~assignment_node() {}
     };
+    PTR_ALIAS(assignment_node)
 }
 

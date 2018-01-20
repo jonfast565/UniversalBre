@@ -3,7 +3,10 @@
 core::expression_node_ptr_s core::parser::parse()
 {
     _log_object->log_debug(L"Parse program");
-    return parse_program();
+    // TODO: This is wrong
+    parse_program();
+    // TODO: This is worse than above
+    return nullptr;
 }
 
 core::token_type core::parser::lookahead()
@@ -34,19 +37,42 @@ void core::parser::eat_token(
     _location++;
 }
 
-core::expression_node_ptr_s core::parser::parse_program()
+core::assignment_node_vecptrptr_s core::parser::parse_program()
 {
     _log_object->log_debug(L"Parse program");
-    auto expression = parse_expression();
+
+    assignment_node_vecptrptr_s assignment_statements =
+        utility::make_ptr_s(std::vector<assignment_node_ptr_s>());
+
+    while (lookahead() != token_type::END_OF_FILE) {
+        auto result = parse_assignment_statement();
+        assignment_statements->push_back(result);
+    }
+
     eat_token(lookahead(), token_type::END_OF_FILE);
-    _log_object->log_debug(L"AST side-view");
-    expression->print(0);
-    return expression;
+    return assignment_statements;
 }
 
-core::expression_node_ptr_s core::parser::parse_assignment_statement()
+void core::parser::print_expression(core::expression_node_ptr_s &expression)
 {
-    return expression_node_ptr_s();
+    _log_object->log_debug(L"AST side-view");
+    expression->print(0);
+}
+
+core::assignment_node_ptr_s core::parser::parse_assignment_statement()
+{
+    _log_object->log_debug(L"Parse assignment statement");
+
+    auto id_name = get_token().get_lexeme();
+    eat_token(lookahead(), token_type::IDENTIFIER);
+    eat_token(lookahead(), token_type::ASSIGNMENT_OPERATOR);
+
+    auto expression = parse_expression();
+    print_expression(expression);
+
+    auto result = utility::make_ptr_s(assignment_node(id_name, expression));
+    eat_token(lookahead(), token_type::SEMICOLON);
+    return result;
 }
 
 core::expression_node_ptr_s core::parser::parse_expression()

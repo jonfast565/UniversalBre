@@ -332,6 +332,17 @@ core::token core::scan_state::try_scan_concat_operator()
     }
 }
 
+core::token core::scan_state::try_scan_assignment_operator()
+{
+    if (get_char() == L'=') {
+        increment_location(1);
+        return core::token(token_type::ASSIGNMENT_OPERATOR);
+    }
+    else {
+        throw exceptions::scan_failure(get_char(), L"assignment operator");
+    }
+}
+
 core::token core::scan_state::try_scan_left_parenthesis()
 {
     if (get_char() == L'(') {
@@ -351,6 +362,17 @@ core::token core::scan_state::try_scan_right_parenthesis()
     }
     else {
         throw exceptions::scan_failure(get_char(), L"right parenthesis");
+    }
+}
+
+core::token core::scan_state::try_scan_semicolon()
+{
+    if (get_char() == L';') {
+        increment_location(1);
+        return core::token(token_type::SEMICOLON);
+    }
+    else {
+        throw exceptions::scan_failure(get_char(), L"semicolon");
     }
 }
 

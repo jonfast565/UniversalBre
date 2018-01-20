@@ -61,10 +61,14 @@ namespace core {
         token try_scan_multiply_operator();
         token try_scan_divide_operator();
         token try_scan_concat_operator();
+        token try_scan_assignment_operator();
 
         // parenthesis
         token try_scan_left_parenthesis();
         token try_scan_right_parenthesis();
+
+        // program delimiters
+        token try_scan_semicolon();
 
         // file delimiters
         token try_scan_end_of_file();
