@@ -34,5 +34,5 @@ namespace core {
         bool is_identifier_char();
         wchar_t get_atom();
     };
-    PTR_ALIAS(atom_status)
+    ALIAS_TYPES(atom_status)
 }

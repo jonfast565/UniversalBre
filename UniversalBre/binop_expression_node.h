@@ -42,6 +42,6 @@ namespace core {
         void set_left_node(expression_node_ptr_s node);
         void set_right_node(expression_node_ptr_s node);
     };
-    PTR_ALIAS(binop_expression_node)
+    ALIAS_TYPES(binop_expression_node)
 }
 

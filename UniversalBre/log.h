@@ -31,6 +31,6 @@ namespace core {
             _debug_mode = debug_mode;
         }
     };
-    PTR_ALIAS(log)
+    ALIAS_TYPES(log)
 }
 

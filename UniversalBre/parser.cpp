@@ -61,7 +61,7 @@ void core::parser::print_expression(core::expression_node_ptr_s &expression)
 
 core::assignment_node_ptr_s core::parser::parse_assignment_statement()
 {
-    _log_object->log_debug(L"Parse assignment statement");
+    _log_object->log_debug(L"Parse function/var assignment statement");
 
     auto id_name = get_token().get_lexeme();
     eat_token(lookahead(), token_type::IDENTIFIER);
@@ -69,16 +69,27 @@ core::assignment_node_ptr_s core::parser::parse_assignment_statement()
 
     switch (lookahead()) {
     case token_type::FUNCTION_KEYWORD:
-        //auto function_expression = parse_function_expression();
-        //return function_expression;
-        throw exceptions::not_implemented_exception(L"Function expression not implemented");
+    {
+        auto function_expression = parse_function_expression();
+        auto result = utility::make_ptr_s(assignment_node(id_name, function_expression));
+        eat_token(lookahead(), token_type::SEMICOLON);
+        return result;
+    }
     default:
+    {
         auto expression = parse_expression();
         print_expression(expression);
         auto result = utility::make_ptr_s(assignment_node(id_name, expression));
         eat_token(lookahead(), token_type::SEMICOLON);
         return result;
     }
+    break;
+    }
+}
+
+core::function_expression_node_ptr_s core::parser::parse_function_expression()
+{
+    return function_expression_node_ptr_s();
 }
 
 core::expression_node_ptr_s core::parser::parse_expression()

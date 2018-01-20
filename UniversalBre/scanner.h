@@ -23,6 +23,6 @@ namespace core {
         // scan and provide a vector
         core::token_vecptr_s scan_all(const std::wstring& input);
     };
-    PTR_ALIAS(scanner)
+    ALIAS_TYPES(scanner)
 }
 

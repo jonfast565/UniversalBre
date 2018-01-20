@@ -22,5 +22,5 @@ namespace core {
             return _node_type;
         }
     };
-    PTR_ALIAS(expression_node)
+    ALIAS_TYPES(expression_node)
 }

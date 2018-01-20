@@ -16,5 +16,5 @@ namespace core {
         // that two newlines terminate
         std::wstring get_interactive_multiple_input();
     };
-    PTR_ALIAS(console_handler)
+    ALIAS_TYPES(console_handler)
 }

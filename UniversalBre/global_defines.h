@@ -86,6 +86,12 @@ extern "C" void(*old_translator)(unsigned, EXCEPTION_POINTERS*)
                      UNIQUE_VECPTRPTR_ALIAS(x) \
                      SHARED_VECPTRPTR_ALIAS(x)
 
-# define VEC_ALIAS(x) using x##_vec = std::vector<x>;
+# define VEC_ALIAS_1(x) using x##_vec = std::vector<x>;
+# define VEC_ALIAS_2(x) using x##_ptr_vec_s = std::vector<std::shared_ptr<x>>;
+# define VEC_ALIAS(x) VEC_ALIAS_1(x) \
+                      VEC_ALIAS_2(x)
+
+# define ALIAS_TYPES(x) PTR_ALIAS(x)\
+                        VEC_ALIAS(x)
 
 // Defines/Includes: add beneath this line

@@ -27,6 +27,6 @@ namespace core {
         expression_node_ptr_s get_single_node();
         void set_single_node(expression_node_ptr_s node);
     };
-    PTR_ALIAS(singleop_expression_node)
+    ALIAS_TYPES(singleop_expression_node)
 }
 

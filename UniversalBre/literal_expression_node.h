@@ -15,6 +15,6 @@ namespace core {
         virtual ~literal_expression_node() {}
         void print(int indent);
     };
-    PTR_ALIAS(literal_expression_node)
+    ALIAS_TYPES(literal_expression_node)
 }
 

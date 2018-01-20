@@ -22,6 +22,6 @@ namespace core {
             _target(target) {}
         virtual ~ssa_instruction() {}
     };
-    PTR_ALIAS(ssa_instruction)
+    ALIAS_TYPES(ssa_instruction)
 }
 

@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="argument_list_node.h" />
     <ClInclude Include="assignment_node.h" />
     <ClInclude Include="atom_status.h" />
     <ClInclude Include="binop_expression_node.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="program_header.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="scan_state.h" />
+    <ClInclude Include="semantic_types.h" />
     <ClInclude Include="singleop_expression_node.h" />
     <ClInclude Include="ssa_instruction.h" />
     <ClInclude Include="token.h" />
@@ -176,6 +178,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="argument_list_node.cpp" />
     <ClCompile Include="assignment_node.cpp" />
     <ClCompile Include="atom_status.cpp" />
     <ClCompile Include="binop_expression_node.cpp" />

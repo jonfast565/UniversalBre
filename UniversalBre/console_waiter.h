@@ -9,5 +9,5 @@ namespace core {
         virtual ~console_waiter() {}
         void wait();
     };
-    PTR_ALIAS(console_waiter)
+    ALIAS_TYPES(console_waiter)
 }

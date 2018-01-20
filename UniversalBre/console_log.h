@@ -21,6 +21,6 @@ namespace core {
         void log_debug(const std::wstring& message);
         void set_console_font();
     };
-    PTR_ALIAS(console_log)
+    ALIAS_TYPES(console_log)
 }
 

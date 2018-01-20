@@ -17,7 +17,6 @@ namespace core {
         token_type get_type();
         std::wstring get_lexeme();
     };
-    PTR_ALIAS(token)
-    VEC_ALIAS(token)
+    ALIAS_TYPES(token)
 }
 

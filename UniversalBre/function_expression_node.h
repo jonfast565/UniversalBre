@@ -8,5 +8,5 @@ namespace core {
         : public expression_node {
 
     };
-    PTR_ALIAS(function_expression_node)
+    ALIAS_TYPES(function_expression_node)
 }

@@ -92,6 +92,6 @@ namespace core {
         // scan delimiters
         bool out_of_range();
     };
-    PTR_ALIAS(scan_state)
+    ALIAS_TYPES(scan_state)
 }
 
