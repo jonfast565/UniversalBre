@@ -31,27 +31,6 @@ void core::binop_expression_node::print(int indent)
     }
 }
 
-void core::binop_expression_node::fold_expr_node()
-{
-    /*
-    if (_right_node->get_node_type() == NODE_TYPE_SINGLE
-        && _op_type == OP_EXPR_PART) {
-        auto singleop_ptr =
-            std::static_pointer_cast<singleop_expression_node>(_right_node);
-        _op_type = singleop_ptr->get_op_type();
-        _right_node = singleop_ptr->get_single_node();
-    }
-
-    if (_right_node->get_node_type() == NODE_TYPE_BINARY
-        && _op_type == OP_EXPR_PART) {
-        auto binaryop_ptr =
-            std::static_pointer_cast<binop_expression_node>(_right_node);
-        _op_type = binaryop_ptr->get_op_type();
-        _right_node = binaryop_ptr;
-    }
-    */
-}
-
 core::op_type core::binop_expression_node::get_op_type()
 {
     return _op_type;
