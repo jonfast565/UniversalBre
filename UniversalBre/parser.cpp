@@ -89,6 +89,9 @@ core::assignment_node_ptr_s core::parser::parse_assignment_statement()
 
 core::function_expression_node_ptr_s core::parser::parse_function_expression()
 {
+    eat_token(lookahead(), token_type::FUNCTION_KEYWORD);
+    eat_token(lookahead(), token_type::SCOPE_BEGIN_OPERATOR);
+    eat_token(lookahead(), token_type::SCOPE_END_OPERATOR);
     return function_expression_node_ptr_s();
 }
 
@@ -96,6 +99,7 @@ core::expression_node_ptr_s core::parser::parse_expression()
 {
     _log_object->log_debug(L"Parse expression");
     auto result = parse_boolean_or_expression();
+
     return result;
 }
 

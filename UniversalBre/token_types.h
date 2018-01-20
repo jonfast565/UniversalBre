@@ -53,6 +53,10 @@ namespace core {
         FUNCTION_KEYWORD,
         INFINITE_KEYWORD,
         BREAK_KEYWORD,
+        FEATURE_KEYWORD,
+        AUTOBREAK_KEYWORD,
+        ON_KEYWORD,
+        OFF_KEYWORD,
 
         // error state
         // used for initialization only
@@ -83,7 +87,6 @@ namespace core {
         // parenthesis
         { token_type::LEFT_PARENTHESIS, L"Left parenthesis" },
         { token_type::RIGHT_PARENTHESIS, L"Right parenthesis" },
-
         { token_type::ASSIGNMENT_OPERATOR, L"Assignment operator" },
 
         // program delimiters
