@@ -39,7 +39,7 @@ void core::console_log::log_success(const std::wstring& success_message)
         std::wcout << "[Success] " << success_message << std::endl;
         SetConsoleTextAttribute(h_console, WIN_WHITE);
 #else
-        std::wcerr << "[Success] " << error_message << std::endl;
+        std::wcerr << "[Success] " << success_message << std::endl;
 #endif
     }
 }
@@ -64,7 +64,7 @@ void core::console_log::just_log(const std::wstring& message)
     std::wcout << message << std::endl;
     SetConsoleTextAttribute(h_console, WIN_WHITE);
 #else
-    std::wcerr << error_message << std::endl;
+    std::wcerr << message << std::endl;
 #endif
 }
 

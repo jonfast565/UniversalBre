@@ -129,7 +129,11 @@ const void utility::concat_in_place(const wchar_t** result, const int count, ...
     // Must free after using this method, srsly
     // this is a bad pattern, exposing the caller to memory mgmt
     // TODO: Implement something better
+#ifdef _WIN32
     *result = _wcsdup(temp.c_str());
+#else
+    *result = wcsdup(temp.c_str());
+#endif
 }
 
 const void utility::concat_two(
