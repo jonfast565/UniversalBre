@@ -14,7 +14,7 @@ namespace core
         log_ptr_s _log_object;
 
         // initial scanning + state ops
-        token scan_one(scan_state_ptr_s state);
+        token scan_one(const scan_state_ptr_s& state);
         scan_state get_initial_state(const std::wstring& input);
     public:
         // ctor/dtor

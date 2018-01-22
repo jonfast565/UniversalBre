@@ -16,7 +16,7 @@ core::scanner::~scanner()
 core::token_vecptr_s core::scanner::scan_all(const std::wstring& input)
 {
     auto token_list_ptr = utility::make_ptr_s(token_vec());
-    auto start_state = utility::make_ptr_s(get_initial_state(input));
+    const auto start_state = utility::make_ptr_s(get_initial_state(input));
     token_ptr_s last_token = nullptr;
 
     auto pass_ctr = 1;
@@ -33,7 +33,7 @@ core::token_vecptr_s core::scanner::scan_all(const std::wstring& input)
     return token_list_ptr;
 }
 
-core::token core::scanner::scan_one(scan_state_ptr_s state)
+core::token core::scanner::scan_one(const scan_state_ptr_s& state)
 {
     // skip all whitespace
     _log_object->log_debug(L"Skipping whitespace");
@@ -51,7 +51,7 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
     }
 
     // save state to ensure we can rewind
-    auto save_state = scan_state(*state);
+    const auto save_state = scan_state(*state);
     scan_state_ptr_s old_state = nullptr;
 
     // keywords
@@ -388,5 +388,5 @@ core::token core::scanner::scan_one(scan_state_ptr_s state)
     }
 
     // error case
-    throw exceptions::scan_failure(state->get_char());
+    throw exceptions::scan_failure(old_state->get_char());
 }
