@@ -1,72 +1,82 @@
 #include "console_log.h"
 
-void core::console_log::log_default(const std::wstring& message) {
+core::console_log::console_log(const bool debug) : log(debug)
+{
+}
+
+void core::console_log::log_default(const std::wstring& message)
+{
 #ifdef _WIN32
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, WIN_BLUE);
+    const auto h_console = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(h_console, WIN_BLUE);
     std::wcout << "[Info] " << message << std::endl;
-    SetConsoleTextAttribute(hConsole, WIN_WHITE);
+    SetConsoleTextAttribute(h_console, WIN_WHITE);
 
 #else
     std::wcout << "[Info] " << message << std::endl;
 #endif
 }
 
-void core::console_log::log_warning(const std::wstring& warn_message) {
+void core::console_log::log_warning(const std::wstring& warn_message)
+{
 #ifdef _WIN32
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, WIN_YELLOW);
+    const auto h_console = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(h_console, WIN_YELLOW);
     std::wcout << "[Warning] " << warn_message << std::endl;
-    SetConsoleTextAttribute(hConsole, WIN_WHITE);
+    SetConsoleTextAttribute(h_console, WIN_WHITE);
 #else
     std::wcerr << "[Warning] " << warn_message << std::endl;
 #endif
 }
 
-void core::console_log::log_success(const std::wstring & success_message)
+void core::console_log::log_success(const std::wstring& success_message)
 {
-    if (_debug_mode) {
+    if (_debug_mode)
+    {
 #ifdef _WIN32
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hConsole, WIN_GREEN);
+        const auto h_console = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(h_console, WIN_GREEN);
         std::wcout << "[Success] " << success_message << std::endl;
-        SetConsoleTextAttribute(hConsole, WIN_WHITE);
+        SetConsoleTextAttribute(h_console, WIN_WHITE);
 #else
         std::wcerr << "[Success] " << error_message << std::endl;
 #endif
     }
 }
 
-void core::console_log::log_error(const std::wstring& error_message) {
+void core::console_log::log_error(const std::wstring& error_message)
+{
 #ifdef _WIN32
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, WIN_RED);
+    const auto h_console = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(h_console, WIN_RED);
     std::wcout << "[Error] " << error_message << std::endl;
-    SetConsoleTextAttribute(hConsole, WIN_WHITE);
+    SetConsoleTextAttribute(h_console, WIN_WHITE);
 #else
     std::wcerr << "[Error] " << error_message << std::endl;
 #endif
 }
 
-void core::console_log::just_log(const std::wstring& message) {
+void core::console_log::just_log(const std::wstring& message)
+{
 #ifdef _WIN32
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, WIN_WHITE);
+    const auto h_console = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(h_console, WIN_WHITE);
     std::wcout << message << std::endl;
-    SetConsoleTextAttribute(hConsole, WIN_WHITE);
+    SetConsoleTextAttribute(h_console, WIN_WHITE);
 #else
     std::wcerr << error_message << std::endl;
 #endif
 }
 
-void core::console_log::log_debug(const std::wstring & message)
+void core::console_log::log_debug(const std::wstring& message)
 {
-    if (_debug_mode) {
+    if (_debug_mode)
+    {
 #ifdef _WIN32
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hConsole, WIN_WHITE);
+        const auto h_console = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(h_console, WIN_WHITE);
         std::wcout << "[Debug] " << message << std::endl;
-        SetConsoleTextAttribute(hConsole, WIN_WHITE);
+        SetConsoleTextAttribute(h_console, WIN_WHITE);
 #else
         std::wcerr << "[Debug] " << message << std::endl;
 #endif

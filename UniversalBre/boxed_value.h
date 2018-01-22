@@ -2,29 +2,32 @@
 
 #include "global_defines.h"
 
-namespace core {
+namespace core
+{
     template <typename T>
     class boxed_value
     {
-    private:
-        T _value;
+        T value_;
     public:
-        boxed_value(T value) : _value(value) {}
-        ~boxed_value() {}
+        explicit boxed_value(T value);
         T get_value();
         void set_value(T value);
     };
 
     template<typename T>
-    inline T boxed_value<T>::get_value()
+    boxed_value<T>::boxed_value(T value) : value_(value)
     {
-        return _value;
     }
 
-    template<typename T>
-    inline void boxed_value<T>::set_value(T value)
+    template <typename T>
+    T boxed_value<T>::get_value()
     {
-        _value = value;
+        return value_;
     }
-    ALIAS_TYPES(boxed_value)
+
+    template <typename T>
+    void boxed_value<T>::set_value(T value)
+    {
+        value_ = value;
+    }
 }

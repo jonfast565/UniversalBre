@@ -7,25 +7,24 @@
 #include "token_types.h"
 #include "token.h"
 
-namespace core {
+namespace core
+{
     class scan_state
     {
-    private:
         // counters
-        int _backtrack = 0;
-        int _location = 0;
-        int _line = 0;
-        int _column = 0;
+        int location_ = 0;
+        int line_ = 0;
+        int column_ = 0;
 
         // inputs
-        std::wstring _input;
-        std::wstring _input_left;
+        std::wstring input_;
+        std::wstring input_left_;
 
         // utilities
         void increment_location(int increment);
         atom_status_ptr_s get_char_atom();
     public:
-        scan_state(std::wstring input);
+        explicit scan_state(std::wstring input);
         scan_state(const scan_state& state);
         virtual ~scan_state();
 
@@ -63,7 +62,7 @@ namespace core {
         // boolean and/or operators
         token try_scan_boolean_and_operator();
         token try_scan_boolean_or_operator();
-        
+
         // boolean comparison operators
         token try_scan_boolean_gt_operator();
         token try_scan_boolean_lt_operator();
@@ -88,10 +87,9 @@ namespace core {
 
         // file delimiters
         token try_scan_end_of_file();
-        
+
         // scan delimiters
         bool out_of_range();
     };
     ALIAS_TYPES(scan_state)
 }
-

@@ -2,7 +2,8 @@
 
 #include "global_defines.h"
 
-namespace core {
+namespace core
+{
     const wchar_t* header =
         L"    __  __      _                            ______  ____  ______ " WIDE_NEWLINE
         L"   / / / /___  (_)   _____  ______________ _/ / __ )/ __ \\/ ____/ " WIDE_NEWLINE

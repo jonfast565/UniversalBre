@@ -3,16 +3,14 @@
 #include "global_defines.h"
 #include "token.h"
 
-namespace core {
+namespace core
+{
     class argument_list_node
     {
-    private:
-        token_vecptrptr_s arguments;
+        token_vecptrptr_s arguments_;
     public:
-        argument_list_node() {}
-        virtual ~argument_list_node() {}
-        void add_argument(token_ptr_s argument);
+        argument_list_node();
+        void add_argument(token_ptr_s argument) const;
     };
     ALIAS_TYPES(argument_list_node)
 }
-

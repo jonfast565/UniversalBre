@@ -2,100 +2,106 @@
 
 void core::binop_expression_node::print(int indent)
 {
-    if (_left_node == nullptr) {
+    if (left_node_ == nullptr)
+    {
         std::wcout
             << indent << " "
-            << utility::build_indent_str(indent + 1) 
+            << utility::build_indent_str(indent + 1)
             << "N/A"
             << std::endl;
     }
-    else {
-        _left_node->print(indent + 1);
+    else
+    {
+        left_node_->print(indent + 1);
     }
 
     std::wcout
         << indent << " "
         << utility::build_indent_str(indent)
-        << get_op_type_string(_op_type)
+        << get_op_type_string(op_type_)
         << std::endl;
 
-    if (_right_node == nullptr) {
-        std::wcout 
+    if (right_node_ == nullptr)
+    {
+        std::wcout
             << indent << " "
-            << utility::build_indent_str(indent + 1) 
+            << utility::build_indent_str(indent + 1)
             << "N/A"
             << std::endl;
     }
-    else {
-        _right_node->print(indent + 1);
+    else
+    {
+        right_node_->print(indent + 1);
     }
 }
 
-core::op_type core::binop_expression_node::get_op_type()
+core::op_type core::binop_expression_node::get_op_type() const
 {
-    return _op_type;
+    return op_type_;
 }
 
 void core::binop_expression_node::set_op_type(op_type type)
 {
-    _op_type = type;
+    op_type_ = type;
 }
 
-bool core::binop_expression_node::one_node_populated()
+bool core::binop_expression_node::one_node_populated() const
 {
-    return _left_node == nullptr
-        && _right_node != nullptr
-        || _left_node != nullptr
-        && _right_node == nullptr;
+    return (left_node_ == nullptr
+        && right_node_ != nullptr)
+        || (left_node_ != nullptr
+        && right_node_ == nullptr);
 }
 
-bool core::binop_expression_node::two_nodes_populated()
+bool core::binop_expression_node::two_nodes_populated() const
 {
-    return _left_node != nullptr && _right_node != nullptr;
+    return left_node_ != nullptr && right_node_ != nullptr;
 }
 
-bool core::binop_expression_node::left_node_populated()
+bool core::binop_expression_node::left_node_populated() const
 {
-    return _left_node != nullptr;
+    return left_node_ != nullptr;
 }
 
-bool core::binop_expression_node::right_node_populated()
+bool core::binop_expression_node::right_node_populated() const
 {
-    return _right_node != nullptr;
+    return right_node_ != nullptr;
 }
 
-core::expression_node_ptr_s core::binop_expression_node::get_left_node()
+core::expression_node_ptr_s core::binop_expression_node::get_left_node() const
 {
-    assert(_left_node != nullptr);
-    return _left_node;
+    assert(left_node_ != nullptr);
+    return left_node_;
 }
 
-core::expression_node_ptr_s core::binop_expression_node::get_right_node()
+core::expression_node_ptr_s core::binop_expression_node::get_right_node() const
 {
-    assert(_right_node != nullptr);
-    return _right_node;
+    assert(right_node_ != nullptr);
+    return right_node_;
 }
 
-core::expression_node_ptr_s core::binop_expression_node::get_populated_node()
+core::expression_node_ptr_s core::binop_expression_node::get_populated_node() const
 {
     assert(one_node_populated());
-    if (left_node_populated()) {
-        return _left_node;
+    if (left_node_populated())
+    {
+        return left_node_;
     }
-    if (right_node_populated()) {
-        return _right_node;
+    if (right_node_populated())
+    {
+        return right_node_;
     }
 
     // SHOULD NEVER HAPPEN (assert)
     return nullptr;
 }
 
-void core::binop_expression_node::set_left_node(expression_node_ptr_s node)
+void core::binop_expression_node::set_left_node(const expression_node_ptr_s node)
 {
-    _left_node = node;
+    left_node_ = node;
 }
 
-void core::binop_expression_node::set_right_node(expression_node_ptr_s node)
+void core::binop_expression_node::set_right_node(const expression_node_ptr_s node)
 {
-    _right_node = node;
+    right_node_ = node;
 }

@@ -26,21 +26,23 @@ bool utility::is_underscore(const wchar_t possible_underscore)
 }
 
 bool utility::is_specific_char(
-    const wchar_t current_char, 
-    const wchar_t possible_specific_char, 
+    const wchar_t current_char,
+    const wchar_t possible_specific_char,
     bool case_invariant)
 {
-    if (!case_invariant) {
+    if (!case_invariant)
+    {
         return current_char == possible_specific_char;
     }
     return towlower(current_char) == towlower(possible_specific_char);
 }
 
 bool utility::is_charset(
-    const wchar_t possible_charset, 
+    const wchar_t possible_charset,
     const std::vector<wchar_t> charset)
 {
-    for (auto char_iter : charset) {
+    for (auto char_iter : charset)
+    {
         if (possible_charset == char_iter)
             return true;
     }
@@ -48,7 +50,7 @@ bool utility::is_charset(
 }
 
 bool utility::is_not_charset(
-    const wchar_t possible_charset, 
+    const wchar_t possible_charset,
     const std::vector<wchar_t> charset)
 {
     return !is_charset(possible_charset, charset);
@@ -56,8 +58,8 @@ bool utility::is_not_charset(
 
 bool utility::is_whitespace(const wchar_t possible_whitespace)
 {
-    return is_charset(possible_whitespace, 
-        array_to_vector<wchar_t>(core::whitespace_chars, core::whitespace_chars_length));
+    return is_charset(possible_whitespace,
+                      array_to_vector<wchar_t>(core::whitespace_chars, core::whitespace_chars_length));
 }
 
 bool utility::is_not_whitespace(const wchar_t possible_whitespace)
@@ -72,7 +74,8 @@ bool utility::is_break_char(const wchar_t possible_break_char)
 
 bool utility::is_integer_break_char(const wchar_t possible_break_char)
 {
-    return is_charset(possible_break_char, array_to_vector<wchar_t>(core::integer_breaking_chars, core::integer_breaking_chars_length));
+    return is_charset(possible_break_char,
+                      array_to_vector<wchar_t>(core::integer_breaking_chars, core::integer_breaking_chars_length));
 }
 
 bool utility::is_newline_char(const wchar_t possible_newline_char)
@@ -80,7 +83,7 @@ bool utility::is_newline_char(const wchar_t possible_newline_char)
     return is_charset(possible_newline_char, array_to_vector<wchar_t>(core::newline_chars, core::newline_chars_length));
 }
 
-const char * utility::wstring_to_cstr(std::wstring& wide_string)
+const char* utility::wstring_to_cstr(std::wstring& wide_string)
 {
     using convert_type = std::codecvt_utf8<wchar_t>;
     std::wstring_convert<convert_type, wchar_t> converter;
@@ -88,12 +91,12 @@ const char * utility::wstring_to_cstr(std::wstring& wide_string)
     return converted_str.c_str();
 }
 
-const wchar_t * utility::wstring_to_wcstr(std::wstring& wide_string)
+const wchar_t* utility::wstring_to_wcstr(std::wstring& wide_string)
 {
     return wide_string.c_str();
 }
 
-std::wstring utility::cstr_to_wstring(const char * c_str)
+std::wstring utility::cstr_to_wstring(const char* c_str)
 {
     std::string intermediate(c_str);
     std::wstring temp(intermediate.length(), L' ');
@@ -104,18 +107,20 @@ std::wstring utility::cstr_to_wstring(const char * c_str)
 std::wstring utility::build_indent_str(int indent)
 {
     auto s = std::wstring();
-    for (int i = 0; i < indent; i++) {
+    for (int i = 0; i < indent; i++)
+    {
         s += L" - ";
     }
     return s;
 }
 
-const void utility::concat_in_place(const wchar_t ** result, const int count, ...)
+const void utility::concat_in_place(const wchar_t** result, const int count, ...)
 {
     va_list list;
     va_start(list, count);
     std::wstring temp;
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++)
+    {
         auto argument = va_arg(list, const wchar_t *);
         temp += std::wstring(argument);
     }
@@ -128,18 +133,18 @@ const void utility::concat_in_place(const wchar_t ** result, const int count, ..
 }
 
 const void utility::concat_two(
-    const wchar_t ** result, 
-    const wchar_t * one, 
-    const wchar_t * two)
+    const wchar_t** result,
+    const wchar_t* one,
+    const wchar_t* two)
 {
     concat_in_place(result, 2, one, two);
 }
 
 const void utility::concat_three(
-    const wchar_t ** result, 
-    const wchar_t * one, 
-    const wchar_t * two, 
-    const wchar_t * three)
+    const wchar_t** result,
+    const wchar_t* one,
+    const wchar_t* two,
+    const wchar_t* three)
 {
     concat_in_place(result, 3, one, two, three);
 }

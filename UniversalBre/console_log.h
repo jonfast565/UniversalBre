@@ -3,24 +3,20 @@
 #include "global_defines.h"
 #include "log.h"
 
-namespace core {
+namespace core
+{
     class console_log :
         public log
     {
     public:
-        // ctor/dtor
-        console_log(bool debug) : log(debug) {};
-        ~console_log() {};
-
-        // same as described in interfaces
-        void log_warning(const std::wstring& warn_message);
-        void log_success(const std::wstring& success_message);
-        void log_error(const std::wstring& error_message);
-        void log_default(const std::wstring& message);
-        void just_log(const std::wstring& message);
-        void log_debug(const std::wstring& message);
-        void set_console_font();
+        explicit console_log(const bool debug);
+        void log_warning(const std::wstring& warn_message) override;
+        void log_success(const std::wstring& success_message) override;
+        void log_error(const std::wstring& error_message) override;
+        void log_default(const std::wstring& message) override;
+        void just_log(const std::wstring& message) override;
+        void log_debug(const std::wstring& message) override;
+        void set_console_font() override;
     };
     ALIAS_TYPES(console_log)
 }
-

@@ -2,15 +2,21 @@
 
 #include "global_defines.h"
 
-namespace core {
+namespace core
+{
     class log
     {
     protected:
         bool _debug_mode;
     public:
         // ctor/dtor
-        log(bool debug_mode) : _debug_mode(debug_mode) {}
-        virtual ~log() {}
+        log(bool debug_mode) : _debug_mode(debug_mode)
+        {
+        }
+
+        virtual ~log()
+        {
+        }
 
         // logging a warning
         virtual void log_warning(const std::wstring& warn_message) = 0;
@@ -27,10 +33,11 @@ namespace core {
         // TODO: Move platform specific method to global inline method
         virtual void set_console_font() = 0;
 
-        void set_debug(bool debug_mode) {
+        void set_debug(bool debug_mode)
+        {
             _debug_mode = debug_mode;
         }
     };
+
     ALIAS_TYPES(log)
 }
-

@@ -2,19 +2,26 @@
 
 #include "expression_node.h"
 
-namespace core {
+namespace core
+{
     class literal_expression_node :
         public expression_node
     {
     private:
         std::wstring _value;
     public:
-        literal_expression_node(std::wstring& value) : 
-            expression_node(NODE_TYPE_LITERAL), 
-            _value(value) {};
-        virtual ~literal_expression_node() {}
-        void print(int indent);
+        literal_expression_node(std::wstring& value) :
+            expression_node(NODE_TYPE_LITERAL),
+            _value(value)
+        {
+        };
+
+        virtual ~literal_expression_node()
+        {
+        }
+
+        void print(int indent) override;
     };
+
     ALIAS_TYPES(literal_expression_node)
 }
-

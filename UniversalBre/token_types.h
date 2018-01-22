@@ -2,103 +2,112 @@
 
 #include "global_defines.h"
 
-namespace core {
-    enum class token_type {
+namespace core
+{
+    enum class token_type
+    {
         // file markers
-        END_OF_FILE,
+        end_of_file,
 
         // scoping
-        SCOPE_BEGIN_OPERATOR,
-        SCOPE_END_OPERATOR,
+        scope_begin_operator,
+        scope_end_operator,
 
         // literals
-        INTEGER_LITERAL,
-        STRING_LITERAL,
-        FLOAT_LITERAL,
-        IDENTIFIER,
+        integer_literal,
+        string_literal,
+        float_literal,
+        identifier,
 
         // operators
-        PLUS_OPERATOR,
-        MINUS_OPERATOR,
-        MULTIPLY_OPERATOR,
-        DIVIDE_OPERATOR,
-        CONCAT_OPERATOR,
+        plus_operator,
+        minus_operator,
+        multiply_operator,
+        divide_operator,
+        concat_operator,
 
         // boolean equality operators
-        BOOLEAN_EQ_OPERATOR, // equal to
-        BOOLEAN_NE_OPERATOR, // not equal to
+        boolean_eq_operator,
+        // equal to
+        boolean_ne_operator,
+        // not equal to
 
         // boolean comparison operators
-        BOOLEAN_GT_OPERATOR, // greater than
-        BOOLEAN_LT_OPERATOR, // less than
-        BOOLEAN_LTE_OPERATOR, // less than or equal to
-        BOOLEAN_GTE_OPERATOR, // greater than or equal to
+        boolean_gt_operator,
+        // greater than
+        boolean_lt_operator,
+        // less than
+        boolean_lte_operator,
+        // less than or equal to
+        boolean_gte_operator,
+        // greater than or equal to
 
         // boolean combinators
-        BOOLEAN_AND_OPERATOR,
-        BOOLEAN_OR_OPERATOR,
+        boolean_and_operator,
+        boolean_or_operator,
 
         // parenthesis
-        LEFT_PARENTHESIS,
-        RIGHT_PARENTHESIS,
+        left_parenthesis,
+        right_parenthesis,
 
         // operators for special operations
-        ASSIGNMENT_OPERATOR,
+        assignment_operator,
 
         // program delimiters
-        SEMICOLON,
-        LIST_DELIMITER,
+        semicolon,
+        list_delimiter,
 
         // keywords
-        FUNCTION_KEYWORD,
-        INFINITE_KEYWORD,
-        BREAK_KEYWORD,
-        FEATURE_KEYWORD,
-        AUTOBREAK_KEYWORD,
-        ON_KEYWORD,
-        OFF_KEYWORD,
+        function_keyword,
+        infinite_keyword,
+        break_keyword,
+        feature_keyword,
+        autobreak_keyword,
+        on_keyword,
+        off_keyword,
 
         // error state
         // used for initialization only
-        INVALID
+        invalid
     };
 
     static std::map<token_type, std::wstring> token_type_index = {
         // file markers
-        { token_type::END_OF_FILE, L"End of file" },
+        {token_type::end_of_file, L"End of file"},
 
         // keywords
-        { token_type::FUNCTION_KEYWORD, L"Function" },
-        { token_type::LIST_DELIMITER, L"List delimiter" },
+        {token_type::function_keyword, L"Function"},
+        {token_type::list_delimiter, L"List delimiter"},
 
         // literals
-        { token_type::INTEGER_LITERAL, L"Integer literal" },
-        { token_type::STRING_LITERAL, L"String literal" },
-        { token_type::FLOAT_LITERAL, L"Float literal" },
-        { token_type::IDENTIFIER, L"Identifier" },
+        {token_type::integer_literal, L"Integer literal"},
+        {token_type::string_literal, L"String literal"},
+        {token_type::float_literal, L"Float literal"},
+        {token_type::identifier, L"Identifier"},
 
         // operators
-        { token_type::PLUS_OPERATOR, L"Plus operator" },
-        { token_type::MINUS_OPERATOR, L"Minus operator" },
-        { token_type::MULTIPLY_OPERATOR, L"Multiply operator" },
-        { token_type::DIVIDE_OPERATOR, L"Divide operator" },
-        { token_type::CONCAT_OPERATOR, L"Concat operator" },
+        {token_type::plus_operator, L"Plus operator"},
+        {token_type::minus_operator, L"Minus operator"},
+        {token_type::multiply_operator, L"Multiply operator"},
+        {token_type::divide_operator, L"Divide operator"},
+        {token_type::concat_operator, L"Concat operator"},
 
         // parenthesis
-        { token_type::LEFT_PARENTHESIS, L"Left parenthesis" },
-        { token_type::RIGHT_PARENTHESIS, L"Right parenthesis" },
-        { token_type::ASSIGNMENT_OPERATOR, L"Assignment operator" },
+        {token_type::left_parenthesis, L"Left parenthesis"},
+        {token_type::right_parenthesis, L"Right parenthesis"},
+        {token_type::assignment_operator, L"Assignment operator"},
 
         // program delimiters
-        { token_type::SEMICOLON, L"Semicolon" },
+        {token_type::semicolon, L"Semicolon"},
 
         // error state
         // used for initialization only
-        { token_type::INVALID, L"Invalid" }
+        {token_type::invalid, L"Invalid"}
     };
 
     // TODO: IMPLEMENT COMPLETELY
-    static std::wstring get_token_type_string(token_type type) {
+    static std::wstring get_token_type_string(token_type type)
+    {
         return token_type_index[type];
     }
 }

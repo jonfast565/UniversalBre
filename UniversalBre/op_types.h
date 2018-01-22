@@ -2,72 +2,81 @@
 
 #include "global_defines.h"
 
-namespace core {
-    enum class op_type {
+namespace core
+{
+    enum class op_type
+    {
         // binary math operations
-        OP_ADDITION,
-        OP_SUBTRACTION,
-        OP_MULTIPLICATION,
-        OP_DIVISION,
+        op_addition,
+        op_subtraction,
+        op_multiplication,
+        op_division,
 
         // boolean equality operations
-        OP_BOOLEAN_EQ, // equal to
-        OP_BOOLEAN_NE, // not equal to
+        op_boolean_eq,
+        // equal to
+        op_boolean_ne,
+        // not equal to
 
         // boolean comparison operations
-        OP_BOOLEAN_GT, // greater than
-        OP_BOOLEAN_LT, // less than
-        OP_BOOLEAN_LTE, // less than or equal to
-        OP_BOOLEAN_GTE, // greater than or equal to
+        op_boolean_gt,
+        // greater than
+        op_boolean_lt,
+        // less than
+        op_boolean_lte,
+        // less than or equal to
+        op_boolean_gte,
+        // greater than or equal to
 
         // boolean combinators
-        OP_BOOLEAN_AND,
-        OP_BOOLEAN_OR,
+        op_boolean_and,
+        op_boolean_or,
 
         // other binary operations
-        OP_CONCAT_STRINGS,
+        op_concat_strings,
 
         // jumps and breaks
-        OP_JUMP_UNCONDITIONAL,
-        OP_BREAK,
+        op_jump_unconditional,
+        op_break,
 
         // special
-        OP_ASSIGN,
+        op_assign,
 
         // the default
-        OP_INVALID
+        op_invalid
     };
 
     static std::map<op_type, std::wstring> op_type_index = {
-        { op_type::OP_ADDITION, L"Add" },
-        { op_type::OP_SUBTRACTION, L"Subtract" },
-        { op_type::OP_MULTIPLICATION, L"Multiply" },
-        { op_type::OP_DIVISION, L"Divide" },
+        {op_type::op_addition, L"Add"},
+        {op_type::op_subtraction, L"Subtract"},
+        {op_type::op_multiplication, L"Multiply"},
+        {op_type::op_division, L"Divide"},
 
-        { op_type::OP_CONCAT_STRINGS, L"String Concatenation"},
+        {op_type::op_concat_strings, L"String Concatenation"},
 
         // boolean equality operations
-        { op_type::OP_BOOLEAN_EQ, L"Boolean Equals" },// equal to
-        { op_type::OP_BOOLEAN_NE, L"Boolean Not-Equals" },// not equal to
+        {op_type::op_boolean_eq, L"Boolean Equals"}, // equal to
+        {op_type::op_boolean_ne, L"Boolean Not-Equals"}, // not equal to
 
         // boolean comparison operations
-        { op_type::OP_BOOLEAN_GT, L"Boolean Greater Than" },// greater than
-        { op_type::OP_BOOLEAN_LT, L"Boolean Less Than" },// less than
-        { op_type::OP_BOOLEAN_LTE, L"Boolean Less Than Equals" },// less than or equal to
-        { op_type::OP_BOOLEAN_GTE, L"Boolean Greater Than Equals" },// greater than or equal to
+        {op_type::op_boolean_gt, L"Boolean Greater Than"}, // greater than
+        {op_type::op_boolean_lt, L"Boolean Less Than"}, // less than
+        {op_type::op_boolean_lte, L"Boolean Less Than Equals"}, // less than or equal to
+        {op_type::op_boolean_gte, L"Boolean Greater Than Equals"}, // greater than or equal to
 
         // boolean combinators
-        { op_type::OP_BOOLEAN_AND, L"Boolean And" },
-        { op_type::OP_BOOLEAN_OR, L"Boolean Or" },
+        {op_type::op_boolean_and, L"Boolean And"},
+        {op_type::op_boolean_or, L"Boolean Or"},
 
-        { op_type::OP_JUMP_UNCONDITIONAL , L"Jump Unconditional" },
-        { op_type::OP_BREAK, L"Break" },
+        {op_type::op_jump_unconditional, L"Jump Unconditional"},
+        {op_type::op_break, L"Break"},
 
-        { op_type::OP_INVALID, L"Invalid" }
+        {op_type::op_invalid, L"Invalid"}
     };
 
     // TODO: IMPLEMENT COMPLETELY
-    static std::wstring get_op_type_string(op_type type) {
+    static std::wstring get_op_type_string(op_type type)
+    {
         return op_type_index[type];
     }
 }

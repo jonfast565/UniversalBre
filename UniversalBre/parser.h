@@ -1,29 +1,27 @@
 #pragma once
 
+#include <utility>
 #include "scanner.h"
 
 #include "expression_node.h"
-#include "binop_expression_node.h"
-#include "literal_expression_node.h"
 
 #include "assignment_node.h"
 #include "argument_list_node.h"
 
-#include "op_types.h"
-
-namespace core {
+namespace core
+{
     class parser
     {
     private:
-        int _location = 0;
-        token_vecptr_s _tokens;
-        log_ptr_s _log_object;
+        int location_ = 0;
+        token_vecptr_s tokens_ = nullptr;
+        log_ptr_s log_object_ = nullptr;
 
-        token_type lookahead();
-        token get_token();
+        token_type lookahead() const;
+        token get_token() const;
 
         void eat_token(token_type actual, token_type expected);
-        void print_expression(core::expression_node_ptr_s &expression);
+        void print_expression(expression_node_ptr_s& expression) const;
 
         // program parsing
         assignment_node_vecptrptr_s parse_program();
@@ -42,12 +40,13 @@ namespace core {
         expression_node_ptr_s parse_term();
         expression_node_ptr_s parse_factor();
     public:
-        parser(token_vecptr_s tokens, log_ptr_s log_object) : 
-            _tokens(tokens), _log_object(log_object) {}
-        virtual ~parser() { }
+        parser(token_vecptr_s tokens, log_ptr_s log_object) :
+            tokens_(std::move(tokens)), 
+            log_object_(std::move(log_object))
+        {
+        }
         expression_node_ptr_s parse();
-        void reset() { _location = 0; }
+        void reset() { location_ = 0; }
     };
     ALIAS_TYPES(parser)
 }
-

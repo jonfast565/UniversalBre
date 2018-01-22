@@ -1,6 +1,10 @@
 #include "argument_list_node.h"
 
-void core::argument_list_node::add_argument(token_ptr_s argument)
+core::argument_list_node::argument_list_node()
 {
-    arguments->push_back(argument);
+}
+
+void core::argument_list_node::add_argument(const token_ptr_s argument) const
+{
+    arguments_->push_back(argument);
 }

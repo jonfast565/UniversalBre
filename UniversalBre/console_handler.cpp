@@ -1,13 +1,5 @@
 #include "console_handler.h"
 
-core::console_handler::console_handler()
-{
-}
-
-core::console_handler::~console_handler()
-{
-}
-
 std::wstring core::console_handler::get_interactive_input()
 {
     std::wcout << L"> ";
@@ -16,16 +8,19 @@ std::wstring core::console_handler::get_interactive_input()
     return input;
 }
 
-std::wstring core::console_handler::get_interactive_multiple_input()
+std::wstring core::console_handler::get_interactive_multiple_input() const
 {
     std::wstring result;
     std::wstring input;
-    do {
+    do
+    {
         std::cout << "> ";
         std::getline(std::wcin, input);
-        if (!input.empty()) {
+        if (!input.empty())
+        {
             result += input + L"\n";
         }
-    } while (!input.empty());
+    }
+    while (!input.empty());
     return result;
 }

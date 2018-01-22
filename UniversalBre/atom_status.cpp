@@ -1,92 +1,93 @@
 #include "atom_status.h"
+#include "utility.h"
 
-core::atom_status::atom_status(const wchar_t atom) : _atom(atom)
+core::atom_status::atom_status(const wchar_t atom) : atom_(atom)
 {
-    _is_digit = utility::is_digit(atom);
-    _is_whitespace = utility::is_whitespace(atom);
-    _is_alpha = utility::is_alpha(atom);
-    _is_alpha_digit = utility::is_alpha_digit(atom);
-    _is_alpha_digit_underscore = utility::is_alpha_digit(atom) || is_underscore();
-    _is_break_char = utility::is_break_char(atom);
-    _is_integer_break_char = utility::is_integer_break_char(atom);
+    is_digit_ = utility::is_digit(atom);
+    is_whitespace_ = utility::is_whitespace(atom);
+    is_alpha_ = utility::is_alpha(atom);
+    is_alpha_digit_ = utility::is_alpha_digit(atom);
+    is_alpha_digit_underscore_ = utility::is_alpha_digit(atom) || is_underscore();
+    is_break_char_ = utility::is_break_char(atom);
+    is_integer_break_char_ = utility::is_integer_break_char(atom);
 }
 
-bool core::atom_status::is_dot()
+bool core::atom_status::is_dot() const
 {
-    return _atom == '.';
+    return atom_ == '.';
 }
 
-bool core::atom_status::is_digit()
+bool core::atom_status::is_digit() const
 {
-    return _is_digit;
+    return is_digit_;
 }
 
-bool core::atom_status::is_whitespace()
+bool core::atom_status::is_whitespace() const
 {
-    return _is_whitespace;
+    return is_whitespace_;
 }
 
-bool core::atom_status::is_break_char()
+bool core::atom_status::is_break_char() const
 {
-    return _is_break_char;
+    return is_break_char_;
 }
 
-bool core::atom_status::is_integer_break_char()
+bool core::atom_status::is_integer_break_char() const
 {
-    return _is_integer_break_char;
+    return is_integer_break_char_;
 }
 
-bool core::atom_status::is_alpha()
+bool core::atom_status::is_alpha() const
 {
-    return _is_alpha;
+    return is_alpha_;
 }
 
-bool core::atom_status::is_alpha_digit()
+bool core::atom_status::is_alpha_digit() const
 {
-    return _is_alpha_digit;
+    return is_alpha_digit_;
 }
 
-bool core::atom_status::is_alpha_digit_underscore()
+bool core::atom_status::is_alpha_digit_underscore() const
 {
-    return _is_alpha_digit_underscore;
+    return is_alpha_digit_underscore_;
 }
 
-bool core::atom_status::is_empty()
+bool core::atom_status::is_empty() const
 {
-    return _atom == L'\x0';
+    return atom_ == L'\x0';
 }
 
-bool core::atom_status::is_empty_or_whitespace()
+bool core::atom_status::is_empty_or_whitespace() const
 {
     return is_empty() || is_whitespace();
 }
 
-bool core::atom_status::breaks_any()
+bool core::atom_status::breaks_any() const
 {
     return is_empty() || is_whitespace() || is_break_char();
 }
 
-bool core::atom_status::breaks_any_integer()
+bool core::atom_status::breaks_any_integer() const
 {
     return is_empty() || is_whitespace() || is_integer_break_char();
 }
 
-bool core::atom_status::breaks_any_string()
+bool core::atom_status::breaks_any_string() const
 {
-    return _atom == '"';
+    return atom_ == '"';
 }
 
-bool core::atom_status::is_underscore()
+bool core::atom_status::is_underscore() const
 {
-    return _atom == '_';
+    return atom_ == '_';
 }
 
-bool core::atom_status::is_identifier_char()
+bool core::atom_status::is_identifier_char() const
 {
     return is_alpha_digit_underscore();
 }
 
-wchar_t core::atom_status::get_atom()
+wchar_t core::atom_status::get_atom() const
 {
-    return _atom;
+    return atom_;
 }

@@ -5,7 +5,8 @@
 #include "token.h"
 #include "log.h"
 
-namespace core {
+namespace core
+{
     class scanner
     {
     private:
@@ -17,12 +18,12 @@ namespace core {
         scan_state get_initial_state(const std::wstring& input);
     public:
         // ctor/dtor
-        scanner(core::log_ptr_s log_object);
+        scanner(log_ptr_s log_object);
         virtual ~scanner();
 
         // scan and provide a vector
-        core::token_vecptr_s scan_all(const std::wstring& input);
+        token_vecptr_s scan_all(const std::wstring& input);
     };
+
     ALIAS_TYPES(scanner)
 }
-
