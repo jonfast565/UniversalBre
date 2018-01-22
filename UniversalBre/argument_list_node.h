@@ -11,6 +11,7 @@ namespace core {
     public:
         argument_list_node() {}
         virtual ~argument_list_node() {}
+        void add_argument(token_ptr_s argument);
     };
     ALIAS_TYPES(argument_list_node)
 }

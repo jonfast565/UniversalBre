@@ -99,6 +99,12 @@
     <ClInclude Include="semantic_types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="statement_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="statement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -150,6 +156,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="argument_list_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="statement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="function_expression_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

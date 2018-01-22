@@ -89,18 +89,22 @@ core::assignment_node_ptr_s core::parser::parse_assignment_statement()
 
 core::function_expression_node_ptr_s core::parser::parse_function_expression()
 {
+    auto result_expression = utility::make_ptr_s(function_expression_node());
+    
     eat_token(lookahead(), token_type::FUNCTION_KEYWORD);
-    // optional argument list
     if (lookahead() == token_type::LEFT_PARENTHESIS) {
         auto argument_list = parse_argument_list();
+        result_expression->get_argument_list();
     }
+
     eat_token(lookahead(), token_type::SCOPE_BEGIN_OPERATOR);
     while (lookahead() != token_type::SCOPE_END_OPERATOR) {
         auto assignment = parse_assignment_statement();
         // TODO: Add to function expression node
     }
+
     eat_token(lookahead(), token_type::SCOPE_END_OPERATOR);
-    return function_expression_node_ptr_s();
+    return result_expression;
 }
 
 core::argument_list_node_ptr_s core::parser::parse_argument_list()
@@ -108,8 +112,9 @@ core::argument_list_node_ptr_s core::parser::parse_argument_list()
     eat_token(lookahead(), token_type::LEFT_PARENTHESIS);
     auto argument_list = utility::make_ptr_s(argument_list_node());
     while (lookahead() == token_type::IDENTIFIER) {
-        // TODO: Add id to argument list
+        auto cur_token = utility::make_ptr_s(get_token());
         eat_token(lookahead(), token_type::IDENTIFIER);
+        argument_list->add_argument(cur_token);
         if (lookahead() != token_type::RIGHT_PARENTHESIS) {
             eat_token(lookahead(), token_type::LIST_DELIMITER);
         }

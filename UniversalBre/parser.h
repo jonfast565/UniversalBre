@@ -25,10 +25,13 @@ namespace core {
         void eat_token(token_type actual, token_type expected);
         void print_expression(core::expression_node_ptr_s &expression);
 
+        // program parsing
         assignment_node_vecptrptr_s parse_program();
         assignment_node_ptr_s parse_assignment_statement();
         function_expression_node_ptr_s parse_function_expression();
         argument_list_node_ptr_s parse_argument_list();
+
+        // expression parsing
         expression_node_ptr_s parse_expression();
         expression_node_ptr_s parse_boolean_or_expression();
         expression_node_ptr_s parse_boolean_and_expression();
