@@ -88,6 +88,11 @@ core::token core::scan_state::try_scan_function_keyword()
         throw exceptions::scan_failure(get_char(), L"n");
     }
     increment_location(1);
+    auto space_post_char = core::atom_status(get_char());
+    if (space_post_char.is_break_char() != true 
+        && space_post_char.is_empty_or_whitespace() != true) {
+        throw exceptions::scan_failure(get_char(), L"identifier");
+    }
     return core::token(token_type::FUNCTION_KEYWORD);
 }
 
