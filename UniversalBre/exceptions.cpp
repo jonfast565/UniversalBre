@@ -8,15 +8,18 @@ exceptions::extended_exception::extended_exception()
 const char* exceptions::extended_exception::what()
 const noexcept
 {
-    size_t i;
 #ifdef _WIN32
+    size_t i;
     wcstombs_s(&i,
-               this->except_str_,
+               except_str_,
                static_cast<size_t>(MAX_STRING),
                except_wstr_,
                wcslen(except_wstr_));
 #else
-    wcstombs_l(except_str_, except_wstr_, static_cast<size_t>(MAX_STRING), LC_ALL);
+    wcstombs_l(except_str_,
+               except_wstr_,
+               static_cast<size_t>(MAX_STRING),
+               LC_ALL);
 #endif
     return except_str_;
 }
