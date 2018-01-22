@@ -5,6 +5,7 @@ std::wstring core::console_handler::get_interactive_input()
     std::wcout << L"> ";
     std::wstring input;
     std::wcin >> input;
+    std::wcout << std::flush;
     return input;
 }
 
@@ -14,7 +15,7 @@ std::wstring core::console_handler::get_interactive_multiple_input() const
     std::wstring input;
     do
     {
-        std::cout << "> ";
+        std::wcout << L"> ";
         std::getline(std::wcin, input);
         if (!input.empty())
         {
@@ -22,5 +23,6 @@ std::wstring core::console_handler::get_interactive_multiple_input() const
         }
     }
     while (!input.empty());
+    std::wcout << std::flush;
     return result;
 }
