@@ -42,7 +42,7 @@ core::assignment_node_vecptrptr_s core::parser::parse_program()
 {
     log_object_->log_debug(L"Parse program");
 
-    assignment_node_vecptrptr_s assignment_statements =
+    auto assignment_statements =
         utility::make_ptr_s(std::vector<assignment_node_ptr_s>());
 
     while (lookahead() != token_type::end_of_file)
