@@ -5,11 +5,11 @@
 namespace core
 {
     // initialize whitespace definition
-    const wchar_t whitespace_chars[] = {' ', '\r\n', '\n', '\v', '\t'};
+    const wchar_t whitespace_chars[] = {' ', '\r', '\n', '\v', '\t'};
     const int whitespace_chars_length = 5;
 
     // initialize newline whitespace chars
-    const wchar_t newline_chars[] = {'\r\n', '\n'};
+    const wchar_t newline_chars[] = {'\r', '\n'};
     const int newline_chars_length = 2;
 
     // initialize breaking characters definition
