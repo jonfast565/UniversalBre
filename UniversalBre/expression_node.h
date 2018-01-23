@@ -17,9 +17,7 @@ namespace core
         node_type node_type_;
     public:
         explicit expression_node(node_type type);
-
         virtual void print(int indent) = 0;
-
         node_type get_node_type() const;
     };
 
