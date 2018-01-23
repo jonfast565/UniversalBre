@@ -1,5 +1,4 @@
 #include "token.h"
- #include <utility>
 
 core::token::token(const token_type type) : token_type_(type)
 {

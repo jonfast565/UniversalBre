@@ -10,11 +10,7 @@ namespace core
     private:
         std::wstring _value;
     public:
-        literal_expression_node(std::wstring& value) :
-            expression_node(NODE_TYPE_LITERAL),
-            _value(value)
-        {
-        };
+        literal_expression_node(std::wstring& value);;
 
         virtual ~literal_expression_node()
         {

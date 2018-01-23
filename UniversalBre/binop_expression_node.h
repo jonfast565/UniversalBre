@@ -1,7 +1,6 @@
 #pragma once
 
 #include "expression_node.h"
-#include <utility>
 #include "literal_expression_node.h"
 #include "op_types.h"
 
@@ -16,14 +15,7 @@ namespace core
         binop_expression_node(
             expression_node_ptr_s left_node,
             expression_node_ptr_s right_node,
-            const op_type op_type) :
-            expression_node(NODE_TYPE_BINARY),
-            left_node_(std::move(left_node)),
-            right_node_(std::move(right_node)),
-            op_type_(op_type)
-        {
-        }
-        ~binop_expression_node() = default;
+            const op_type op_type);
         void print(int indent) override;
         bool one_node_populated() const;
         bool two_nodes_populated() const;

@@ -9,6 +9,11 @@ core::expression_node_ptr_s core::parser::parse()
     return nullptr;
 }
 
+void core::parser::reset()
+{
+    location_ = 0;
+}
+
 core::token_type core::parser::lookahead() const
 {
     return tokens_->at(location_).get_type();
@@ -391,4 +396,10 @@ core::expression_node_ptr_s core::parser::parse_factor()
         throw exceptions::parse_failure(
             L"Subexpression did not start with id, left parenthesis, identifier, or numeric constant");
     }
+}
+
+core::parser::parser(token_vecptr_s tokens, log_ptr_s log_object):
+    tokens_(std::move(tokens)),
+    log_object_(std::move(log_object))
+{
 }

@@ -5,32 +5,33 @@
 
 namespace core
 {
-    enum node_type
+    enum class node_type
     {
-        NODE_TYPE_BINARY,
-        NODE_TYPE_SINGLE,
-        NODE_TYPE_LITERAL
+        node_type_binary,
+        node_type_single,
+        node_type_literal
     };
 
     class expression_node
     {
-    protected:
-        ~expression_node() = default;
-    private:
         node_type node_type_;
     public:
-        explicit expression_node(node_type type) :
-            node_type_(type)
-        {
-        }
+        explicit expression_node(node_type type);
 
         virtual void print(int indent) = 0;
 
-        node_type get_node_type() const
-        {
-            return node_type_;
-        }
+        node_type get_node_type() const;
     };
+
+    inline expression_node::expression_node(node_type type):
+        node_type_(type)
+    {
+    }
+
+    inline node_type expression_node::get_node_type() const
+    {
+        return node_type_;
+    }
 
     ALIAS_TYPES(expression_node)
 }

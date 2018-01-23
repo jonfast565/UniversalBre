@@ -1,6 +1,5 @@
 #pragma once
 
-#include <utility>
 #include "scanner.h"
 
 #include "expression_node.h"
@@ -12,7 +11,6 @@ namespace core
 {
     class parser
     {
-    private:
         int location_ = 0;
         token_vecptr_s tokens_ = nullptr;
         log_ptr_s log_object_ = nullptr;
@@ -40,13 +38,9 @@ namespace core
         expression_node_ptr_s parse_term();
         expression_node_ptr_s parse_factor();
     public:
-        parser(token_vecptr_s tokens, log_ptr_s log_object) :
-            tokens_(std::move(tokens)), 
-            log_object_(std::move(log_object))
-        {
-        }
+        parser(token_vecptr_s tokens, log_ptr_s log_object);
         expression_node_ptr_s parse();
-        void reset() { location_ = 0; }
+        void reset();
     };
     ALIAS_TYPES(parser)
 }

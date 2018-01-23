@@ -1,5 +1,14 @@
 #include "binop_expression_node.h"
 
+core::binop_expression_node::binop_expression_node(expression_node_ptr_s left_node, expression_node_ptr_s right_node,
+                                                   const op_type op_type):
+    expression_node(node_type::node_type_binary),
+    left_node_(std::move(left_node)),
+    right_node_(std::move(right_node)),
+    op_type_(op_type)
+{
+}
+
 void core::binop_expression_node::print(int indent)
 {
     if (left_node_ == nullptr)

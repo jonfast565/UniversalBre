@@ -55,6 +55,7 @@
 #include <cassert>
 #include <locale>
 #include <cstdarg>
+#include <utility> // apparently std::move is here and not in <memory>
 
 // Functionality: Cause Windows to properly handle assert()
 #ifdef EHA_SET
