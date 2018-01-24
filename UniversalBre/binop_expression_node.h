@@ -15,7 +15,7 @@ namespace core
         binop_expression_node(
             expression_node_ptr_s left_node,
             expression_node_ptr_s right_node,
-            const op_type op_type);
+            op_type op_type);
         void print(int indent) override;
         bool one_node_populated() const;
         bool two_nodes_populated() const;
