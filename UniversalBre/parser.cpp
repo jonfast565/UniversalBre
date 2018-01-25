@@ -1,4 +1,6 @@
 #include "parser.h"
+#include "op_types.h"
+#include "binop_expression_node.h"
 
 core::expression_node_ptr_s core::parser::parse()
 {
@@ -43,21 +45,37 @@ void core::parser::eat_token(
     location_++;
 }
 
-core::assignment_node_vecptrptr_s core::parser::parse_program()
+core::statement_node_vecptrptr_s core::parser::parse_program()
 {
     log_object_->log_debug(L"Parse program");
 
-    auto assignment_statements =
-        utility::make_ptr_s(std::vector<assignment_node_ptr_s>());
+    auto statements =
+        utility::make_ptr_s(statement_node_ptr_vec_s());
 
     while (lookahead() != token_type::end_of_file)
     {
-        const auto result = parse_assignment_statement();
-        assignment_statements->push_back(result);
+        statements->push_back(parse_possible_statement());
     }
 
     eat_token(lookahead(), token_type::end_of_file);
-    return assignment_statements;
+    return statements;
+}
+
+core::statement_node_ptr_s core::parser::parse_possible_statement()
+{
+    switch (lookahead()) {
+    case token_type::identifier:
+    {
+        const auto result = parse_assignment_statement();
+        return result;
+    }
+    case token_type::infinite_keyword:
+    {
+        return nullptr;
+    }
+    default:
+        throw exceptions::parse_failure(L"Blah"); // TODO: FIX
+    }
 }
 
 void core::parser::print_expression(expression_node_ptr_s& expression) const
@@ -77,20 +95,20 @@ core::assignment_node_ptr_s core::parser::parse_assignment_statement()
     switch (lookahead())
     {
     case token_type::function_keyword:
-        {
-            const auto function_expression = parse_function_expression();
-            auto result = utility::make_ptr_s(assignment_node(id_name, function_expression));
-            eat_token(lookahead(), token_type::semicolon);
-            return result;
-        }
+    {
+        const auto function_expression = parse_function_expression();
+        auto result = utility::make_ptr_s(assignment_node(id_name, function_expression));
+        eat_token(lookahead(), token_type::semicolon);
+        return result;
+    }
     default:
-        {
-            auto expression = parse_expression();
-            print_expression(expression);
-            auto result = utility::make_ptr_s(assignment_node(id_name, expression));
-            eat_token(lookahead(), token_type::semicolon);
-            return result;
-        }
+    {
+        auto expression = parse_expression();
+        print_expression(expression);
+        auto result = utility::make_ptr_s(assignment_node(id_name, expression));
+        eat_token(lookahead(), token_type::semicolon);
+        return result;
+    }
     }
 }
 
@@ -108,7 +126,7 @@ core::function_expression_node_ptr_s core::parser::parse_function_expression()
     eat_token(lookahead(), token_type::scope_begin_operator);
     while (lookahead() != token_type::scope_end_operator)
     {
-        auto assignment = parse_assignment_statement();
+        auto assignment = parse_possible_statement();
         // TODO: Add to function expression node
     }
 
@@ -331,74 +349,74 @@ core::expression_node_ptr_s core::parser::parse_factor()
     switch (lookahead())
     {
     case token_type::left_parenthesis:
-        {
-            eat_token(lookahead(), token_type::left_parenthesis);
-            auto single = parse_expression();
-            eat_token(lookahead(), token_type::right_parenthesis);
-            return single;
-        }
+    {
+        eat_token(lookahead(), token_type::left_parenthesis);
+        auto single = parse_expression();
+        eat_token(lookahead(), token_type::right_parenthesis);
+        return single;
+    }
     case token_type::integer_literal:
+    {
+        auto cur_lexeme = get_token().get_lexeme();
+        eat_token(lookahead(), token_type::integer_literal);
+        return utility::make_ptr_s(literal_expression_node(cur_lexeme));
+    }
+    case token_type::float_literal:
+    {
+        auto cur_lexeme = get_token().get_lexeme();
+        eat_token(lookahead(), token_type::float_literal);
+        return utility::make_ptr_s(literal_expression_node(cur_lexeme));
+    }
+    case token_type::identifier:
+    {
+        auto cur_lexeme = get_token().get_lexeme();
+        eat_token(lookahead(), token_type::identifier);
+        // TODO: Allow parsing of function calls
+        return utility::make_ptr_s(literal_expression_node(cur_lexeme));
+    }
+    case token_type::string_literal:
+    {
+        // The grammar can allow this kind of interleaved expression
+        // however, semantic analysis should provide errors on invalid operations
+        // even though concatenation makes sense in this case
+        auto cur_lexeme = get_token().get_lexeme();
+        eat_token(lookahead(), token_type::string_literal);
+        return utility::make_ptr_s(literal_expression_node(cur_lexeme));
+    }
+    case token_type::minus_operator:
+    {
+        eat_token(lookahead(), token_type::minus_operator);
+
+        // TODO: Fix this shit, we're appending contextual information in the parser
+        // as if it is scanning... dreadful.
+        auto cur_lexeme = L"-" + get_token().get_lexeme();
+
+        switch (lookahead())
         {
-            auto cur_lexeme = get_token().get_lexeme();
+        case token_type::integer_literal:
             eat_token(lookahead(), token_type::integer_literal);
             return utility::make_ptr_s(literal_expression_node(cur_lexeme));
-        }
-    case token_type::float_literal:
-        {
-            auto cur_lexeme = get_token().get_lexeme();
+            break;
+        case token_type::float_literal:
             eat_token(lookahead(), token_type::float_literal);
             return utility::make_ptr_s(literal_expression_node(cur_lexeme));
-        }
-    case token_type::identifier:
-        {
-            auto cur_lexeme = get_token().get_lexeme();
+            break;
+        case token_type::identifier:
             eat_token(lookahead(), token_type::identifier);
-            // TODO: Allow parsing of function calls
             return utility::make_ptr_s(literal_expression_node(cur_lexeme));
+            break;
+        default:
+            auto error_str = L"Negative subexpression not allowed for " + cur_lexeme;
+            throw exceptions::parse_failure(error_str.c_str());
         }
-    case token_type::string_literal:
-        {
-            // The grammar can allow this kind of interleaved expression
-            // however, semantic analysis should provide errors on invalid operations
-            // even though concatenation makes sense in this case
-            auto cur_lexeme = get_token().get_lexeme();
-            eat_token(lookahead(), token_type::string_literal);
-            return utility::make_ptr_s(literal_expression_node(cur_lexeme));
-        }
-    case token_type::minus_operator:
-        {
-            eat_token(lookahead(), token_type::minus_operator);
-
-            // TODO: Fix this shit, we're appending contextual information in the parser
-            // as if it is scanning... dreadful.
-            auto cur_lexeme = L"-" + get_token().get_lexeme();
-
-            switch (lookahead())
-            {
-            case token_type::integer_literal:
-                eat_token(lookahead(), token_type::integer_literal);
-                return utility::make_ptr_s(literal_expression_node(cur_lexeme));
-                break;
-            case token_type::float_literal:
-                eat_token(lookahead(), token_type::float_literal);
-                return utility::make_ptr_s(literal_expression_node(cur_lexeme));
-                break;
-            case token_type::identifier:
-                eat_token(lookahead(), token_type::identifier);
-                return utility::make_ptr_s(literal_expression_node(cur_lexeme));
-                break;
-            default:
-                auto error_str = L"Negative subexpression not allowed for " + cur_lexeme;
-                throw exceptions::parse_failure(error_str.c_str());
-            }
-        }
+    }
     default:
         throw exceptions::parse_failure(
             L"Subexpression did not start with id, left parenthesis, identifier, or numeric constant");
     }
 }
 
-core::parser::parser(token_vecptr_s tokens, log_ptr_s log_object):
+core::parser::parser(token_vecptr_s tokens, log_ptr_s log_object) :
     tokens_(std::move(tokens)),
     log_object_(std::move(log_object))
 {

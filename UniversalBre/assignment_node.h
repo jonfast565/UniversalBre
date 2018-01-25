@@ -2,12 +2,13 @@
 
 #include "global_defines.h"
 #include "semantic_types.h"
-#include "binop_expression_node.h"
 #include "function_expression_node.h"
+#include "statement_node.h"
 
 namespace core
 {
-    class assignment_node
+    class assignment_node : 
+    public statement_node
     {
     private:
         assignment_type assignment_type_;

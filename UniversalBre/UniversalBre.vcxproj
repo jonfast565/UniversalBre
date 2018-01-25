@@ -151,6 +151,7 @@
     <ClInclude Include="assignment_node.h" />
     <ClInclude Include="atom_status.h" />
     <ClInclude Include="binop_expression_node.h" />
+    <ClInclude Include="control_flow_node.h" />
     <ClInclude Include="function_expression_node.h" />
     <ClInclude Include="op_types.h" />
     <ClInclude Include="boxed_value.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="console_handler.cpp" />
     <ClCompile Include="console_log.cpp" />
     <ClCompile Include="console_waiter.cpp" />
+    <ClCompile Include="control_flow_node.cpp" />
     <ClCompile Include="exceptions.cpp" />
     <ClCompile Include="function_expression_node.cpp" />
     <ClCompile Include="literal_expression_node.cpp" />

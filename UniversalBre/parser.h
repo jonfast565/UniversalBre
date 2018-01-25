@@ -1,11 +1,10 @@
 #pragma once
 
 #include "scanner.h"
-
 #include "expression_node.h"
-
 #include "assignment_node.h"
 #include "argument_list_node.h"
+#include "statement_node.h"
 
 namespace core
 {
@@ -22,7 +21,10 @@ namespace core
         void print_expression(expression_node_ptr_s& expression) const;
 
         // program parsing
-        assignment_node_vecptrptr_s parse_program();
+        statement_node_vecptrptr_s parse_program();
+        statement_node_ptr_s parse_possible_statement();
+
+
         assignment_node_ptr_s parse_assignment_statement();
         function_expression_node_ptr_s parse_function_expression();
         argument_list_node_ptr_s parse_argument_list();

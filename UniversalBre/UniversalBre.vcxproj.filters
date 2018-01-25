@@ -105,6 +105,9 @@
     <ClInclude Include="statement_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="control_flow_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -162,6 +165,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="statement_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="control_flow_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
