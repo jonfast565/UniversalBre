@@ -195,7 +195,7 @@
     <ClCompile Include="scan_state.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ssa_instruction.cpp" />
-    <ClCompile Include="statement.cpp" />
+    <ClCompile Include="statement_node.cpp" />
     <ClCompile Include="token.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>

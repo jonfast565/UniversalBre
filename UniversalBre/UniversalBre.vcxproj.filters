@@ -158,10 +158,10 @@
     <ClCompile Include="argument_list_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="statement.cpp">
+    <ClCompile Include="function_expression_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="function_expression_node.cpp">
+    <ClCompile Include="statement_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
