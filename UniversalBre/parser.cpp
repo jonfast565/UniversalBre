@@ -109,7 +109,7 @@ core::function_expression_node_ptr_s core::parser::parse_function_expression()
     while (lookahead() != token_type::scope_end_operator)
     {
         auto assignment = parse_assignment_statement();
-        // TODO: Add to function expression node
+        result_expression->insert_body_statement(assignment);
     }
 
     eat_token(lookahead(), token_type::scope_end_operator);

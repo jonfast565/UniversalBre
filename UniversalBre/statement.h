@@ -13,4 +13,5 @@ namespace core
         statement(statement_type type);
         statement_type get_type() const;
     };
+    ALIAS_TYPES(statement)
 }
