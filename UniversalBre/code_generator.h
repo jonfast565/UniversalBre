@@ -10,7 +10,7 @@ namespace core
     class code_generator
     {
     public:
-        virtual ssa_instruction_vecptrptr_s generate_code() = 0;
+        core::ssa_instruction_vecptrptr_s generate_code();
     };
     ALIAS_TYPES(code_generator)
 }
