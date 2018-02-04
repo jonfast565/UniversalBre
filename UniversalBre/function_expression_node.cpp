@@ -1,6 +1,7 @@
 #include "function_expression_node.h"
 
-inline core::function_expression_node::function_expression_node()
+inline core::function_expression_node::function_expression_node() : 
+    statement(statement_type::function_assignment_statement)
 {
     _argument_list = utility::make_ptr_s(argument_list_node());
     _body_statements = utility::make_ptr_s(statement_vecptr_s());

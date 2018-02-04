@@ -109,7 +109,8 @@ core::function_expression_node_ptr_s core::parser::parse_function_expression()
     while (lookahead() != token_type::scope_end_operator)
     {
         auto assignment = parse_assignment_statement();
-        result_expression->insert_body_statement(assignment);
+        auto statement_ptr = std::dynamic_pointer_cast<statement>(assignment);
+        result_expression->insert_body_statement(statement_ptr);
     }
 
     eat_token(lookahead(), token_type::scope_end_operator);

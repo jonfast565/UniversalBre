@@ -7,7 +7,7 @@
 
 namespace core
 {
-    class function_expression_node
+    class function_expression_node : public statement
     {
     private:
         argument_list_node_ptr_s _argument_list;

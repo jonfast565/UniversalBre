@@ -7,7 +7,7 @@
 
 namespace core
 {
-    class assignment_node
+    class assignment_node : statement
     {
     private:
         assignment_type assignment_type_;
