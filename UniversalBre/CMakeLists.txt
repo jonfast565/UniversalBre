@@ -26,7 +26,7 @@ set(SOURCE_FILES
         scanner.h
         semantic_types.h
         ssa_instruction.h
-        statement_node.h
+        statement.h
         statement_types.h
         token.h
         token_types.h
