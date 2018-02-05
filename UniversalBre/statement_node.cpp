@@ -1,12 +1,12 @@
-#include "statement_node.h"
+#include "statement.h"
 
-core::statement_node::statement_node(statement_type type): 
+core::statement::statement(statement_type type): 
     type_(type)
 {
 
 }
 
-core::statement_type core::statement_node::get_type() const
+core::statement_type core::statement::get_type() const
 {
     return type_;
 }

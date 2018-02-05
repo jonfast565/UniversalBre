@@ -4,7 +4,7 @@
 #include "expression_node.h"
 #include "assignment_node.h"
 #include "argument_list_node.h"
-#include "statement_node.h"
+#include "statement.h"
 
 namespace core
 {
@@ -21,8 +21,8 @@ namespace core
         void print_expression(expression_node_ptr_s& expression) const;
 
         // program parsing
-        statement_node_vecptrptr_s parse_program();
-        statement_node_ptr_s parse_possible_statement();
+        statement_vecptrptr_s parse_program();
+        statement_ptr_s parse_possible_statement();
 
 
         assignment_node_ptr_s parse_assignment_statement();

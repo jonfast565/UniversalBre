@@ -3,18 +3,13 @@
 #include "global_defines.h"
 #include "semantic_types.h"
 #include "function_expression_node.h"
-#include "statement_node.h"
+#include "statement.h"
+#include "expression_node.h"
 
 namespace core
 {
-<<<<<<< HEAD
-    class assignment_node : 
-    public statement_node
-=======
-    class assignment_node : statement
->>>>>>> f77f72730c56a068b0aacda328b7d689a06ebc42
+    class assignment_node : public statement
     {
-    private:
         assignment_type assignment_type_;
         std::wstring variable_name_;
         expression_node_ptr_s expression_;
@@ -27,8 +22,6 @@ namespace core
         explicit assignment_node(
             std::wstring variable_name,
             function_expression_node_ptr_s expression);
-
-        virtual ~assignment_node() = default;
     };
 
     ALIAS_TYPES(assignment_node)

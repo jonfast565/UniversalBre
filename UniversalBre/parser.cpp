@@ -45,12 +45,12 @@ void core::parser::eat_token(
     location_++;
 }
 
-core::statement_node_vecptrptr_s core::parser::parse_program()
+core::statement_vecptrptr_s core::parser::parse_program()
 {
     log_object_->log_debug(L"Parse program");
 
     auto statements =
-        utility::make_ptr_s(statement_node_ptr_vec_s());
+        utility::make_ptr_s(statement_ptr_vec_s());
 
     while (lookahead() != token_type::end_of_file)
     {
@@ -61,13 +61,14 @@ core::statement_node_vecptrptr_s core::parser::parse_program()
     return statements;
 }
 
-core::statement_node_ptr_s core::parser::parse_possible_statement()
+core::statement_ptr_s core::parser::parse_possible_statement()
 {
     switch (lookahead()) {
     case token_type::identifier:
     {
         const auto result = parse_assignment_statement();
-        return result;
+        const auto statement_ptr = std::dynamic_pointer_cast<statement>(result);
+        return statement_ptr;
     }
     case token_type::infinite_keyword:
     {
@@ -126,14 +127,8 @@ core::function_expression_node_ptr_s core::parser::parse_function_expression()
     eat_token(lookahead(), token_type::scope_begin_operator);
     while (lookahead() != token_type::scope_end_operator)
     {
-<<<<<<< HEAD
-        auto assignment = parse_possible_statement();
-        // TODO: Add to function expression node
-=======
-        auto assignment = parse_assignment_statement();
-        auto statement_ptr = std::dynamic_pointer_cast<statement>(assignment);
+        auto statement_ptr = parse_possible_statement();
         result_expression->insert_body_statement(statement_ptr);
->>>>>>> f77f72730c56a068b0aacda328b7d689a06ebc42
     }
 
     eat_token(lookahead(), token_type::scope_end_operator);
