@@ -86,7 +86,7 @@ namespace
                 auto p = core::parser(v, l);
                 auto expr = p.parse();
                 auto g = core::code_generator();
-                auto instrs = g.generate_code(expr);
+                auto instrs = g.generate_code();
                 /*
                 for (auto &i : *instrs) {
                     i.print_code();

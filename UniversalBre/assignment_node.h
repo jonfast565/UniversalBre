@@ -7,8 +7,12 @@
 
 namespace core
 {
+<<<<<<< HEAD
     class assignment_node : 
     public statement_node
+=======
+    class assignment_node : statement
+>>>>>>> f77f72730c56a068b0aacda328b7d689a06ebc42
     {
     private:
         assignment_type assignment_type_;
