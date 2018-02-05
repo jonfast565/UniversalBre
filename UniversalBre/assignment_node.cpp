@@ -12,6 +12,6 @@ core::assignment_node::assignment_node(std::wstring variable_name, function_expr
     assignment_type_(assignment_type::function_assignment),
     variable_name_(std::move(variable_name)),
     function_expression_(std::move(expression)), 
-    statement(statement_type::assignment_statement)
+    statement(statement_type::function_assignment_statement)
 {
 }

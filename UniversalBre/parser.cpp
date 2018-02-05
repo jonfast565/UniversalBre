@@ -120,14 +120,14 @@ core::function_expression_node_ptr_s core::parser::parse_function_expression()
     eat_token(lookahead(), token_type::function_keyword);
     if (lookahead() == token_type::left_parenthesis)
     {
-        auto argument_list = parse_argument_list();
-        result_expression->get_argument_list();
+        const auto argument_list = parse_argument_list();
+        result_expression->set_argument_list(argument_list);
     }
 
     eat_token(lookahead(), token_type::scope_begin_operator);
     while (lookahead() != token_type::scope_end_operator)
     {
-        auto statement_ptr = parse_possible_statement();
+        const auto statement_ptr = parse_possible_statement();
         result_expression->insert_body_statement(statement_ptr);
     }
 
