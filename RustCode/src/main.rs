@@ -1,9 +1,14 @@
 mod log;
-mod scanner;
-mod parser;
 mod constants;
 mod command_line;
 mod repl;
+mod token;
+mod token_type;
+mod atom_status;
+mod scanner;
+mod operation_type;
+mod parser;
+
 
 fn main() {
     command_line::get_arguments();
