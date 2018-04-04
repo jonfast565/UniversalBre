@@ -39,7 +39,7 @@ pub enum TokenType {
     // operators for special operations
     AssignmentOperator,
     // program delimiters
-    SemiColon,
+    Semicolon,
     ListDelimiter,
     // keywords
     FunctionKeyword,

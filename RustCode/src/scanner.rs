@@ -1,4 +1,5 @@
 use token::Token;
+use token_type::TokenType;
 use atom_status::AtomStatus;
 
 #[derive(Debug, Clone)]
@@ -6,7 +7,7 @@ struct ScanError {
     location: usize,
     line: usize,
     column: usize,
-    errorMessage: String
+    error_message: String
 }
 
 impl ScanError {
@@ -59,14 +60,23 @@ impl ScanState {
     // utilities
 
     fn char_at(&self) -> char {
+        if self.location >= self.input.len() {
+            return '\0'
+        }
         self.input[self.location]
     }
 
     fn char_at_index(&self, index: usize) -> char {
+        if index > self.input.len() {
+            return '\0'
+        }
         self.input[index]
     }
 
     fn char_at_offset(&self, offset: usize) -> char {
+        if self.location + offset >= self.input.len() {
+            return '\0'
+        }
         self.input[self.location + offset]
     }
 
@@ -113,6 +123,30 @@ impl ScanState {
         self.increment_location(temp_ctr);
     }
 
+    fn get_scan_error_details(&self, message: String) -> ScanError {
+        // TODO: Implement as constructor method
+        ScanError {
+            location: self.location,
+            line: self.line,
+            column: self.column,
+            error_message: message
+        }
+    }
+
+    fn get_token(&self, lexeme: String, token_type: TokenType) -> Token {
+        Token::init(self.line, self.column, token_type, lexeme)
+    }
+
+    fn scan_single_char_operator(&mut self, operator_char: char, token_type: TokenType) -> Result<Token, ScanError> {
+        if self.char_at() != operator_char {
+            return Err(self.get_scan_error_details(
+                format!("{} not scanned", operator_char).to_string()))
+        }
+        self.increment_location(1);
+        Ok(self.get_token(
+            format!("{}", operator_char).to_string(), token_type))
+    }
+
     // scan methods
     fn scan_function_keyword(&mut self) {
 
@@ -141,12 +175,12 @@ impl ScanState {
     }
 
     // brackets
-    fn scan_begin_scope_operator(&mut self) {
-
+    fn scan_begin_scope_operator(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator('{', TokenType::ScopeBeginOperator)
     }
 
-    fn scan_end_scope_operator(&mut self) {
-
+    fn scan_end_scope_operator(&mut self) -> Result<Token, ScanError>  {
+        self.scan_single_char_operator('{', TokenType::ScopeEndOperator)
     }
 
     // literals
@@ -207,58 +241,58 @@ impl ScanState {
 
     // operators
 
-    fn scan_plus_operator(&mut self) {
-
+    fn scan_plus_operator(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator('+', TokenType::PlusOperator)
     }
 
-    fn scan_minus_operator(&mut self) {
-
+    fn scan_minus_operator(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator('-', TokenType::MinusOperator)
     }
 
-    fn scan_multiply_operator(&mut self) {
-
+    fn scan_multiply_operator(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator('*', TokenType::MultiplyOperator)
     }
 
-    fn scan_divide_operator(&mut self) {
-
+    fn scan_divide_operator(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator('/', TokenType::DivideOperator)
     }
 
-    fn scan_concat_operator(&mut self) {
-
+    fn scan_concat_operator(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator('~', TokenType::ConcatOperator)
     }
 
-    fn scan_assignment_operator(&mut self) {
-
+    fn scan_assignment_operator(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator('=', TokenType::AssignmentOperator)
     }
 
     // parenthesis
 
-    fn scan_left_parenthesis(&mut self) {
-
+    fn scan_left_parenthesis(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator('(', TokenType::LeftParenthesis)
     }
 
-    fn scan_right_parenthesis(&mut self) {
-
+    fn scan_right_parenthesis(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator(')', TokenType::RightParenthesis)
     }
 
     // program delimiters
 
-    fn scan_semicolon(&mut self) {
-
+    fn scan_semicolon(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator(';', TokenType::Semicolon)
     }
 
-    fn scan_list_delimiter(&mut self) {
-
+    fn scan_list_delimiter(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator(')', TokenType::ListDelimiter)
     }
 
     // file delimiters
-    fn scan_end_of_file(&mut self) {
-
+    fn scan_end_of_file(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator('\0', TokenType::EndOfFile)
     }
 
     // scan delimiters
     fn out_of_range(&self) -> bool {
-        false
+        self.location >= self.input.len() - 1
     }
 }
 
