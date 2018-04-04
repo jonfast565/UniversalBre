@@ -1,0 +1,7 @@
+[package]
+name = "universal_bre"
+version = "0.1.0"
+authors = ["Jon Fast <jfast@acc.org>"]
+
+[dependencies]
+termcolor = "0.3.6"
