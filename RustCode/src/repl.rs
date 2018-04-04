@@ -5,47 +5,45 @@ use self::rustyline::Editor;
 use log;
 
 fn prompt() -> String {
-	log::log_info("REPL: User CTRL-D to complete input, or CTRL-C to exit");
+    log::log_info("REPL: User CTRL-D to complete input, or CTRL-C to exit");
 
-	let mut rl = Editor::<()>::new();
-	let mut result = String::new();
-	let mut interrupted = false;
+    let mut rl = Editor::<()>::new();
+    let mut result = String::new();
+    let mut interrupted = false;
 
-	loop {
+    loop {
         let readline = rl.readline(">> ");
 
         match readline {
             Ok(line) => {
                 result += &line;
-            },
+            }
             Err(ReadlineError::Interrupted) => {
                 interrupted = true;
-                break
-            },
-            Err(ReadlineError::Eof) => {
-                break
-            },
+                break;
+            }
+            Err(ReadlineError::Eof) => break,
             Err(err) => {
                 log::log_error(&format!("Error: {:?}", err));
-                break
+                break;
             }
         }
     }
 
     if !interrupted {
-    	return result
-	}
+        return result;
+    }
 
-	// TODO: Send back input/status struct, this is naive
-	String::from("<<INTERRUPTED>>")
+    // TODO: Send back input/status struct, this is naive
+    String::from("<<INTERRUPTED>>")
 }
 
 pub fn prompt_loop() {
-	loop {
-		let input = prompt();
-		// TODO: deal with input status here
-		if input == "<<INTERRUPTED>>" {
-			break;
-		}
-	}
+    loop {
+        let input = prompt();
+        // TODO: deal with input status here
+        if input == "<<INTERRUPTED>>" {
+            break;
+        }
+    }
 }
