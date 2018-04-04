@@ -36,12 +36,14 @@ fn prompt() -> String {
     	return result
 	}
 
+	// TODO: Send back input/status struct, this is naive
 	String::from("<<INTERRUPTED>>")
 }
 
 pub fn prompt_loop() {
 	loop {
 		let input = prompt();
+		// TODO: deal with input status here
 		if input == "<<INTERRUPTED>>" {
 			break;
 		}
