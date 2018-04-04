@@ -1,4 +1,5 @@
 extern crate clap;
+
 use self::clap::{Arg, App /*, SubCommand */};
 
 pub fn get_arguments() {

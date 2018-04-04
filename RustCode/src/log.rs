@@ -1,4 +1,5 @@
 extern crate termcolor;
+
 use std::io::{Write};
 use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 

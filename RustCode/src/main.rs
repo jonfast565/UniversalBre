@@ -9,5 +9,6 @@ fn main() {
     commandline::get_arguments();
     log::log_debug(constants::PROGRAM_HEADER);
     log::log_success("Initialized.");
-    log::log_error("Nothing implemented yet!");
+    repl::prompt_loop();
+    log::log_success("Goodbye!");
 }

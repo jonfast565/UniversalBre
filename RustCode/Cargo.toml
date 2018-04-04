@@ -6,3 +6,4 @@ authors = ["Jon Fast <jnfstdj656@gmail.com>"]
 [dependencies]
 termcolor = "0.3.6"
 clap = "2.31.2"
+rustyline = "1.0.0"
