@@ -38,12 +38,15 @@ fn prompt() -> String {
     String::from("<<INTERRUPTED>>")
 }
 
-pub fn prompt_loop() {
+pub fn prompt_loop() -> String {
+    let mut result = String::new();
     loop {
         let input = prompt();
+        result += &input;
         // TODO: deal with input status here
         if input == "<<INTERRUPTED>>" {
             break;
         }
     }
+    result
 }

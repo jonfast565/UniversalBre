@@ -3,7 +3,7 @@ use token_type::TokenType;
 use atom_status::AtomStatus;
 
 #[derive(Debug, Clone)]
-struct ScanError {
+pub struct ScanError {
     location: usize,
     line: usize,
     column: usize,
@@ -11,7 +11,14 @@ struct ScanError {
 }
 
 impl ScanError {
-    
+    fn init(location: usize, line: usize, column: usize, error_message: String) -> ScanError {
+        ScanError {
+            location: location,
+            line: line,
+            column: column,
+            error_message: error_message
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -19,9 +26,7 @@ struct ScanState {
     location: usize,
     line: usize,
     column: usize,
-    input: Vec<char>,
-    failed: bool,
-    error: Option<ScanError>
+    input: Vec<char>
 }
 
 impl ScanState {
@@ -30,9 +35,7 @@ impl ScanState {
             location: 0,
             line: 0,
             column: 0,
-            input: ScanState::input_to_char_vector(input),
-            failed: false,
-            error: None
+            input: ScanState::input_to_char_vector(input)
         }
     }
 
@@ -175,6 +178,12 @@ impl ScanState {
             self.increment_location(1);
         }
 
+        let last_char = self.get_atom();
+        if !last_char.is_empty_or_whitespace() || !last_char.is_break_char() {
+            return Err(self.get_scan_error_details(
+                format!("{} not scanned, id candidate", keyword_id).to_string()))
+        }
+
         Ok(self.get_token(
             format!("{}", keyword_id).to_string(), token_type))
     }
@@ -182,7 +191,7 @@ impl ScanState {
     // scan methods
 
     fn scan_function_keyword(&mut self) -> Result<Token, ScanError> {
-        self.scan_sequence("function", TokenType::FunctionKeyword)
+        self.scan_sequence("fin", TokenType::FunctionKeyword)
     }
 
     // loops
@@ -232,11 +241,12 @@ impl ScanState {
         increment_counter += 1;
 
         loop {
-            let mut next_char = self.get_atom();
+            let next_char = self.get_atom();
             if next_char.breaks_any_integer() {
                 break
             } 
             else if !next_char.is_digit() {
+                self.decrement_location(increment_counter);
                 return Err(self.get_scan_error_details(
                     format!("{} not scanned", "integer digit").to_string()))
             }
@@ -250,96 +260,114 @@ impl ScanState {
         Ok(self.get_token(result, TokenType::IntegerLiteral))
     }
 
-    // TODO: Translate and validate these remaining methods
-    fn scan_string_literal(&mut self) {
-/*
-    std::wstring result;
+    fn scan_string_literal(&mut self) -> Result<Token, ScanError> {
+        let mut result = String::new();
+        let first_char = self.get_atom();
+        let mut increment_counter = self.location;
 
-    auto first_char = atom_status(get_char());
-    if (!first_char.breaks_any_string())
-    {
-        throw exceptions::scan_failure(get_char(), L"quotation");
-    }
-
-    auto next_char = get_char_atom();
-    do
-    {
-        result += get_char();
-        increment_location(1);
-        next_char = get_char_atom();
-    }
-    while (!next_char->breaks_any_string());
-
-    result += get_char();
-    increment_location(1);
-    return token(token_type::string_literal, result);
-*/
-    }
-
-    fn scan_identifier(&mut self) {
-/*
-    std::wstring result;
-
-    auto first_char = atom_status(get_char());
-    if (!first_char.is_identifier_char())
-    {
-        throw exceptions::scan_failure(get_char(), L"letter, digit, underscore");
-    }
-
-    auto next_char = get_char_atom();
-    do
-    {
-        if (next_char->is_identifier_char())
-        {
-            result += get_char();
-            increment_location(1);
+        if !first_char.breaks_any_string() {
+            // must 'lock in' the first quote mark
+            return Err(self.get_scan_error_details(
+                format!("{} not scanned", "string delimiter").to_string()))
         }
-        else
-        {
-            throw exceptions::scan_failure(get_char(), L"letter, digit, underscore");
+
+        self.increment_location(1);
+        increment_counter += 1;
+
+        loop {
+            let next_char = self.get_atom();
+            if next_char.breaks_any_string() {
+                break
+            }
+            else if self.out_of_range() {
+                self.decrement_location(increment_counter);
+                return Err(self.get_scan_error_details(
+                    format!("{} runs off of code file", "string").to_string()))
+            } 
+            else {
+                result.push(next_char.get_atom());
+                self.increment_location(1);
+                increment_counter += 1;
+            }
         }
-        next_char = get_char_atom();
-    }
-    while (!next_char->breaks_any());
-    return token(token_type::identifier, result);
-*/
+
+        let next_char = self.get_atom();
+        result.push(next_char.get_atom());
+        self.increment_location(1);
+
+        Ok(self.get_token(result, TokenType::StringLiteral))
     }
 
-    fn scan_float_literal(&mut self) {
-/*
-    std::wstring result;
+    fn scan_identifier(&mut self) -> Result<Token, ScanError> {
+        let mut result = String::new();
+        let first_char = self.get_atom();
+        let mut increment_counter = self.location;
 
-    auto first_char = atom_status(get_char());
-    if (!first_char.is_digit())
-    {
-        throw exceptions::scan_failure(get_char(), L"digit");
+        if !first_char.is_identifier_char() {
+            return Err(self.get_scan_error_details(
+                format!("{} not scanned", "identifier").to_string()))
+        }
+
+        self.increment_location(1);
+        increment_counter += 1;
+
+        loop {
+            let next_char = self.get_atom();
+            if next_char.breaks_any() {
+                break
+            } 
+            else if next_char.is_identifier_char() {
+                result.push(next_char.get_atom());
+                self.increment_location(1);
+                increment_counter += 1;
+            }
+            else {
+                self.decrement_location(increment_counter);
+                return Err(self.get_scan_error_details(
+                format!("{} broken scan", "identifier").to_string()))
+            }
+        }
+
+        Ok(self.get_token(result, TokenType::Identifier))
     }
 
-    auto next_char = get_char_atom();
-    bool precision_part = false;
-    do
-    {
-        if (next_char->is_digit())
-        {
-            result += get_char();
-            increment_location(1);
-        }
-        else if (next_char->is_dot() && precision_part == false)
-        {
-            result += get_char();
-            increment_location(1);
-            precision_part = true;
-        }
-        else
-        {
-            throw exceptions::scan_failure(get_char(), L"digit");
-        }
-        next_char = get_char_atom();
-    }
-    while (!next_char->breaks_any_integer());
+    fn scan_float_literal(&mut self) -> Result<Token, ScanError> {
+        let mut result = String::new();
+        let first_char = self.get_atom();
+        let mut increment_counter = self.location;
 
-    return token(token_type::float_literal, result);
-*/
+        if !first_char.is_digit() {
+            return Err(self.get_scan_error_details(
+                format!("{} not scanned", "floating-point number").to_string()))
+        }
+
+        self.increment_location(1);
+        increment_counter += 1;
+        let precision_part = false;
+
+        loop {
+            let next_char = self.get_atom();
+            if next_char.breaks_any_integer() {
+                break
+            } 
+            else if next_char.is_dot() && precision_part == false {
+                result.push(next_char.get_atom());
+                self.increment_location(1);
+                increment_counter += 1;
+            }
+            else if next_char.is_digit() {
+                result.push(next_char.get_atom());
+                self.increment_location(1);
+                increment_counter += 1;
+            }
+            else {
+                self.decrement_location(increment_counter);
+                return Err(self.get_scan_error_details(
+                format!("{} broken scan", "identifier").to_string()))
+            }
+        }
+
+        Ok(self.get_token(result, TokenType::FloatLiteral))
     }
 
     // boolean equality operators 
@@ -439,17 +467,181 @@ impl ScanState {
     }
 }
 
-struct Scanner {
-
+pub struct Scanner {
+    state: ScanState
 }
 
 impl Scanner {
-
-    fn scan_one() {
-
+    
+    pub fn init (input: String) -> Scanner {
+        Scanner {
+            state: ScanState::init(input)
+        }
     }
 
-    fn scan_all() {
+    fn scan_one(&mut self) -> Result<Token, ScanError> {
+        self.state.skip_whitespace();
 
+        // end of file
+        if let Ok(token) = self.state.scan_end_of_file() {
+            return Ok(token)
+        }
+
+        // numeric literals
+
+        if let Ok(token) = self.state.scan_integer_literal() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_float_literal() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_string_literal() {
+            return Ok(token)
+        }
+
+        // scoping operators
+
+        if let Ok(token) = self.state.scan_begin_scope_operator() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_end_scope_operator() {
+            return Ok(token)
+        }
+
+        // mathematical operators
+
+        if let Ok(token) = self.state.scan_plus_operator() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_minus_operator() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_multiply_operator() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_divide_operator() {
+            return Ok(token)
+        }
+
+        // string operators
+
+        if let Ok(token) = self.state.scan_concat_operator() {
+            return Ok(token)
+        }
+
+        // assingment operators
+
+        if let Ok(token) = self.state.scan_assignment_operator() {
+            return Ok(token)
+        }
+
+        // grouping operators
+
+        if let Ok(token) = self.state.scan_left_parenthesis() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_right_parenthesis() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_semicolon() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_list_delimiter() {
+            return Ok(token)
+        }
+
+        // boolean operators
+
+        if let Ok(token) = self.state.scan_boolean_eq_operator() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_boolean_ne_operator() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_boolean_and_operator() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_boolean_or_operator() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_boolean_gt_operator() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_boolean_lt_operator() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_boolean_gte_operator() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_boolean_lte_operator() {
+            return Ok(token)
+        }
+
+        // keywords
+
+        if let Ok(token) = self.state.scan_function_keyword() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_infinite_keyword() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_break_keyword() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_feature_keyword() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_autobreak_keyword() {
+            return Ok(token)
+        }
+
+        // identifier
+
+        if let Ok(token) = self.state.scan_identifier() {
+            return Ok(token)
+        }
+
+        let error_message = format!("No scan possible starting with character {}", self.state.char_at());
+        Err(ScanError::init(self.state.location, self.state.line, self.state.column, error_message))
+    }
+
+    pub fn scan_all(&mut self) -> Result<Vec<Token>, ScanError> {
+        let mut tokens : Vec<Token> = Vec::new();
+
+        loop {
+            let new_token = self.scan_one();
+            match new_token {
+                Err(scan_error) => return Err(scan_error),
+                Ok(scanned_token) => {
+                    if *scanned_token.get_token_type() == TokenType::EndOfFile {
+                        break
+                    } else {
+                        tokens.push(scanned_token)
+                    }
+                }
+            }
+        }
+
+        return Ok(tokens);
     }
 }

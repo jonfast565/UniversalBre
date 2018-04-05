@@ -17,4 +17,20 @@ impl Token {
             lexeme: lexeme
         }
 	}
+
+	pub fn get_token_type(&self) -> &TokenType {
+		&self.token_type
+	}
+
+	pub fn get_lexeme(&self) -> &String {
+		&self.lexeme
+	}
+
+	pub fn get_line(&self) -> usize {
+		self.line
+	}
+
+	pub fn get_column(&self) -> usize {
+		self.column
+	}
 }

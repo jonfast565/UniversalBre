@@ -14,6 +14,18 @@ fn main() {
     command_line::get_arguments();
     log::log_debug(constants::PROGRAM_HEADER);
     log::log_success("Initialized");
-    repl::prompt_loop();
+    let input = repl::prompt_loop();
+    log::log_success(&format!("Scanning {}", input));
+    let mut scanner1 = scanner::Scanner::init(input);
+    let tokens = scanner1.scan_all();
+    match tokens {
+    	Ok(token_list) => {
+    		for token in &token_list {
+    			println!("{:?}", token.get_token_type());
+    		}
+    	},
+    	Err(scan_error) => println!("Failed!")
+    }
+
     log::log_success("Goodbye!");
 }
