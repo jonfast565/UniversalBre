@@ -3,8 +3,23 @@ extern crate rustyline;
 use self::rustyline::error::ReadlineError;
 use self::rustyline::Editor;
 use log;
+use scanner;
 
-fn prompt() -> String {
+struct ReplStatus {
+    input: String,
+    interrupted: bool
+}
+
+impl ReplStatus {
+    fn init(input: String, interrupted: bool) -> ReplStatus {
+        ReplStatus {
+            input: input,
+            interrupted: interrupted
+        }
+    }
+}
+
+fn prompt() -> ReplStatus {
     log::log_info("REPL: User CTRL-D to complete input, or CTRL-C to exit");
 
     let mut rl = Editor::<()>::new();
@@ -17,6 +32,7 @@ fn prompt() -> String {
         match readline {
             Ok(line) => {
                 result += &line;
+                result += "\n";
             }
             Err(ReadlineError::Interrupted) => {
                 interrupted = true;
@@ -31,22 +47,36 @@ fn prompt() -> String {
     }
 
     if !interrupted {
-        return result;
+        return ReplStatus::init(result, false)
     }
 
-    // TODO: Send back input/status struct, this is naive
-    String::from("<<INTERRUPTED>>")
+    ReplStatus::init(String::new(), true)
 }
 
-pub fn prompt_loop() -> String {
+pub fn prompt_loop() {
     let mut result = String::new();
     loop {
-        let input = prompt();
-        result += &input;
-        // TODO: deal with input status here
-        if input == "<<INTERRUPTED>>" {
-            break;
+        let repl_status = prompt();
+        if (repl_status.interrupted) {
+            break
+        } else {
+            log::log_success(&format!("Scanning {}", repl_status.input));
+            if (repl_status.input.is_empty()) { 
+                log::log_info("Input empty... try again.");
+                continue 
+            }
+
+            let mut scanner1 = scanner::Scanner::init(repl_status.input);
+            let tokens = scanner1.scan_all();
+            // debug token printer
+            match tokens {
+                Ok(token_list) => {
+                    for token in &token_list {
+                        println!("{:?}", token.get_token_type());
+                    }
+                },
+                Err(scan_error) => println!("Failed!")
+            }      
         }
     }
-    result
 }

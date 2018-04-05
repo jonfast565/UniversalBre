@@ -1,6 +1,7 @@
 use token::Token;
 use token_type::TokenType;
 use atom_status::AtomStatus;
+use log;
 
 #[derive(Debug, Clone)]
 pub struct ScanError {
@@ -75,7 +76,7 @@ impl ScanState {
     }
 
     fn char_at_index(&self, index: usize) -> char {
-        if index > self.input.len() {
+        if index >= self.input.len() {
             return '\0'
         }
         self.input[index]
@@ -167,7 +168,10 @@ impl ScanState {
 
         for keyword_char in &keyword_chars {
             let lowercase_char = keyword_char.to_lowercase().next().unwrap();
-            
+
+            // log::log_debug(&format!("Sequence char is '{}'", lowercase_char));
+            // log::log_debug(&format!("Current char is '{}'", self.char_at()));
+
             if self.char_at() != lowercase_char {
                 self.decrement_location(increment_counter);
                 return Err(self.get_scan_error_details(
