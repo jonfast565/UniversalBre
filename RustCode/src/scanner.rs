@@ -20,6 +20,10 @@ impl ScanError {
             error_message: error_message
         }
     }
+
+    pub fn get_error_message(&self) -> String {
+        return self.error_message.clone();
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -41,15 +45,16 @@ impl ScanState {
     }
 
     fn input_to_char_vector(input: String) -> Vec<char> {
-        return input.chars().collect();
+        let stopped_input = input + "\0";
+        return stopped_input.chars().collect();
     }
 
     fn get_line(&self) -> usize {
-        self.line
+        self.line + 1
     }
 
     fn get_column(&self) -> usize {
-        self.column
+        self.column + 1
     }
 
     fn get_location(&self) -> usize {
@@ -58,7 +63,7 @@ impl ScanState {
 
     fn increment_location(&mut self, increment: usize) {
         self.location += increment;
-        self.column += increment; // TODO: This is wrong
+        self.column += increment; // TODO: This is wrong?
     }
 
     fn decrement_location(&mut self, decrement: usize) {
@@ -69,9 +74,13 @@ impl ScanState {
     // utilities
 
     fn char_at(&self) -> char {
-        if self.location >= self.input.len() {
+        if self.out_of_range() {
             return '\0'
         }
+        
+        // log::log_debug(&format!("Current location is '{}'", self.location));
+        // log::log_debug(&format!("Current char is '{}'", self.input[self.location]));
+        
         self.input[self.location]
     }
 
@@ -93,6 +102,10 @@ impl ScanState {
         AtomStatus::init(self.char_at_index(location))
     }
 
+    fn get_atom_at_offset(&self, offset: usize) -> AtomStatus {
+        AtomStatus::init(self.char_at_offset(offset))
+    }
+
     fn get_atom(&self) -> AtomStatus {
         AtomStatus::init(self.char_at_index(self.location))
     }
@@ -112,16 +125,11 @@ impl ScanState {
             return
         }
 
-        let mut temp_ctr : usize = self.location;
-        let mut c : AtomStatus = self.get_atom_at_index(temp_ctr);
-
-        if !c.is_whitespace() { 
-            return
-        }
+        let mut temp_ctr : usize = 0;
 
         loop
         {
-            c = self.get_atom_at_index(temp_ctr);
+            let c = self.get_atom_at_offset(temp_ctr);
             if c.is_whitespace() {
                 temp_ctr += 1;
                 if c.is_newline_char() {
@@ -152,6 +160,12 @@ impl ScanState {
 
     // scan helpers
 
+    fn push_increment_scan(&mut self, result: &mut String, increment_counter: &mut usize, char_atom: &mut AtomStatus) {
+        result.push(char_atom.get_atom());
+        self.increment_location(1);
+        *increment_counter += 1;
+    }
+
     fn scan_single_char_operator(&mut self, operator_char: char, token_type: TokenType) -> Result<Token, ScanError> {
         if self.char_at() != operator_char {
             return Err(self.get_scan_error_details(
@@ -165,6 +179,7 @@ impl ScanState {
     fn scan_sequence(&mut self, keyword_id: &str, token_type: TokenType) -> Result<Token, ScanError>  {
         let keyword_chars : Vec<char> = keyword_id.chars().collect();
         let mut increment_counter = 0;
+        let mut result = String::new();
 
         for keyword_char in &keyword_chars {
             let lowercase_char = keyword_char.to_lowercase().next().unwrap();
@@ -177,13 +192,13 @@ impl ScanState {
                 return Err(self.get_scan_error_details(
                 format!("{} not scanned", keyword_id).to_string()))
             }
-            
-            increment_counter += 1;
-            self.increment_location(1);
+
+            let mut current_atom = self.get_atom();
+            self.push_increment_scan(&mut result, &mut increment_counter, &mut current_atom);
         }
 
         let last_char = self.get_atom();
-        if !last_char.is_empty_or_whitespace() || !last_char.is_break_char() {
+        if !last_char.breaks_any() {
             return Err(self.get_scan_error_details(
                 format!("{} not scanned, id candidate", keyword_id).to_string()))
         }
@@ -195,7 +210,7 @@ impl ScanState {
     // scan methods
 
     fn scan_function_keyword(&mut self) -> Result<Token, ScanError> {
-        self.scan_sequence("fin", TokenType::FunctionKeyword)
+        self.scan_sequence("fn", TokenType::FunctionKeyword)
     }
 
     // loops
@@ -218,6 +233,14 @@ impl ScanState {
         self.scan_sequence("autobreak", TokenType::AutobreakKeyword)
     }
 
+    fn scan_on_keyword(&mut self) -> Result<Token, ScanError> {
+        self.scan_sequence("on", TokenType::OnKeyword)
+    }
+
+    fn scan_off_keyword(&mut self) -> Result<Token, ScanError> {
+        self.scan_sequence("off", TokenType::OffKeyword)
+    }
+
     // brackets
 
     fn scan_begin_scope_operator(&mut self) -> Result<Token, ScanError> {
@@ -225,7 +248,7 @@ impl ScanState {
     }
 
     fn scan_end_scope_operator(&mut self) -> Result<Token, ScanError>  {
-        self.scan_single_char_operator('{', TokenType::ScopeEndOperator)
+        self.scan_single_char_operator('}', TokenType::ScopeEndOperator)
     }
 
     // literals
@@ -233,7 +256,7 @@ impl ScanState {
     fn scan_integer_literal(&mut self) -> Result<Token, ScanError> {
         let mut result = String::new();
         let first_char = self.get_atom();
-        let mut increment_counter = self.location;
+        let mut increment_counter = 0;
 
         if !first_char.is_digit() {
             // must 'lock in' the first character
@@ -241,6 +264,7 @@ impl ScanState {
                 format!("{} not scanned", "digit").to_string()))
         }
 
+        result.push(first_char.get_atom());
         self.increment_location(1);
         increment_counter += 1;
 
@@ -267,7 +291,7 @@ impl ScanState {
     fn scan_string_literal(&mut self) -> Result<Token, ScanError> {
         let mut result = String::new();
         let first_char = self.get_atom();
-        let mut increment_counter = self.location;
+        let mut increment_counter = 0;
 
         if !first_char.breaks_any_string() {
             // must 'lock in' the first quote mark
@@ -275,6 +299,7 @@ impl ScanState {
                 format!("{} not scanned", "string delimiter").to_string()))
         }
 
+        result.push(first_char.get_atom());
         self.increment_location(1);
         increment_counter += 1;
 
@@ -305,13 +330,14 @@ impl ScanState {
     fn scan_identifier(&mut self) -> Result<Token, ScanError> {
         let mut result = String::new();
         let first_char = self.get_atom();
-        let mut increment_counter = self.location;
+        let mut increment_counter = 0;
 
         if !first_char.is_identifier_char() {
             return Err(self.get_scan_error_details(
                 format!("{} not scanned", "identifier").to_string()))
         }
 
+        result.push(first_char.get_atom());
         self.increment_location(1);
         increment_counter += 1;
 
@@ -328,7 +354,7 @@ impl ScanState {
             else {
                 self.decrement_location(increment_counter);
                 return Err(self.get_scan_error_details(
-                format!("{} broken scan", "identifier").to_string()))
+                format!("unrecognized char {}", self.char_at()).to_string()))
             }
         }
 
@@ -338,7 +364,7 @@ impl ScanState {
     fn scan_float_literal(&mut self) -> Result<Token, ScanError> {
         let mut result = String::new();
         let first_char = self.get_atom();
-        let mut increment_counter = self.location;
+        let mut increment_counter = 0;
 
         if !first_char.is_digit() {
             return Err(self.get_scan_error_details(
@@ -347,27 +373,30 @@ impl ScanState {
 
         self.increment_location(1);
         increment_counter += 1;
-        let precision_part = false;
+        result.push(first_char.get_atom());
+        let mut precision_part = false;
 
+        // TODO: Collect scale and precision in both of these sections
         loop {
             let next_char = self.get_atom();
-            if next_char.breaks_any_integer() {
-                break
-            } 
+            if next_char.is_digit() {
+                result.push(next_char.get_atom());
+                self.increment_location(1);
+                increment_counter += 1;
+            }
             else if next_char.is_dot() && precision_part == false {
                 result.push(next_char.get_atom());
                 self.increment_location(1);
                 increment_counter += 1;
+                precision_part = true;
             }
-            else if next_char.is_digit() {
-                result.push(next_char.get_atom());
-                self.increment_location(1);
-                increment_counter += 1;
-            }
+            else if next_char.breaks_any_integer() {
+                break
+            } 
             else {
                 self.decrement_location(increment_counter);
                 return Err(self.get_scan_error_details(
-                format!("{} broken scan", "identifier").to_string()))
+                format!("unrecognized char {}", self.char_at()).to_string()))
             }
         }
 
@@ -455,7 +484,7 @@ impl ScanState {
     }
 
     fn scan_list_delimiter(&mut self) -> Result<Token, ScanError> {
-        self.scan_single_char_operator(')', TokenType::ListDelimiter)
+        self.scan_single_char_operator(',', TokenType::ListDelimiter)
     }
 
     // file delimiters
@@ -467,7 +496,7 @@ impl ScanState {
     // scan delimiters
     // TODO: Is this method needed? can it be moved to the top?
     fn out_of_range(&self) -> bool {
-        self.location >= self.input.len() - 1
+        self.location >= self.input.len()
     }
 }
 
@@ -484,9 +513,12 @@ impl Scanner {
     }
 
     fn scan_one(&mut self) -> Result<Token, ScanError> {
-        self.state.skip_whitespace();
+        // skip the whitespace
 
+        self.state.skip_whitespace();
+        
         // end of file
+
         if let Ok(token) = self.state.scan_end_of_file() {
             return Ok(token)
         }
@@ -619,13 +651,22 @@ impl Scanner {
             return Ok(token)
         }
 
+        if let Ok(token) = self.state.scan_on_keyword() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_off_keyword() {
+            return Ok(token)
+        }
+
         // identifier
 
         if let Ok(token) = self.state.scan_identifier() {
             return Ok(token)
         }
 
-        let error_message = format!("No scan possible starting with character {}", self.state.char_at());
+        let error_message = format!("Unrecognized character '{}'\nstarting at line {} column {}", 
+            self.state.char_at(), self.state.get_line(), self.state.get_column());
         Err(ScanError::init(self.state.location, self.state.line, self.state.column, error_message))
     }
 

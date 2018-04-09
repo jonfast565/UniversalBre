@@ -2,8 +2,11 @@ extern crate rustyline;
 
 use self::rustyline::error::ReadlineError;
 use self::rustyline::Editor;
+
 use log;
 use scanner;
+use token_type::TokenType;
+use token::Token;
 
 struct ReplStatus {
     input: String,
@@ -53,15 +56,29 @@ fn prompt() -> ReplStatus {
     ReplStatus::init(String::new(), true)
 }
 
+fn print_tokens(token_list: Vec<Token>) {
+    for token in &token_list {
+        let tt = token.get_token_type().clone();
+        if tt == TokenType::Identifier
+            || tt == TokenType::IntegerLiteral
+            || tt == TokenType::FloatLiteral
+            || tt == TokenType::StringLiteral {
+            println!("{:?}: {}", token.get_token_type(), token.get_lexeme());
+        } else {
+            println!("{:?}", token.get_token_type());
+        }
+    }
+}
+
 pub fn prompt_loop() {
     let mut result = String::new();
     loop {
         let repl_status = prompt();
-        if (repl_status.interrupted) {
+        if repl_status.interrupted {
             break
         } else {
             log::log_success(&format!("Scanning {}", repl_status.input));
-            if (repl_status.input.is_empty()) { 
+            if repl_status.input.is_empty() { 
                 log::log_info("Input empty... try again.");
                 continue 
             }
@@ -70,12 +87,8 @@ pub fn prompt_loop() {
             let tokens = scanner1.scan_all();
             // debug token printer
             match tokens {
-                Ok(token_list) => {
-                    for token in &token_list {
-                        println!("{:?}", token.get_token_type());
-                    }
-                },
-                Err(scan_error) => println!("Failed!")
+                Ok(token_list) => print_tokens(token_list),
+                Err(scan_error) => println!("Failed! {}", scan_error.get_error_message())
             }      
         }
     }

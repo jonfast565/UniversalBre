@@ -64,11 +64,11 @@ impl AtomStatus {
     }
 
     pub fn breaks_any(&self) -> bool {
-		self.is_empty() || self.is_whitespace() || self.is_break_char()
+		self.is_empty_or_whitespace() || self.is_break_char()
     }
 
     pub fn breaks_any_integer(&self) -> bool {
-		self.is_empty() || self.is_whitespace() || self.is_integer_break_char()
+		self.is_empty_or_whitespace() || self.is_integer_break_char()
     }
 
     pub fn breaks_any_string(&self) -> bool {
