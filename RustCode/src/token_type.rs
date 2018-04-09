@@ -41,6 +41,7 @@ pub enum TokenType {
     // program delimiters
     Semicolon,
     ListDelimiter,
+    TypeSpecifier,
     // keywords
     FunctionKeyword,
     InfiniteKeyword,

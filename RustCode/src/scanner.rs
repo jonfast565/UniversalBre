@@ -126,7 +126,6 @@ impl ScanState {
         }
 
         let mut temp_ctr : usize = 0;
-
         loop
         {
             let c = self.get_atom_at_offset(temp_ctr);
@@ -160,7 +159,7 @@ impl ScanState {
 
     // scan helpers
 
-    fn push_increment_scan(&mut self, result: &mut String, increment_counter: &mut usize, char_atom: &mut AtomStatus) {
+    fn push_increment_scan(&mut self, result: &mut String, increment_counter: &mut usize, char_atom: &AtomStatus) {
         result.push(char_atom.get_atom());
         self.increment_location(1);
         *increment_counter += 1;
@@ -194,7 +193,7 @@ impl ScanState {
             }
 
             let mut current_atom = self.get_atom();
-            self.push_increment_scan(&mut result, &mut increment_counter, &mut current_atom);
+            self.push_increment_scan(&mut result, &mut increment_counter, &current_atom);
         }
 
         let last_char = self.get_atom();
@@ -255,7 +254,7 @@ impl ScanState {
 
     fn scan_integer_literal(&mut self) -> Result<Token, ScanError> {
         let mut result = String::new();
-        let first_char = self.get_atom();
+        let mut first_char = self.get_atom();
         let mut increment_counter = 0;
 
         if !first_char.is_digit() {
@@ -264,9 +263,7 @@ impl ScanState {
                 format!("{} not scanned", "digit").to_string()))
         }
 
-        result.push(first_char.get_atom());
-        self.increment_location(1);
-        increment_counter += 1;
+        self.push_increment_scan(&mut result, &mut increment_counter, &first_char);
 
         loop {
             let next_char = self.get_atom();
@@ -279,9 +276,7 @@ impl ScanState {
                     format!("{} not scanned", "integer digit").to_string()))
             }
             else {
-                result.push(next_char.get_atom());
-                self.increment_location(1);
-                increment_counter += 1;
+                self.push_increment_scan(&mut result, &mut increment_counter, &next_char);
             }
         }
 
@@ -299,9 +294,7 @@ impl ScanState {
                 format!("{} not scanned", "string delimiter").to_string()))
         }
 
-        result.push(first_char.get_atom());
-        self.increment_location(1);
-        increment_counter += 1;
+        self.push_increment_scan(&mut result, &mut increment_counter, &first_char);
 
         loop {
             let next_char = self.get_atom();
@@ -314,9 +307,7 @@ impl ScanState {
                     format!("{} runs off of code file", "string").to_string()))
             } 
             else {
-                result.push(next_char.get_atom());
-                self.increment_location(1);
-                increment_counter += 1;
+                self.push_increment_scan(&mut result, &mut increment_counter, &next_char);
             }
         }
 
@@ -337,9 +328,7 @@ impl ScanState {
                 format!("{} not scanned", "identifier").to_string()))
         }
 
-        result.push(first_char.get_atom());
-        self.increment_location(1);
-        increment_counter += 1;
+        self.push_increment_scan(&mut result, &mut increment_counter, &first_char);
 
         loop {
             let next_char = self.get_atom();
@@ -347,9 +336,7 @@ impl ScanState {
                 break
             } 
             else if next_char.is_identifier_char() {
-                result.push(next_char.get_atom());
-                self.increment_location(1);
-                increment_counter += 1;
+                self.push_increment_scan(&mut result, &mut increment_counter, &next_char);
             }
             else {
                 self.decrement_location(increment_counter);
@@ -371,23 +358,17 @@ impl ScanState {
                 format!("{} not scanned", "floating-point number").to_string()))
         }
 
-        self.increment_location(1);
-        increment_counter += 1;
-        result.push(first_char.get_atom());
+        self.push_increment_scan(&mut result, &mut increment_counter, &first_char);
         let mut precision_part = false;
 
         // TODO: Collect scale and precision in both of these sections
         loop {
             let next_char = self.get_atom();
             if next_char.is_digit() {
-                result.push(next_char.get_atom());
-                self.increment_location(1);
-                increment_counter += 1;
+                self.push_increment_scan(&mut result, &mut increment_counter, &next_char);
             }
             else if next_char.is_dot() && precision_part == false {
-                result.push(next_char.get_atom());
-                self.increment_location(1);
-                increment_counter += 1;
+                self.push_increment_scan(&mut result, &mut increment_counter, &next_char);
                 precision_part = true;
             }
             else if next_char.breaks_any_integer() {
@@ -485,6 +466,10 @@ impl ScanState {
 
     fn scan_list_delimiter(&mut self) -> Result<Token, ScanError> {
         self.scan_single_char_operator(',', TokenType::ListDelimiter)
+    }
+
+    fn scan_type_specifier(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator(':', TokenType::TypeSpecifier)
     }
 
     // file delimiters
@@ -629,7 +614,7 @@ impl Scanner {
             return Ok(token)
         }
 
-        // keywords
+        // language keywords
 
         if let Ok(token) = self.state.scan_function_keyword() {
             return Ok(token)
@@ -659,6 +644,10 @@ impl Scanner {
             return Ok(token)
         }
 
+        // language type keywords
+
+
+
         // identifier
 
         if let Ok(token) = self.state.scan_identifier() {
@@ -667,6 +656,7 @@ impl Scanner {
 
         let error_message = format!("Unrecognized character '{}'\nstarting at line {} column {}", 
             self.state.char_at(), self.state.get_line(), self.state.get_column());
+
         Err(ScanError::init(self.state.location, self.state.line, self.state.column, error_message))
     }
 
