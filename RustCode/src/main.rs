@@ -8,6 +8,7 @@ mod atom_status;
 mod scanner;
 mod operation_type;
 mod parser;
+mod program;
 
 
 fn main() {
