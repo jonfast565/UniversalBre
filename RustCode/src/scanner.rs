@@ -1,7 +1,6 @@
 use token::Token;
 use token_type::TokenType;
 use atom_status::AtomStatus;
-use log;
 
 #[derive(Debug, Clone)]
 pub struct ScanError {
@@ -254,7 +253,7 @@ impl ScanState {
 
     fn scan_integer_literal(&mut self) -> Result<Token, ScanError> {
         let mut result = String::new();
-        let mut first_char = self.get_atom();
+        let first_char = self.get_atom();
         let mut increment_counter = 0;
 
         if !first_char.is_digit() {
@@ -580,6 +579,10 @@ impl Scanner {
             return Ok(token)
         }
 
+        if let Ok(token) = self.state.scan_type_specifier() {
+            return Ok(token)
+        }
+
         // boolean operators
 
         if let Ok(token) = self.state.scan_boolean_eq_operator() {
@@ -646,7 +649,7 @@ impl Scanner {
 
         // language type keywords
 
-
+        // TODO: Implement language type keywords!
 
         // identifier
 
@@ -668,7 +671,7 @@ impl Scanner {
             match new_token {
                 Err(scan_error) => return Err(scan_error),
                 Ok(scanned_token) => {
-                    if *scanned_token.get_token_type() == TokenType::EndOfFile {
+                    if scanned_token.get_token_type() == TokenType::EndOfFile {
                         break
                     } else {
                         tokens.push(scanned_token)

@@ -50,7 +50,4 @@ pub enum TokenType {
     AutobreakKeyword,
     OnKeyword,
     OffKeyword,
-    // error state
-    // used for initialization only
-    Invalid
 }

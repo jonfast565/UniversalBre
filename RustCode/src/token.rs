@@ -18,12 +18,12 @@ impl Token {
         }
 	}
 
-	pub fn get_token_type(&self) -> &TokenType {
-		&self.token_type
+	pub fn get_token_type(&self) -> TokenType {
+		self.token_type.clone()
 	}
 
-	pub fn get_lexeme(&self) -> &String {
-		&self.lexeme
+	pub fn get_lexeme(&self) -> String {
+		self.lexeme.clone()
 	}
 
 	pub fn get_line(&self) -> usize {

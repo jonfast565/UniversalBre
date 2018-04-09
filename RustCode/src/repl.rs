@@ -5,6 +5,8 @@ use self::rustyline::Editor;
 
 use log;
 use scanner;
+use parser;
+
 use token_type::TokenType;
 use token::Token;
 
@@ -23,7 +25,7 @@ impl ReplStatus {
 }
 
 fn prompt() -> ReplStatus {
-    log::log_info("REPL: User CTRL-D to complete input, or CTRL-C to exit");
+    log::log_info("REPL: Enter + CTRL-D to run commands, or CTRL-C to exit");
 
     let mut rl = Editor::<()>::new();
     let mut result = String::new();
@@ -71,7 +73,6 @@ fn print_tokens(token_list: Vec<Token>) {
 }
 
 pub fn prompt_loop() {
-    let mut result = String::new();
     loop {
         let repl_status = prompt();
         if repl_status.interrupted {
