@@ -1,3 +1,4 @@
+
 mod log;
 mod constants;
 mod command_line;
@@ -9,7 +10,6 @@ mod scanner;
 mod operation_type;
 mod parser;
 mod program;
-
 
 fn main() {
     command_line::get_arguments();
