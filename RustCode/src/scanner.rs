@@ -457,6 +457,14 @@ impl ScanState {
         self.scan_single_char_operator(')', TokenType::RightParenthesis)
     }
 
+    fn scan_left_indexer(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator('[', TokenType::LeftIndexer)
+    }
+
+    fn scan_right_indexer(&mut self) -> Result<Token, ScanError> {
+        self.scan_single_char_operator(']', TokenType::RightIndexer)
+    }
+
     // program delimiters
 
     fn scan_semicolon(&mut self) -> Result<Token, ScanError> {
@@ -568,6 +576,14 @@ impl Scanner {
         }
 
         if let Ok(token) = self.state.scan_right_parenthesis() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_left_indexer() {
+            return Ok(token)
+        }
+
+        if let Ok(token) = self.state.scan_right_indexer() {
             return Ok(token)
         }
 

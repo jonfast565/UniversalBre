@@ -36,6 +36,8 @@ pub enum TokenType {
     // parenthesis
     LeftParenthesis,
     RightParenthesis,
+    LeftIndexer,
+    RightIndexer,
     // operators for special operations
     AssignmentOperator,
     // program delimiters
