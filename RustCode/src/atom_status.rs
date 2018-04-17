@@ -31,14 +31,14 @@ impl AtomStatus {
 
     pub fn is_break_char(&self) -> bool {
     	let breaking_chars : Vec<char> = vec!(
-    		'(', ')', '+', '-', '*', '/', '~', '.', '<', '>', '=', '&', '|', ';', '{', '}', ','
+    		'(', ')', '+', '-', '*', '/', '~', '.', '<', '>', '=', '&', '|', ';', '{', '}', ',', ']', '[', ':'
     	);
     	breaking_chars.contains(&self.atom)
     }
 
     pub fn is_integer_break_char(&self) -> bool {
     	let integer_breaking_chars : Vec<char> = vec!(
-        '(', ')', '+', '-', '*', '/', '~', '<', '>', '=', '&', '|', ';', '{', '}', ','
+        '(', ')', '+', '-', '*', '/', '~', '<', '>', '=', '&', '|', ';', '{', '}', ',', ']', '[', ':'
     	);
     	integer_breaking_chars.contains(&self.atom)
     }

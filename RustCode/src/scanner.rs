@@ -77,6 +77,7 @@ impl ScanState {
             return '\0'
         }
         
+        // TODO: Enable code for debugging, but make it switchable
         // log::log_debug(&format!("Current location is '{}'", self.location));
         // log::log_debug(&format!("Current char is '{}'", self.input[self.location]));
         
