@@ -7,6 +7,7 @@ mod token;
 mod token_type;
 mod atom_status;
 mod scanner;
+mod statement;
 mod operation_type;
 mod parser;
 mod program;

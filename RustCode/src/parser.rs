@@ -3,6 +3,7 @@
 use program::Program;
 use token::Token;
 use token_type::TokenType;
+use statement::Statement;
 use log;
 
 struct Parser { 
@@ -23,7 +24,7 @@ impl Parser {
 	}
 
 	fn get_lookahead(&self) -> TokenType {
-		self.tokens[self.location].get_token_type()
+		self.tokens[self.location].get_token_type().clone()
 	}
 
 	fn get_token(&self) -> Token {
@@ -41,16 +42,36 @@ impl Parser {
 		self.location += 1;
 	}
 
-	pub fn parse(&self) -> Program {
+	pub fn parse(&mut self) -> Program {
 		self.parse_program()
 	}
 
-	pub fn parse_program(&self) -> Program {
-		Program {}
+	pub fn parse_program(&mut self) -> Program {
+		log::log_debug("Parse program");
+		let mut statements = Vec::<Statement>::new();
+
+		while self.get_lookahead() != TokenType::EndOfFile {
+			statements.push(self.parse_possible_statement())
+		}
+
+		let eof_lookahead = self.get_lookahead(); 
+		self.eat_token(eof_lookahead, TokenType::EndOfFile);
+		Program::init(statements)
 	}
 
-	pub fn parse_possible_statement(&self) {
-		//let statements = Vec<Statement>{};
-		
+	pub fn parse_possible_statement(&mut self) -> Statement {
+		match self.get_lookahead() {
+			TokenType::Identifier => self.parse_assignment_statement(),
+			TokenType::InfiniteKeyword => self.parse_infinite_loop(),
+			_ => panic!("Unrecognized statement lookahead")
+		}
 	} 
+
+	pub fn parse_assignment_statement(&mut self) -> Statement {
+		Statement {}
+	}
+
+	pub fn parse_infinite_loop(&mut self) -> Statement {
+		Statement {}
+	}
 }
