@@ -1,18 +1,18 @@
 use ordering::Ordering;
 
-pub struct Statement {
+pub struct LoopBlock {
 	statement_order: usize
 }
 
-impl Statement {
-	pub fn init(statement_order: usize) -> Statement {
-		Statement {
+impl LoopBlock {
+	pub fn init(statement_order: usize) -> LoopBlock {
+		LoopBlock {
 			statement_order: statement_order
 		}
 	}
 }
 
-impl Ordering for Statement {
+impl Ordering for LoopBlock {
 	fn get_order(&self) -> usize {
 		self.statement_order
 	}

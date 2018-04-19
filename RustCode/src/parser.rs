@@ -1,10 +1,13 @@
 // use operationtype;
 
-use program::Program;
+use log;
+
 use token::Token;
 use token_type::TokenType;
+
+use program::Program;
 use statement::Statement;
-use log;
+use loop_block::LoopBlock;
 
 struct Parser { 
 	location: usize,
@@ -49,9 +52,19 @@ impl Parser {
 	pub fn parse_program(&mut self) -> Program {
 		log::log_debug("Parse program");
 		let mut statements = Vec::<Statement>::new();
+		let mut loops = Vec::<LoopBlock>::new();
 
 		while self.get_lookahead() != TokenType::EndOfFile {
-			statements.push(self.parse_possible_statement())
+			match self.get_lookahead() {
+				TokenType::Identifier => { 
+					statements.push(self.parse_assignment_statement()); 
+				},
+				TokenType::InfiniteKeyword => { 
+					loops.push(self.parse_infinite_loop()); 
+				},
+				// TODO: This should be a very user-friendly error
+				_ => panic!("Unrecognized statement lookahead")
+			}
 		}
 
 		let eof_lookahead = self.get_lookahead(); 
@@ -59,19 +72,13 @@ impl Parser {
 		Program::init(statements)
 	}
 
-	pub fn parse_possible_statement(&mut self) -> Statement {
-		match self.get_lookahead() {
-			TokenType::Identifier => self.parse_assignment_statement(),
-			TokenType::InfiniteKeyword => self.parse_infinite_loop(),
-			_ => panic!("Unrecognized statement lookahead")
-		}
-	} 
-
 	pub fn parse_assignment_statement(&mut self) -> Statement {
-		Statement {}
+		log::log_debug("Parse assignment statement");
+		Statement::init(0)
 	}
 
-	pub fn parse_infinite_loop(&mut self) -> Statement {
-		Statement {}
+	pub fn parse_infinite_loop(&mut self) -> LoopBlock {
+		log::log_debug("Parse infinite loop");
+		LoopBlock::init(0)
 	}
 }
