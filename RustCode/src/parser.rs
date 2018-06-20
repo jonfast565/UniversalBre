@@ -1,8 +1,6 @@
-// use operationtype;
-
 use log;
 use semantic_blocks::{FunctionBlock, LoopBlock, LoopType, Program, SemanticBlock, StatementBlock,
-                      StatementType};
+                      StatementType, ArgumentBlock};
 use token::Token;
 use token_type::TokenType;
 
@@ -76,16 +74,21 @@ impl Parser {
 
 	pub fn parse_assignment_statement(&mut self) -> StatementBlock {
 		log::log_debug("Parse assignment statement");
+		let lookahead = self.get_lookahead();
+		self.eat_token(lookahead, TokenType::Semicolon);
 		StatementBlock::init(StatementType::AssignmentStatement)
 	}
 
 	pub fn parse_infinite_loop(&mut self) -> LoopBlock {
 		log::log_debug("Parse infinite loop");
+		let lookahead = self.get_lookahead();
+		self.eat_token(lookahead, TokenType::Semicolon);
 		LoopBlock::init(LoopType::InfiniteLoop)
 	}
 
 	pub fn parse_function_block(&mut self) -> FunctionBlock {
 		log::log_debug("Parse function");
-		FunctionBlock::init()
+		let argument_list = Vec::new();
+		FunctionBlock::init(argument_list)
 	}
 }

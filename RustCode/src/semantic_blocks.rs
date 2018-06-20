@@ -19,11 +19,19 @@ impl StatementBlock {
 	}
 }
 
-pub struct FunctionBlock {}
+pub struct ArgumentBlock {
+	
+}
+
+pub struct FunctionBlock {
+	arguments: Vec<ArgumentBlock>
+}
 
 impl FunctionBlock {
-	pub fn init() -> FunctionBlock {
-		FunctionBlock {}
+	pub fn init(arguments: Vec<ArgumentBlock>) -> FunctionBlock {
+		FunctionBlock {
+			arguments: arguments
+		}
 	}
 }
 

@@ -112,78 +112,6 @@
 	"buffers":
 	[
 		{
-			"file": "RustCode/src/parser.rs",
-			"settings":
-			{
-				"buffer_size": 1894,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "RustCode/src/statement.rs",
-			"settings":
-			{
-				"buffer_size": 370,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "RustCode/src/loop_block.rs",
-			"settings":
-			{
-				"buffer_size": 370,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "RustCode/src/binary_expr.rs",
-			"settings":
-			{
-				"buffer_size": 50,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "RustCode/src/literal_expr.rs",
-			"settings":
-			{
-				"buffer_size": 52,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "RustCode/src/statement_type.rs",
-			"settings":
-			{
-				"buffer_size": 65,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "RustCode/src/operation_type.rs",
-			"settings":
-			{
-				"buffer_size": 45,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "RustCode/src/ordering.rs",
-			"settings":
-			{
-				"buffer_size": 93,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "LegacyCpp/UniversalBre/parser.cpp",
 			"settings":
 			{
@@ -245,11 +173,24 @@
 	"expanded_folders":
 	[
 		"/C/Users/jfast/Desktop/Repos/UniversalBre",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src"
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre"
 	],
 	"file_history":
 	[
+		"/C/Users/jfast/Desktop/gnatcoll-core-master/gnatcoll-core-master/.travis.yml",
+		"/C/Users/jfast/Desktop/gnatcoll-core-master/gnatcoll-core-master/Makefile",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/parser.cpp",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/semantic_block.rs",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/ordering.rs",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/statement_type.rs",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/operation_type.rs",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/parser.rs",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/statement.rs",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/loop_block.rs",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/function_block.rs",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/literal_expr.rs",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/binary_expr.rs",
 		"//entbuild1/c$/ProductionSupportBkup/PW20180418/NcdrDataSubmissionWCF/prdncdrweb1/Config/Prod/bindings.config",
 		"//prdncdrweb1/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Web.config",
 		"//stgncdrweb1/c$/Websites/services.stage.ncdr.com/NCDRDataSubmissionWCF/Web.config",
@@ -263,7 +204,6 @@
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/program.rs",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/loop_type.rs",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/loop.rs",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/ordering.rs",
 		"//prdncdrapp2/c$/WindowsApp/Ncdr.UnifiedPlatform.Console.DqrProcessor/appsettings.json",
 		"//prdncdrapp2/c$/WindowsApp/Ncdr.UnifiedPlatform.Console.DqrProcessor/appsettings.production.json",
 		"//prdncdrapp1/c$/WindowsApp/Ncdr.UnifiedPlatform.Console.DqrProcessor/appsettings.production.json",
@@ -275,8 +215,6 @@
 		"//entbuild1/c$/BuildScripts/ProjectBuildScripts/UnifiedPlatform-master-Ncdr.UnifiedPlatform.sln-Ncdr.UnifiedPlatform.Console.DqrProcessor.csproj-Deploy.ps1",
 		"/C/Users/jfast/Downloads/EventsMaster.csv",
 		"//prdncdrweb1/c$/Websites/www.ncdr.com/WebNCDR/web.config",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/statement.rs",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/operation_type.rs",
 		"//entbuild1/c$/BuildArtifactsJenkins/master/Ncdr.UnifiedPlatform.sln/Ncdr.UnifiedPlatform.Console.CdaProcessor.csproj/4-18-2018_24625PM/appsettings.production.json",
 		"/C/Users/jfast/Desktop/Jenkins_Jobs-1524082397096.json",
 		"//stgncdrweb1/c$/CognosAnalytics/CA11/configuration/cogstartup.xml",
@@ -286,9 +224,7 @@
 		"/C/BuildScripts/ProjectBuildScriptsTest/Ncdr Release (Single Node Apps)-EnvironmentSetup.ps1",
 		"/C/BuildScripts/ProjectBuildScriptsTest/Ncdr Release-EnvironmentSetup.ps1",
 		"/C/BuildScripts/ProjectBuildScriptsTest/Ncdr Stage (Single Node Apps)-EnvironmentSetup.ps1",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/parser.rs",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/scanner.rs",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/parser.cpp",
 		"//prdncdrweb3/c$/Websites/Ncdr.UnifiedPlatform.Web.Dct/appsettings.json",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/atom_status.rs",
 		"//stgncdrapp1/c$/WindowsApp/NcdrEmailService/appsettings.json",
@@ -369,19 +305,11 @@
 		"/C/Users/jfast/Documents/IISExpress/TraceLogFiles/Ncdr.DataSubmissionService.Api/fr000269.xml",
 		"//prdncdrweb3/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/services.config",
 		"//prdncdrweb2/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Web.config",
-		"/C/Users/jfast/Desktop/Repos/NCDR_TFS/Other/NCDRDataSubmissionWCF/Release/Publish/Web.config",
-		"//prdncdrweb1/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/services.config",
-		"//prdncdrweb3/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/behaviors.config",
-		"//prdncdrweb3/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/bindings.config",
-		"/C/Users/jfast/Desktop/test-results3.xml",
-		"//prdncdrapp1/c$/WindowsApp/LoadFigSubmissionToDataSource/Fig.xsd",
-		"//prdncdrweb1/c$/Websites/www.ncdr.com/WebNCDR/config/prod/connectionStrings.config",
-		"//prdncdrweb1/c$/Websites/www.ncdr.com/IISSiteManager/Web.config",
-		"//prdncdrweb1/c$/Websites/www.ncdr.com/IISSiteManager/UserAccessConfiguration.json"
+		"/C/Users/jfast/Desktop/Repos/NCDR_TFS/Other/NCDRDataSubmissionWCF/Release/Publish/Web.config"
 	],
 	"find":
 	{
-		"height": 23.0
+		"height": 25.0
 	},
 	"find_in_files":
 	{
@@ -424,234 +352,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "RustCode/src/parser.rs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1894,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1892,
-								1892
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rust/Rust.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 765.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "RustCode/src/statement.rs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 370,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								99,
-								99
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rust/Rust.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "RustCode/src/loop_block.rs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 370,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								370,
-								370
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rust/Rust.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "RustCode/src/binary_expr.rs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 50,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								44,
-								44
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rust/Rust.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "RustCode/src/literal_expr.rs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 52,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								52,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rust/Rust.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "RustCode/src/statement_type.rs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 65,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								63,
-								63
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rust/Rust.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "RustCode/src/operation_type.rs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 45,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rust/Rust.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "RustCode/src/ordering.rs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 93,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								93,
-								93
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rust/Rust.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				}
 			]
 		},
 		{
@@ -659,9 +361,9 @@
 			"sheets":
 			[
 				{
-					"buffer": 8,
+					"buffer": 0,
 					"file": "LegacyCpp/UniversalBre/parser.cpp",
-					"semi_transient": false,
+					"semi_transient": true,
 					"settings":
 					{
 						"buffer_size": 14084,
@@ -671,8 +373,8 @@
 						"selection":
 						[
 							[
-								1134,
-								1134
+								2928,
+								2928
 							]
 						],
 						"settings":
@@ -682,10 +384,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1215.0,
+						"translation.y": 1824.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -693,11 +395,11 @@
 	],
 	"incremental_find":
 	{
-		"height": 23.0
+		"height": 25.0
 	},
 	"input":
 	{
-		"height": 35.0
+		"height": 37.0
 	},
 	"layout":
 	{
@@ -719,7 +421,7 @@
 		"cols":
 		[
 			0.0,
-			0.5,
+			0.0440528634361,
 			1.0
 		],
 		"rows":
@@ -741,7 +443,7 @@
 	"project": "universal_bre.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 46.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -771,7 +473,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},
