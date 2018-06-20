@@ -89,6 +89,6 @@ impl Parser {
 	fn parse_function_block(&mut self) -> FunctionBlock {
 		log::log_debug("Parse function");
 		let argument_list = Vec::<ArgumentBlock>::new();
-		FunctionBlock::init(argument_list)
+		FunctionBlock::init("someFunction".to_string(), argument_list)
 	}
 }
