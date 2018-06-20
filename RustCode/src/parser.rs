@@ -1,6 +1,6 @@
 use log;
 use semantic_blocks::{FunctionBlock, LoopBlock, LoopType, Program, SemanticBlock, StatementBlock,
-                      StatementType, ArgumentBlock};
+                      BinaryExpr, ArgumentBlock};
 use token::Token;
 use token_type::TokenType;
 
@@ -17,12 +17,13 @@ impl Parser {
 		}
 	}
 
-	fn get_location(&self) -> usize {
-		self.location
-	}
-
 	fn get_lookahead(&self) -> TokenType {
 		self.tokens[self.location].get_token_type().clone()
+	}
+
+	fn eat_lookahead(&mut self, token_type: TokenType) {
+		let lookahead = self.get_lookahead();
+		self.eat_token(lookahead, token_type);
 	}
 
 	fn get_token(&self) -> Token {
@@ -67,28 +68,77 @@ impl Parser {
 			}
 		}
 
-		let eof_lookahead = self.get_lookahead();
-		self.eat_token(eof_lookahead, TokenType::EndOfFile);
+		self.eat_lookahead(TokenType::EndOfFile);
 		Program::init(semantic_blocks)
+	}
+
+	fn parse_expression(&self) -> BinaryExpr {
+		BinaryExpr {
+			// expr
+		}
 	}
 
 	fn parse_assignment_statement(&mut self) -> StatementBlock {
 		log::log_debug("Parse assignment statement");
-		let lookahead = self.get_lookahead();
-		self.eat_token(lookahead, TokenType::Semicolon);
-		StatementBlock::init(StatementType::AssignmentStatement)
+		let id = if self.get_lookahead() == TokenType::Identifier {
+			self.get_token().get_lexeme()
+		} else { 
+			"".to_string() // TODO: What?
+		};
+		self.eat_lookahead(TokenType::Identifier);
+
+		let expression = self.parse_expression();
+		self.eat_lookahead(TokenType::Semicolon);
+
+		StatementBlock::init_with_assignment(id, expression)
 	}
 
 	fn parse_infinite_loop(&mut self) -> LoopBlock {
 		log::log_debug("Parse infinite loop");
-		let lookahead = self.get_lookahead();
-		self.eat_token(lookahead, TokenType::Semicolon);
+		self.eat_lookahead(TokenType::Semicolon);
 		LoopBlock::init(LoopType::InfiniteLoop)
+	}
+
+	fn parse_argument_list(&mut self) -> Vec<ArgumentBlock> {
+		let mut argument_list = Vec::<ArgumentBlock>::new();
+		if self.get_lookahead() == TokenType::LeftParenthesis {
+			
+			self.eat_lookahead(TokenType::LeftParenthesis);
+			while self.get_lookahead() == TokenType::Identifier {
+				let id = self.get_token().get_lexeme();
+				self.eat_lookahead(TokenType::Identifier);
+				argument_list.push(ArgumentBlock::init(id));
+
+				if self.get_lookahead() != TokenType::RightParenthesis {
+					self.eat_lookahead(TokenType::ListDelimiter);
+				}
+			}
+			self.eat_lookahead(TokenType::RightParenthesis);
+		}
+		argument_list
 	}
 
 	fn parse_function_block(&mut self) -> FunctionBlock {
 		log::log_debug("Parse function");
-		let argument_list = Vec::<ArgumentBlock>::new();
-		FunctionBlock::init("someFunction".to_string(), argument_list)
+		
+		self.eat_lookahead(TokenType::FunctionKeyword);
+		let id = if self.get_lookahead() == TokenType::Identifier {
+			self.get_token().get_lexeme()
+		} else { 
+			"".to_string() // TODO: What?
+		};
+
+		self.eat_lookahead(TokenType::Identifier);
+		let argument_list = self.parse_argument_list();
+
+		let mut function_body = Vec::<SemanticBlock>::new();
+		self.eat_lookahead(TokenType::ScopeBeginOperator);
+		while self.get_lookahead() != TokenType::ScopeEndOperator {
+			let result_statement = self.parse_assignment_statement();
+			function_body.push(SemanticBlock::init_with_statement(result_statement));
+		}
+		self.eat_lookahead(TokenType::ScopeEndOperator);
+
+		FunctionBlock::init(id, argument_list, function_body)
 	}
 }

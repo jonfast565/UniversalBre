@@ -9,30 +9,44 @@ pub enum StatementType {
 
 pub struct StatementBlock {
 	statement_type: StatementType,
+	assignment_id: String,
+	expression: Option<BinaryExpr>
 }
 
 impl StatementBlock {
-	pub fn init(statement_type: StatementType) -> StatementBlock {
+	pub fn init_with_assignment(assignment_id: String, expression: BinaryExpr) -> StatementBlock {
 		StatementBlock {
-			statement_type: statement_type,
+			statement_type: StatementType::AssignmentStatement,
+			assignment_id: assignment_id,
+			expression: Some(expression)
 		}
 	}
 }
 
 pub struct ArgumentBlock {
+	name: String
+}
 
+impl ArgumentBlock {
+	pub fn init(name: String) -> ArgumentBlock {
+		ArgumentBlock {
+			name: name
+		}
+	}
 }
 
 pub struct FunctionBlock {
 	name: String,
-	arguments: Vec<ArgumentBlock>
+	arguments: Vec<ArgumentBlock>,
+	body: Vec<SemanticBlock>
 }
 
 impl FunctionBlock {
-	pub fn init(name: String, arguments: Vec<ArgumentBlock>) -> FunctionBlock {
+	pub fn init(name: String, arguments: Vec<ArgumentBlock>, body: Vec<SemanticBlock>) -> FunctionBlock {
 		FunctionBlock {
 			name: name,
-			arguments: arguments
+			arguments: arguments,
+			body: body
 		}
 	}
 }

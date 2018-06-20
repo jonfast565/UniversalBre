@@ -363,7 +363,7 @@
 				{
 					"buffer": 0,
 					"file": "LegacyCpp/UniversalBre/parser.cpp",
-					"semi_transient": true,
+					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 14084,
@@ -373,8 +373,8 @@
 						"selection":
 						[
 							[
-								2928,
-								2928
+								3895,
+								3895
 							]
 						],
 						"settings":
@@ -384,7 +384,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1824.0,
+						"translation.y": 2208.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -481,7 +481,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 213.0,
+	"side_bar_width": 112.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
