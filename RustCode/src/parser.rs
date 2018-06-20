@@ -4,13 +4,13 @@ use semantic_blocks::{FunctionBlock, LoopBlock, LoopType, Program, SemanticBlock
 use token::Token;
 use token_type::TokenType;
 
-struct Parser {
+pub struct Parser {
 	location: usize,
 	tokens: Vec<Token>,
 }
 
 impl Parser {
-	fn init(tokens: Vec<Token>) -> Parser {
+	pub fn init(tokens: Vec<Token>) -> Parser {
 		Parser {
 			location: 0,
 			tokens: tokens,
@@ -44,7 +44,7 @@ impl Parser {
 		self.parse_program()
 	}
 
-	pub fn parse_program(&mut self) -> Program {
+	fn parse_program(&mut self) -> Program {
 		log::log_debug("Parse program");
 		let mut semantic_blocks = Vec::<SemanticBlock>::new();
 
@@ -72,23 +72,23 @@ impl Parser {
 		Program::init(semantic_blocks)
 	}
 
-	pub fn parse_assignment_statement(&mut self) -> StatementBlock {
+	fn parse_assignment_statement(&mut self) -> StatementBlock {
 		log::log_debug("Parse assignment statement");
 		let lookahead = self.get_lookahead();
 		self.eat_token(lookahead, TokenType::Semicolon);
 		StatementBlock::init(StatementType::AssignmentStatement)
 	}
 
-	pub fn parse_infinite_loop(&mut self) -> LoopBlock {
+	fn parse_infinite_loop(&mut self) -> LoopBlock {
 		log::log_debug("Parse infinite loop");
 		let lookahead = self.get_lookahead();
 		self.eat_token(lookahead, TokenType::Semicolon);
 		LoopBlock::init(LoopType::InfiniteLoop)
 	}
 
-	pub fn parse_function_block(&mut self) -> FunctionBlock {
+	fn parse_function_block(&mut self) -> FunctionBlock {
 		log::log_debug("Parse function");
-		let argument_list = Vec::new();
+		let argument_list = Vec::<ArgumentBlock>::new();
 		FunctionBlock::init(argument_list)
 	}
 }

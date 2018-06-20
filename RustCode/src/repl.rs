@@ -84,11 +84,14 @@ pub fn prompt_loop() {
                 continue 
             }
 
-            let mut scanner1 = scanner::Scanner::init(repl_status.input);
-            let tokens = scanner1.scan_all();
-            // debug token printer
+            let mut scanner = scanner::Scanner::init(repl_status.input);
+            let tokens = scanner.scan_all();
             match tokens {
-                Ok(token_list) => print_tokens(token_list),
+                Ok(token_list) => { 
+                    // print_tokens(token_list);
+                    let mut parser = parser::Parser::init(token_list/*.to_vec()*/);
+                    let _blocks = parser.parse();
+                },
                 Err(scan_error) => println!("Failed! {}", scan_error.get_error_message())
             }      
         }
