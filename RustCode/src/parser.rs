@@ -1,24 +1,21 @@
 // use operationtype;
 
 use log;
-
+use semantic_blocks::{FunctionBlock, LoopBlock, LoopType, Program, SemanticBlock, StatementBlock,
+                      StatementType};
 use token::Token;
 use token_type::TokenType;
 
-use program::Program;
-use statement::Statement;
-use loop_block::LoopBlock;
-
-struct Parser { 
+struct Parser {
 	location: usize,
-	tokens: Vec<Token>
+	tokens: Vec<Token>,
 }
 
 impl Parser {
 	fn init(tokens: Vec<Token>) -> Parser {
 		Parser {
 			location: 0,
-			tokens: tokens
+			tokens: tokens,
 		}
 	}
 
@@ -39,7 +36,7 @@ impl Parser {
 			let debug_message = format!("{:?} found", expected);
 			log::log_debug(&debug_message);
 		} else {
-			let error_message = format!("Expected {:?} but got {:?}", expected, actual); 
+			let error_message = format!("Expected {:?} but got {:?}", expected, actual);
 			panic!(error_message);
 		}
 		self.location += 1;
@@ -51,34 +48,44 @@ impl Parser {
 
 	pub fn parse_program(&mut self) -> Program {
 		log::log_debug("Parse program");
-		let mut statements = Vec::<Statement>::new();
-		let mut loops = Vec::<LoopBlock>::new();
+		let mut semantic_blocks = Vec::<SemanticBlock>::new();
 
 		while self.get_lookahead() != TokenType::EndOfFile {
 			match self.get_lookahead() {
-				TokenType::Identifier => { 
-					statements.push(self.parse_assignment_statement()); 
-				},
-				TokenType::InfiniteKeyword => { 
-					loops.push(self.parse_infinite_loop()); 
-				},
+				TokenType::Identifier => {
+					let assignment_statement = self.parse_assignment_statement();
+					semantic_blocks.push(SemanticBlock::init_with_statement(assignment_statement));
+				}
+				TokenType::InfiniteKeyword => {
+					let infinite_loop = self.parse_infinite_loop();
+					semantic_blocks.push(SemanticBlock::init_with_loop(infinite_loop));
+				}
+				TokenType::FunctionKeyword => {
+					let function_block = self.parse_function_block();
+					semantic_blocks.push(SemanticBlock::init_with_function(function_block));
+				}
 				// TODO: This should be a very user-friendly error
-				_ => panic!("Unrecognized statement lookahead")
+				_ => panic!("Unrecognized statement lookahead, aborted"),
 			}
 		}
 
-		let eof_lookahead = self.get_lookahead(); 
+		let eof_lookahead = self.get_lookahead();
 		self.eat_token(eof_lookahead, TokenType::EndOfFile);
-		Program::init(statements)
+		Program::init(semantic_blocks)
 	}
 
-	pub fn parse_assignment_statement(&mut self) -> Statement {
+	pub fn parse_assignment_statement(&mut self) -> StatementBlock {
 		log::log_debug("Parse assignment statement");
-		Statement::init(0)
+		StatementBlock::init(StatementType::AssignmentStatement)
 	}
 
 	pub fn parse_infinite_loop(&mut self) -> LoopBlock {
 		log::log_debug("Parse infinite loop");
-		LoopBlock::init(0)
+		LoopBlock::init(LoopType::InfiniteLoop)
+	}
+
+	pub fn parse_function_block(&mut self) -> FunctionBlock {
+		log::log_debug("Parse function");
+		FunctionBlock::init()
 	}
 }

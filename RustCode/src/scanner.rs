@@ -56,10 +56,6 @@ impl ScanState {
         self.column + 1
     }
 
-    fn get_location(&self) -> usize {
-        self.location
-    }
-
     fn increment_location(&mut self, increment: usize) {
         self.location += increment;
         self.column += increment; // TODO: This is wrong?
@@ -96,10 +92,6 @@ impl ScanState {
             return '\0'
         }
         self.input[self.location + offset]
-    }
-
-    fn get_atom_at_index(&self, location: usize) -> AtomStatus {
-        AtomStatus::init(self.char_at_index(location))
     }
 
     fn get_atom_at_offset(&self, offset: usize) -> AtomStatus {
