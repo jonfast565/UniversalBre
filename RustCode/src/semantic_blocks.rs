@@ -9,7 +9,7 @@ pub enum StatementType {
 
 pub struct StatementBlock {
 	statement_type: StatementType,
-	assignment_id: String,
+	assignment_id: Option<String>,
 	expression: Option<BinaryExpr>
 }
 
@@ -17,7 +17,7 @@ impl StatementBlock {
 	pub fn init_with_assignment(assignment_id: String, expression: BinaryExpr) -> StatementBlock {
 		StatementBlock {
 			statement_type: StatementType::AssignmentStatement,
-			assignment_id: assignment_id,
+			assignment_id: Some(assignment_id),
 			expression: Some(expression)
 		}
 	}
