@@ -1,10 +1,10 @@
 
 mod log;
+mod error;
 mod constants;
 mod command_line;
 mod repl;
 mod token;
-mod token_type;
 mod atom_status;
 mod scanner;
 mod semantic_blocks;

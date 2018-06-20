@@ -1,8 +1,8 @@
+use error::CompileError;
 use log;
-use semantic_blocks::{FunctionBlock, LoopBlock, LoopType, Program, SemanticBlock, StatementBlock,
-                      BinaryExpr, ArgumentBlock};
-use token::Token;
-use token_type::TokenType;
+use semantic_blocks::{ArgumentBlock, BinaryExpr, FunctionBlock, LoopBlock, LoopType, Program,
+                      SemanticBlock, StatementBlock};
+use token::{Token, TokenType};
 
 pub struct Parser {
 	location: usize,
@@ -30,6 +30,11 @@ impl Parser {
 		self.tokens[self.location].clone()
 	}
 
+	fn get_compile_error(&self, message: String) -> CompileError {
+		let error_token = self.get_token();
+		CompileError::init(0, error_token.get_line(), error_token.get_column(), message)
+	}
+
 	fn eat_token(&mut self, actual: TokenType, expected: TokenType) {
 		if actual == expected {
 			let debug_message = format!("{:?} found", expected);
@@ -41,14 +46,10 @@ impl Parser {
 		self.location += 1;
 	}
 
-	pub fn parse(&mut self) -> Program {
-		self.parse_program()
-	}
-
-	fn parse_program(&mut self) -> Program {
+	pub fn parse(&mut self) -> Result<Program, CompileError> {
 		log::log_debug("Parse program");
 		let mut semantic_blocks = Vec::<SemanticBlock>::new();
-
+		let mut matched = true;
 		while self.get_lookahead() != TokenType::EndOfFile {
 			match self.get_lookahead() {
 				TokenType::Identifier => {
@@ -63,13 +64,20 @@ impl Parser {
 					let function_block = self.parse_function_block();
 					semantic_blocks.push(SemanticBlock::init_with_function(function_block));
 				}
-				// TODO: This should be a very user-friendly error
-				_ => panic!("Unrecognized statement lookahead, aborted"),
+				_ => {
+					matched = false;
+				}
+			}
+
+			if !matched {
+				return Err(self.get_compile_error(
+					"Cannot start with this statement type".to_string(),
+				));
 			}
 		}
 
 		self.eat_lookahead(TokenType::EndOfFile);
-		Program::init(semantic_blocks)
+		Ok(Program::init(semantic_blocks))
 	}
 
 	fn parse_expression(&self) -> BinaryExpr {
@@ -82,7 +90,7 @@ impl Parser {
 		log::log_debug("Parse assignment statement");
 		let id = if self.get_lookahead() == TokenType::Identifier {
 			self.get_token().get_lexeme()
-		} else { 
+		} else {
 			"".to_string() // TODO: What?
 		};
 		self.eat_lookahead(TokenType::Identifier);
@@ -102,7 +110,6 @@ impl Parser {
 	fn parse_argument_list(&mut self) -> Vec<ArgumentBlock> {
 		let mut argument_list = Vec::<ArgumentBlock>::new();
 		if self.get_lookahead() == TokenType::LeftParenthesis {
-			
 			self.eat_lookahead(TokenType::LeftParenthesis);
 			while self.get_lookahead() == TokenType::Identifier {
 				let id = self.get_token().get_lexeme();
@@ -120,11 +127,11 @@ impl Parser {
 
 	fn parse_function_block(&mut self) -> FunctionBlock {
 		log::log_debug("Parse function");
-		
+
 		self.eat_lookahead(TokenType::FunctionKeyword);
 		let id = if self.get_lookahead() == TokenType::Identifier {
 			self.get_token().get_lexeme()
-		} else { 
+		} else {
 			"".to_string() // TODO: What?
 		};
 

@@ -1,29 +1,6 @@
-use token::Token;
-use token_type::TokenType;
+use token::{Token, TokenType};
 use atom_status::AtomStatus;
-
-#[derive(Debug, Clone)]
-pub struct ScanError {
-    location: usize,
-    line: usize,
-    column: usize,
-    error_message: String
-}
-
-impl ScanError {
-    fn init(location: usize, line: usize, column: usize, error_message: String) -> ScanError {
-        ScanError {
-            location: location,
-            line: line,
-            column: column,
-            error_message: error_message
-        }
-    }
-
-    pub fn get_error_message(&self) -> String {
-        return self.error_message.clone();
-    }
-}
+use error::CompileError;
 
 #[derive(Debug, Clone)]
 struct ScanState {
@@ -135,14 +112,8 @@ impl ScanState {
         self.increment_location(temp_ctr);
     }
 
-    fn get_scan_error_details(&self, message: String) -> ScanError {
-        // TODO: Implement as constructor method
-        ScanError {
-            location: self.location,
-            line: self.line,
-            column: self.column,
-            error_message: message
-        }
+    fn get_scan_error_details(&self, message: String) -> CompileError {
+        CompileError::init(self.location, self.line, self.column, message)
     }
 
     fn get_token(&self, lexeme: String, token_type: TokenType) -> Token {
@@ -157,7 +128,7 @@ impl ScanState {
         *increment_counter += 1;
     }
 
-    fn scan_single_char_operator(&mut self, operator_char: char, token_type: TokenType) -> Result<Token, ScanError> {
+    fn scan_single_char_operator(&mut self, operator_char: char, token_type: TokenType) -> Result<Token, CompileError> {
         if self.char_at() != operator_char {
             return Err(self.get_scan_error_details(
                 format!("{} not scanned", operator_char).to_string()))
@@ -167,7 +138,7 @@ impl ScanState {
             format!("{}", operator_char).to_string(), token_type))
     }
 
-    fn scan_sequence(&mut self, keyword_id: &str, token_type: TokenType) -> Result<Token, ScanError>  {
+    fn scan_sequence(&mut self, keyword_id: &str, token_type: TokenType) -> Result<Token, CompileError>  {
         let keyword_chars : Vec<char> = keyword_id.chars().collect();
         let mut increment_counter = 0;
         let mut result = String::new();
@@ -200,51 +171,51 @@ impl ScanState {
 
     // scan methods
 
-    fn scan_function_keyword(&mut self) -> Result<Token, ScanError> {
+    fn scan_function_keyword(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("fn", TokenType::FunctionKeyword)
     }
 
     // loops
 
-    fn scan_infinite_keyword(&mut self) -> Result<Token, ScanError> {
+    fn scan_infinite_keyword(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("infinite", TokenType::InfiniteKeyword)
     }
 
-    fn scan_break_keyword(&mut self) -> Result<Token, ScanError> {
+    fn scan_break_keyword(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("break", TokenType::BreakKeyword)
     }
 
     // language features
     
-    fn scan_feature_keyword(&mut self) -> Result<Token, ScanError> {
+    fn scan_feature_keyword(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("feature", TokenType::FeatureKeyword)
     }
 
-    fn scan_autobreak_keyword(&mut self) -> Result<Token, ScanError> {
+    fn scan_autobreak_keyword(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("autobreak", TokenType::AutobreakKeyword)
     }
 
-    fn scan_on_keyword(&mut self) -> Result<Token, ScanError> {
+    fn scan_on_keyword(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("on", TokenType::OnKeyword)
     }
 
-    fn scan_off_keyword(&mut self) -> Result<Token, ScanError> {
+    fn scan_off_keyword(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("off", TokenType::OffKeyword)
     }
 
     // brackets
 
-    fn scan_begin_scope_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_begin_scope_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('{', TokenType::ScopeBeginOperator)
     }
 
-    fn scan_end_scope_operator(&mut self) -> Result<Token, ScanError>  {
+    fn scan_end_scope_operator(&mut self) -> Result<Token, CompileError>  {
         self.scan_single_char_operator('}', TokenType::ScopeEndOperator)
     }
 
     // literals
 
-    fn scan_integer_literal(&mut self) -> Result<Token, ScanError> {
+    fn scan_integer_literal(&mut self) -> Result<Token, CompileError> {
         let mut result = String::new();
         let first_char = self.get_atom();
         let mut increment_counter = 0;
@@ -275,7 +246,7 @@ impl ScanState {
         Ok(self.get_token(result, TokenType::IntegerLiteral))
     }
 
-    fn scan_string_literal(&mut self) -> Result<Token, ScanError> {
+    fn scan_string_literal(&mut self) -> Result<Token, CompileError> {
         let mut result = String::new();
         let first_char = self.get_atom();
         let mut increment_counter = 0;
@@ -310,7 +281,7 @@ impl ScanState {
         Ok(self.get_token(result, TokenType::StringLiteral))
     }
 
-    fn scan_identifier(&mut self) -> Result<Token, ScanError> {
+    fn scan_identifier(&mut self) -> Result<Token, CompileError> {
         let mut result = String::new();
         let first_char = self.get_atom();
         let mut increment_counter = 0;
@@ -340,7 +311,7 @@ impl ScanState {
         Ok(self.get_token(result, TokenType::Identifier))
     }
 
-    fn scan_float_literal(&mut self) -> Result<Token, ScanError> {
+    fn scan_float_literal(&mut self) -> Result<Token, CompileError> {
         let mut result = String::new();
         let first_char = self.get_atom();
         let mut increment_counter = 0;
@@ -378,103 +349,103 @@ impl ScanState {
 
     // boolean equality operators 
 
-    fn scan_boolean_eq_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_boolean_eq_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("==", TokenType::BooleanEqOperator)
     }
 
-    fn scan_boolean_ne_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_boolean_ne_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("!=", TokenType::BooleanNeOperator)
     }
 
     // boolean and/or operators
 
-    fn scan_boolean_and_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_boolean_and_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("&&", TokenType::BooleanAndOperator)
     }
 
-    fn scan_boolean_or_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_boolean_or_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("||", TokenType::BooleanOrOperator)
     }
 
     // boolean comparison operators
 
-    fn scan_boolean_gt_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_boolean_gt_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('>', TokenType::BooleanGtOperator)
     }
 
-    fn scan_boolean_lt_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_boolean_lt_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('<', TokenType::BooleanLtOperator)
     }
 
-    fn scan_boolean_gte_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_boolean_gte_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence(">=", TokenType::BooleanGteOperator)
     }
 
-    fn scan_boolean_lte_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_boolean_lte_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_sequence("<=", TokenType::BooleanLteOperator)
     }
 
     // operators
 
-    fn scan_plus_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_plus_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('+', TokenType::PlusOperator)
     }
 
-    fn scan_minus_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_minus_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('-', TokenType::MinusOperator)
     }
 
-    fn scan_multiply_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_multiply_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('*', TokenType::MultiplyOperator)
     }
 
-    fn scan_divide_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_divide_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('/', TokenType::DivideOperator)
     }
 
-    fn scan_concat_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_concat_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('~', TokenType::ConcatOperator)
     }
 
-    fn scan_assignment_operator(&mut self) -> Result<Token, ScanError> {
+    fn scan_assignment_operator(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('=', TokenType::AssignmentOperator)
     }
 
     // parenthesis
 
-    fn scan_left_parenthesis(&mut self) -> Result<Token, ScanError> {
+    fn scan_left_parenthesis(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('(', TokenType::LeftParenthesis)
     }
 
-    fn scan_right_parenthesis(&mut self) -> Result<Token, ScanError> {
+    fn scan_right_parenthesis(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator(')', TokenType::RightParenthesis)
     }
 
-    fn scan_left_indexer(&mut self) -> Result<Token, ScanError> {
+    fn scan_left_indexer(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('[', TokenType::LeftIndexer)
     }
 
-    fn scan_right_indexer(&mut self) -> Result<Token, ScanError> {
+    fn scan_right_indexer(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator(']', TokenType::RightIndexer)
     }
 
     // program delimiters
 
-    fn scan_semicolon(&mut self) -> Result<Token, ScanError> {
+    fn scan_semicolon(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator(';', TokenType::Semicolon)
     }
 
-    fn scan_list_delimiter(&mut self) -> Result<Token, ScanError> {
+    fn scan_list_delimiter(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator(',', TokenType::ListDelimiter)
     }
 
-    fn scan_type_specifier(&mut self) -> Result<Token, ScanError> {
+    fn scan_type_specifier(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator(':', TokenType::TypeSpecifier)
     }
 
     // file delimiters
 
-    fn scan_end_of_file(&mut self) -> Result<Token, ScanError> {
+    fn scan_end_of_file(&mut self) -> Result<Token, CompileError> {
         self.scan_single_char_operator('\0', TokenType::EndOfFile)
     }
 
@@ -497,7 +468,7 @@ impl Scanner {
         }
     }
 
-    fn scan_one(&mut self) -> Result<Token, ScanError> {
+    fn scan_one(&mut self) -> Result<Token, CompileError> {
         // skip the whitespace
 
         self.state.skip_whitespace();
@@ -669,10 +640,10 @@ impl Scanner {
         let error_message = format!("Unrecognized character '{}'\nstarting at line {} column {}", 
             self.state.char_at(), self.state.get_line(), self.state.get_column());
 
-        Err(ScanError::init(self.state.location, self.state.line, self.state.column, error_message))
+        Err(CompileError::init(self.state.location, self.state.line, self.state.column, error_message))
     }
 
-    pub fn scan_all(&mut self) -> Result<Vec<Token>, ScanError> {
+    pub fn scan_all(&mut self) -> Result<Vec<Token>, CompileError> {
         let mut tokens : Vec<Token> = Vec::new();
 
         loop {

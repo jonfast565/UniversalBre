@@ -23,6 +23,13 @@ impl StatementBlock {
 	}
 }
 
+pub enum DataType {
+	StringType,
+	IntegerType,
+	FloatType,
+	BooleanType
+}
+
 pub struct ArgumentBlock {
 	name: String
 }

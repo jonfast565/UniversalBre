@@ -7,8 +7,7 @@ use log;
 use scanner;
 use parser;
 
-use token_type::TokenType;
-use token::Token;
+use token::{Token, TokenType};
 
 struct ReplStatus {
     input: String,
