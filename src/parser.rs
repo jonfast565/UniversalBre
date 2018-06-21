@@ -30,6 +30,9 @@ impl Parser {
 	}
 
 	fn get_token(&self) -> Token {
+		if self.location == self.tokens.len() {
+			return Token::init(0, 0, TokenType::EndOfFile, String::new());
+		}
 		self.tokens[self.location].clone()
 	}
 
@@ -90,7 +93,7 @@ impl Parser {
 
 			if !matched {
 				return Err(self.get_static_compile_error(
-					"Cannot start with this statement type",
+					"Cannot start with this statement type. Must be of id, loop, or function.",
 				));
 			}
 		}
