@@ -104,6 +104,7 @@ impl Parser {
 			String::new() // TODO: What?
 		};
 		self.eat_lookahead(TokenType::Identifier);
+		self.eat_lookahead(TokenType::AssignmentOperator);
 
 		let expression = match self.parse_expression() {
 			Ok(expression_contents) => expression_contents,

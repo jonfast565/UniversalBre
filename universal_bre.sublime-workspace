@@ -111,14 +111,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "LegacyCpp/UniversalBre/parser.cpp",
-			"settings":
-			{
-				"buffer_size": 14084,
-				"line_ending": "Windows"
-			}
-		}
 	],
 	"build_system": "Packages/Rust/Rust.sublime-build",
 	"build_system_choices":
@@ -172,15 +164,15 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Users/jfast/Desktop/Repos/UniversalBre",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre"
+		"/C/Users/jfast/Desktop/Repos/UniversalBre"
 	],
 	"file_history":
 	[
+		"/C/Users/jfast/Desktop/CA_IIS_Config_NCDR_Production_PublicReporting.bat",
+		"/C/Users/jfast/Desktop/CA_IIS_Config_NCDR_Production.bat",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/parser.cpp",
 		"/C/Users/jfast/Desktop/gnatcoll-core-master/gnatcoll-core-master/.travis.yml",
 		"/C/Users/jfast/Desktop/gnatcoll-core-master/gnatcoll-core-master/Makefile",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/parser.cpp",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/semantic_block.rs",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/ordering.rs",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/statement_type.rs",
@@ -303,9 +295,7 @@
 		"/C/Windows/System32/drivers/etc/hosts",
 		"/C/Users/jfast/Documents/IISExpress/config/applicationhost.config",
 		"/C/Users/jfast/Documents/IISExpress/TraceLogFiles/Ncdr.DataSubmissionService.Api/fr000269.xml",
-		"//prdncdrweb3/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/services.config",
-		"//prdncdrweb2/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Web.config",
-		"/C/Users/jfast/Desktop/Repos/NCDR_TFS/Other/NCDRDataSubmissionWCF/Release/Publish/Web.config"
+		"//prdncdrweb3/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/services.config"
 	],
 	"find":
 	{
@@ -357,39 +347,8 @@
 			]
 		},
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "LegacyCpp/UniversalBre/parser.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 14084,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								13937,
-								11141
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 5472.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -481,7 +440,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 112.0,
+	"side_bar_width": 313.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
