@@ -44,13 +44,13 @@ impl Parser {
 		if actual == expected {
 			let debug_message = format!("{:?} found", expected);
 			log::log_debug(&debug_message);
+			self.location += 1;
 			return None
 		} else {
 			let error_message = format!("Expected {:?} but got {:?}", expected, actual);
 			compile_error = self.get_compile_error(error_message);
+			Some(compile_error)
 		}
-		self.location += 1;
-		Some(compile_error)
 	}
 
 	pub fn parse(&mut self) -> Result<Program, CompileError> {

@@ -87,9 +87,16 @@ pub fn prompt_loop() {
             let tokens = scanner.scan_all();
             match tokens {
                 Ok(token_list) => { 
-                    // print_tokens(token_list);
+                    print_tokens(token_list.to_vec());
                     let mut parser = parser::Parser::init(token_list/*.to_vec()*/);
-                    let _blocks = parser.parse();
+                    match parser.parse() {
+                        Ok(blocks) => {
+                            // TODO: implement code generation
+                        },
+                        Err(contents) => {
+                            log::log_error(&format!("CE {}", contents.to_string()));
+                        }
+                    }
                 },
                 Err(scan_error) => println!("Failed! {}", scan_error.get_error_message())
             }      

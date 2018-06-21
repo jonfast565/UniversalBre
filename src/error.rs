@@ -1,3 +1,5 @@
+use std::fmt;
+
 #[derive(Debug, Clone)]
 pub struct CompileError {
     location: usize,
@@ -18,5 +20,11 @@ impl CompileError {
 
     pub fn get_error_message(&self) -> String {
         return self.error_message.clone();
+    }
+}
+
+impl fmt::Display for CompileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}, {}: {}", self.line, self.column, self.error_message)
     }
 }
