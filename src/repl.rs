@@ -42,10 +42,7 @@ fn prompt() -> ReplStatus {
                 interrupted = true;
                 break;
             }
-            Err(ReadlineError::Eof) => {
-                result += "\0";
-                break;
-            }
+            Err(ReadlineError::Eof) => break,
             Err(err) => {
                 log::log_error(&format!("Error: {:?}", err));
                 break;

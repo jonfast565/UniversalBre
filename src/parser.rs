@@ -18,6 +18,9 @@ impl Parser {
 	}
 
 	fn get_lookahead(&self) -> TokenType {
+		if self.location == self.tokens.len() {
+			return TokenType::EndOfFile;
+		}
 		self.tokens[self.location].get_token_type().clone()
 	}
 
