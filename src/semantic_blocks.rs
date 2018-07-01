@@ -1,3 +1,4 @@
+#[derive(Debug, Clone, PartialEq)]
 pub enum ExprType {
 	Binary,
 	Literal,
@@ -55,6 +56,7 @@ impl ExprNode {
 	}
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub enum StatementType {
 	AssignmentStatement,
 	BreakStatement,
@@ -76,6 +78,7 @@ impl StatementBlock {
 	}
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub enum DataType {
 	StringType,
 	IntegerType,
@@ -132,6 +135,7 @@ impl FunctionBlock {
 	}
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub enum LoopType {
 	InfiniteLoop,
 	ConditionalLoop,
