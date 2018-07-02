@@ -7,6 +7,7 @@ mod repl;
 mod token;
 mod atom_status;
 mod scanner;
+mod visualizer;
 mod semantic_blocks;
 mod parser;
 

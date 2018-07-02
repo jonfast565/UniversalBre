@@ -1,3 +1,5 @@
+use visualizer::Visualizer;
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum ExprType {
 	Binary,
@@ -56,6 +58,12 @@ impl ExprNode {
 	}
 }
 
+impl Visualizer for ExprNode {
+	fn build_graphviz(&self) -> String {
+		String::new()
+	}
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum StatementType {
 	AssignmentStatement,
@@ -75,6 +83,12 @@ impl StatementBlock {
 			assignment_id: Some(assignment_id),
 			expression: Some(expression),
 		}
+	}
+}
+
+impl Visualizer for StatementBlock {
+	fn build_graphviz(&self) -> String {
+		String::new()
 	}
 }
 
@@ -135,6 +149,12 @@ impl FunctionBlock {
 	}
 }
 
+impl Visualizer for FunctionBlock {
+	fn build_graphviz(&self) -> String {
+		String::new()
+	}
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum LoopType {
 	InfiniteLoop,
@@ -151,6 +171,12 @@ impl LoopBlock {
 		LoopBlock {
 			loop_type: loop_type,
 		}
+	}
+}
+
+impl Visualizer for LoopBlock {
+	fn build_graphviz(&self) -> String {
+		String::new()
 	}
 }
 
@@ -182,6 +208,21 @@ impl SemanticBlock {
 			function_block: Some(function_block),
 		}
 	}
+	pub fn get_loop(self) -> Option<LoopBlock> {
+		self.loop_block
+	}
+	pub fn get_statement(self) -> Option<StatementBlock> {
+		self.statement_block
+	}
+	pub fn get_function(self) -> Option<FunctionBlock> {
+		self.function_block
+	}
+}
+
+impl Visualizer for SemanticBlock {
+	fn build_graphviz(&self) -> String {
+		String::new()
+	}
 }
 
 pub struct Program {
@@ -191,5 +232,11 @@ pub struct Program {
 impl Program {
 	pub fn init(blocks: Vec<SemanticBlock>) -> Program {
 		Program { blocks: blocks }
+	}
+}
+
+impl Visualizer for Program {
+	fn build_graphviz(&self) -> String {
+		String::new()
 	}
 }
