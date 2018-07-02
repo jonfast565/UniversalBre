@@ -111,15 +111,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "/C/Users/jfast/Desktop/image_deletes.txt",
-			"settings":
-			{
-				"buffer_size": 1205,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		}
 	],
 	"build_system": "Packages/Rust/Rust.sublime-build",
 	"build_system_choices":
@@ -171,12 +162,25 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
-	"expanded_folders":
-	[
-		"/C/Users/jfast/Desktop/Repos/UniversalBre"
-	],
 	"file_history":
 	[
+		"/C/Users/jfast/Desktop/node-playground/index.js",
+		"/C/Users/jfast/Desktop/registryBenchmark.json",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/src/repl.rs",
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/src/parser.rs",
+		"/C/Users/jfast/Desktop/sql-test/index.js",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/package.json",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/frontend/package.json",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/package.json",
+		"/C/Users/jfast/Desktop/sql-test/package.json",
+		"/C/Program Files/iisnode/www/defaultdocument/web.config",
+		"/C/Program Files/iisnode/www/helloworld/web.config",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/node_modules/foundation/js/foundation/foundation.js",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/.gitignore",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/public/stylesheets/style.css",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/app.js",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/views/index.pug",
+		"/C/Users/jfast/Desktop/image_deletes.txt",
 		"/C/Users/jfast/Desktop/CA_IIS_Config_NCDR_Production_PublicReporting.bat",
 		"/C/Users/jfast/Desktop/CA_IIS_Config_NCDR_Production.bat",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/parser.cpp",
@@ -287,24 +291,7 @@
 		"/C/Users/jfast/Desktop/universalbre/universal_bre/src/main.rs",
 		"/C/Users/jfast/go/src/hello/main.go",
 		"//rdprdncdrweb1/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/bindings.config",
-		"/C/Users/jfast/Desktop/Files/NcdrDataSubmissionApiTestTool/TestTool/Client.exe.config",
-		"//rdprdncdrweb1/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/behaviors.config",
-		"/C/Users/jfast/Desktop/Files/NcdrDataSubmissionApiTestTool/NcdrDataSubmissionApiTestTool/Client.exe.config",
-		"//rdprdncdrweb1/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/web.config",
-		"//prdncdrweb1/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/bindings.config",
-		"//rdprdncdrweb3/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/behaviors.config",
-		"//prdncdrweb1/c$/Websites/vendor.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/connectionStrings.config",
-		"//prdncdrweb1/c$/Websites/vendor.ncdr.com/NCDRDataSubmissionWCF/Web.config",
-		"//prdncdrweb2/c$/Websites/vendor.ncdr.com/lb/Web.config",
-		"/C/Users/jfast/Desktop/click_stuff.ahk",
-		"//prdncdrweb3/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/appSettings.config",
-		"//prdncdrweb1/c$/Websites/vendor.ncdr.com/NCDRDataSubmissionApi/Web.config",
-		"//prdncdrweb1/c$/Websites/www.ncdr.com/DeviceListAutomation/web.config",
-		"//prdncdrweb3/c$/Websites/www.ncdr.com/DeviceListAutomation/web.config",
-		"/C/Windows/System32/drivers/etc/hosts",
-		"/C/Users/jfast/Documents/IISExpress/config/applicationhost.config",
-		"/C/Users/jfast/Documents/IISExpress/TraceLogFiles/Ncdr.DataSubmissionService.Api/fr000269.xml",
-		"//prdncdrweb3/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/services.config"
+		"/C/Users/jfast/Desktop/Files/NcdrDataSubmissionApiTestTool/TestTool/Client.exe.config"
 	],
 	"find":
 	{
@@ -356,37 +343,8 @@
 			]
 		},
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "/C/Users/jfast/Desktop/image_deletes.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1205,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1162,
-								1162
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 16.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -478,7 +436,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 313.0,
+	"side_bar_width": 187.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

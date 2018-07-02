@@ -4,7 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
+       /* {
             "name": "(lldb) Launch",
             "type": "cppdbg",
             "request": "launch",
@@ -15,7 +15,7 @@
             "environment": [],
             "externalConsole": true,
             "MIMode": "lldb"
-        }/*,
+        },*/
         {
             "name": "(Windows) Launch",
             "type": "cppvsdbg",
@@ -26,6 +26,6 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": true
-        }*/
+        }
     ]
 }
