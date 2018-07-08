@@ -4,7 +4,7 @@ use visualizer::Visualizer;
 pub enum ExprType {
 	Binary,
 	Literal,
-	Variable,
+	Variable
 }
 
 pub struct ExprNode {
@@ -61,8 +61,15 @@ impl ExprNode {
 impl Visualizer for ExprNode {
 	fn build_graphviz(&self) -> String {
 		if self.expr_type == ExprType::Literal || self.expr_type == ExprType::Variable {
-			let data_type = self.data_type.as_ref().unwrap();
-			let value = self.value.as_ref().unwrap();
+			let data_type = match self.data_type.as_ref() {
+				Some(data_type) => &data_type,
+				None => &DataType::NoneType
+			};
+			let no_value = "No Value".to_string();
+			let value = match self.value.as_ref() {
+				Some(value) => &value,
+				None => &no_value
+			};
 			return format!("{:?}{}", data_type, value);
 		} else if self.expr_type == ExprType::Binary {
 			let op_type = self.operation_type.as_ref().unwrap();
@@ -118,6 +125,7 @@ pub enum DataType {
 	IntegerType,
 	FloatType,
 	BooleanType,
+	NoneType
 }
 
 #[derive(Debug, Clone, PartialEq)]
