@@ -7,6 +7,7 @@ use log;
 use scanner;
 use parser;
 
+use visualizer::Visualizer;
 use token::{Token, TokenType};
 
 struct ReplStatus {
@@ -90,7 +91,8 @@ pub fn prompt_loop() {
                     print_tokens(token_list.to_vec());
                     let mut parser = parser::Parser::init(token_list);
                     match parser.parse() {
-                        Ok(blocks) => {
+                        Ok(program) => {
+                            log::log_info(&program.build_graphviz());
                             log::log_info("CS Success!");
                         },
                         Err(contents) => {

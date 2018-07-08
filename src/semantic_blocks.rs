@@ -60,7 +60,18 @@ impl ExprNode {
 
 impl Visualizer for ExprNode {
 	fn build_graphviz(&self) -> String {
-		String::new()
+		if self.expr_type == ExprType::Literal || self.expr_type == ExprType::Variable {
+			let data_type = self.data_type.as_ref().unwrap();
+			let value = self.value.as_ref().unwrap();
+			return format!("{:?}{}", data_type, value);
+		} else if self.expr_type == ExprType::Binary {
+			let op_type = self.operation_type.as_ref().unwrap();
+			let left_node = self.left_node.as_ref().unwrap().build_graphviz();
+			let right_node = self.right_node.as_ref().unwrap().build_graphviz();
+			return format!("{:?}\n{}\n{}", op_type, left_node, right_node);
+		} else {
+			panic!("Invalid EXPR_TYPE: This should never happen");
+		}
 	}
 }
 
@@ -88,7 +99,16 @@ impl StatementBlock {
 
 impl Visualizer for StatementBlock {
 	fn build_graphviz(&self) -> String {
-		String::new()
+		if self.statement_type == StatementType::AssignmentStatement {
+			let assignment_id = self.assignment_id.as_ref().unwrap();
+			let expression = self.expression.as_ref().unwrap();
+			return format!(
+				"{}\n{}",
+				format!("{}{}", assignment_id, "="),
+				expression.build_graphviz()
+			);
+		}
+		panic!("Invalid STATEMENT_TYPE: This should never happen");
 	}
 }
 
@@ -100,6 +120,7 @@ pub enum DataType {
 	BooleanType,
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub enum OperationType {
 	BooleanOrOperation,
 	BooleanAndOperation,
@@ -208,19 +229,13 @@ impl SemanticBlock {
 			function_block: Some(function_block),
 		}
 	}
-	pub fn get_loop(self) -> Option<LoopBlock> {
-		self.loop_block
-	}
-	pub fn get_statement(self) -> Option<StatementBlock> {
-		self.statement_block
-	}
-	pub fn get_function(self) -> Option<FunctionBlock> {
-		self.function_block
-	}
 }
 
 impl Visualizer for SemanticBlock {
 	fn build_graphviz(&self) -> String {
+		if let Some(statement_block) = self.statement_block.as_ref() {
+			return statement_block.build_graphviz();
+		} 
 		String::new()
 	}
 }
@@ -237,6 +252,11 @@ impl Program {
 
 impl Visualizer for Program {
 	fn build_graphviz(&self) -> String {
-		String::new()
+		let blocks_ref = self.blocks.as_slice();
+		let mut result = String::new();
+		for block in blocks_ref {
+			result = format!("{}\n{}", result, block.build_graphviz());
+		}
+		result
 	}
 }

@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"time",
+				"timeframe"
+			],
+			[
+				"timefr",
+				"timeframes"
+			],
+			[
+				"unique",
+				"uniqueAggregationTypes"
+			],
+			[
 				"debug",
 				"debug_message"
 			],
@@ -164,6 +176,34 @@
 	},
 	"file_history":
 	[
+		"//stgncdrweb2/c$/Websites/stage.ncdr.com/Status/app.js",
+		"/C/Users/jfast/Downloads/table.xml",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/install-windows-service.js",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/app.js",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/bin/www",
+		"/C/NodeApps/NcdrStatusDashboard/access.log",
+		"/C/NodeApps/NcdrStatusDashboard/install-windows-service.js",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/daemon/ncdrstatusdashboard.exe.config",
+		"/C/NodeApps/NcdrStatusDashboard/app.js",
+		"/C/NodeApps/NcdrStatusDashboard/iisnode/index.html",
+		"/C/NodeApps/NcdrStatusDashboard/web.config",
+		"/C/NodeApps/NcdrStatusDashboard/www.js",
+		"/C/NodeApps/NcdrStatusDashboard/bin/www",
+		"/C/Websites/NcdrStatusDashboard/web.config",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/uninstall-windows-service.js",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/views/index.pug",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/routes/index.js",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/views/layout.pug",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/configuration/constants.js",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/publish/web.config",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/publish/app.js",
+		"/C/Program Files/iisnode/interceptor.js",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/publish/www.js",
+		"/C/Windows/System32/inetsrv/config/applicationHost.config",
+		"/C/Users/jfast/Desktop/node-playground/package.json",
+		"/C/NodeApps/NcdrStatusDashboard/node_modules/winser/bin/winser",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/web.config",
+		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/publish/bin/www",
 		"/C/Users/jfast/Desktop/node-playground/index.js",
 		"/C/Users/jfast/Desktop/registryBenchmark.json",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/src/repl.rs",
@@ -263,35 +303,7 @@
 		"/C/Users/jfast/Desktop/BurstMonitorLog.Log",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/token_types.h",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/log.rs",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/command_line.rs",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/scan_state.h",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/function_expression_node.cpp",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/global_defines.h",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/.gitignore",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/commandline.rs",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/Cargo.toml",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/operationtype.rs",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/tokentype.rs",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/utility.cpp",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/program_header.h",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/header.rs",
-		"/C/Users/jfast/Desktop/universal_bre/src/scanner.rs",
-		"/C/Users/jfast/Desktop/universal_bre/src/tokentype.rs",
-		"/C/Users/jfast/Desktop/universal_bre/src/operationtype.rs",
-		"/C/Users/jfast/Desktop/universal_bre/src/parser.rs",
-		"/C/Users/jfast/Desktop/universal_bre/src/log.rs",
-		"/C/Users/jfast/Desktop/universal_bre/src/main.rs",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/UniversalBre/op_types.h",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/UniversalBre/literal_expression_node.h",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/.gitignore",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/UniversalBre/global_defines.h",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/UniversalBre/utility.h",
-		"/C/Users/jfast/Desktop/universal_bre/Cargo.toml",
-		"/C/Users/jfast/Desktop/TestTool/Client.exe.config",
-		"/C/Users/jfast/Desktop/universalbre/universal_bre/src/main.rs",
-		"/C/Users/jfast/go/src/hello/main.go",
-		"//rdprdncdrweb1/c$/Websites/services.ncdr.com/NCDRDataSubmissionWCF/Config/Prod/bindings.config",
-		"/C/Users/jfast/Desktop/Files/NcdrDataSubmissionApiTestTool/TestTool/Client.exe.config"
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/command_line.rs"
 	],
 	"find":
 	{
@@ -309,6 +321,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"debug",
+			"iisnode",
 			"NCDR Export Service",
 			"NCDR CDA Service",
 			"NCDR DQR Service",
@@ -388,7 +402,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 27.0
+		"height": 29.0
 	},
 	"output.find_results":
 	{
