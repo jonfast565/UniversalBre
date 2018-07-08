@@ -123,6 +123,15 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "Cargo.toml",
+			"settings":
+			{
+				"buffer_size": 186,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "Packages/Rust/Rust.sublime-build",
 	"build_system_choices":
@@ -176,6 +185,7 @@
 	},
 	"file_history":
 	[
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/Cargo.toml",
 		"//stgncdrweb2/c$/Websites/stage.ncdr.com/Status/app.js",
 		"/C/Users/jfast/Downloads/table.xml",
 		"/C/Users/jfast/Desktop/Repos/NcdrStatusDashboard/backend/install-windows-service.js",
@@ -302,8 +312,7 @@
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/atom_status.cpp",
 		"/C/Users/jfast/Desktop/BurstMonitorLog.Log",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/token_types.h",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/log.rs",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/command_line.rs"
+		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/log.rs"
 	],
 	"find":
 	{
@@ -357,8 +366,37 @@
 			]
 		},
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "Cargo.toml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 186,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								186,
+								186
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],

@@ -70,7 +70,7 @@ impl Visualizer for ExprNode {
 				Some(value) => &value,
 				None => &no_value
 			};
-			return format!("{:?}{}", data_type, value);
+			return format!("[label=\"{}: {:?}\"", value, data_type);
 		} else if self.expr_type == ExprType::Binary {
 			let op_type = self.operation_type.as_ref().unwrap();
 			let left_node = self.left_node.as_ref().unwrap().build_graphviz();

@@ -3,6 +3,7 @@ use log;
 use semantic_blocks::{ArgumentBlock, DataType, ExprNode, FunctionBlock, LoopBlock, LoopType,
                       OperationType, Program, SemanticBlock, StatementBlock};
 use token::{Token, TokenType};
+extern crate snowflake;
 
 macro_rules! report_lookahead_error {
 	($e:expr) => { if let Some(error) = $e {
