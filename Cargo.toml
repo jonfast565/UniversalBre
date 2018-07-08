@@ -7,4 +7,4 @@ authors = ["Jon Fast <jnfstdj656@gmail.com>"]
 termcolor = "0.3.6"
 clap = "2.31.2"
 rustyline = "1.0.0"
-snowflake = "1.2"
+uuid = { version = "0.6", features = ["v4"] }

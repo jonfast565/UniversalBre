@@ -1,6 +1,7 @@
 
 mod log;
 mod error;
+mod utility;
 mod constants;
 mod command_line;
 mod repl;

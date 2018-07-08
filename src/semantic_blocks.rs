@@ -1,4 +1,5 @@
 use visualizer::Visualizer;
+use utility;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum ExprType {
@@ -8,6 +9,7 @@ pub enum ExprType {
 }
 
 pub struct ExprNode {
+	id: String,
 	expr_type: ExprType,
 
 	// binary stuff
@@ -27,6 +29,7 @@ impl ExprNode {
 		operation_type: OperationType,
 	) -> ExprNode {
 		ExprNode {
+			id: utility::get_new_uuid(),
 			expr_type: ExprType::Binary,
 			left_node: Some(Box::new(left_node)),
 			right_node: Some(Box::new(right_node)),
@@ -37,6 +40,7 @@ impl ExprNode {
 	}
 	pub fn init_as_literal(value: String, data_type: DataType) -> ExprNode {
 		ExprNode {
+			id: utility::get_new_uuid(),
 			expr_type: ExprType::Literal,
 			left_node: None,
 			right_node: None,
@@ -48,6 +52,7 @@ impl ExprNode {
 
 	pub fn init_as_variable(value: String) -> ExprNode {
 		ExprNode {
+			id: utility::get_new_uuid(),
 			expr_type: ExprType::Variable,
 			left_node: None,
 			right_node: None,
@@ -60,6 +65,7 @@ impl ExprNode {
 
 impl Visualizer for ExprNode {
 	fn build_graphviz(&self) -> String {
+		let id = &self.id;
 		if self.expr_type == ExprType::Literal || self.expr_type == ExprType::Variable {
 			let data_type = match self.data_type.as_ref() {
 				Some(data_type) => &data_type,
@@ -70,12 +76,17 @@ impl Visualizer for ExprNode {
 				Some(value) => &value,
 				None => &no_value
 			};
-			return format!("[label=\"{}: {:?}\"", value, data_type);
+			return format!("\"{}\" [label=\"{}: {:?}\"]", id, value, data_type);
 		} else if self.expr_type == ExprType::Binary {
 			let op_type = self.operation_type.as_ref().unwrap();
-			let left_node = self.left_node.as_ref().unwrap().build_graphviz();
-			let right_node = self.right_node.as_ref().unwrap().build_graphviz();
-			return format!("{:?}\n{}\n{}", op_type, left_node, right_node);
+			let left_node = self.left_node.as_ref().unwrap();
+			let right_node = self.right_node.as_ref().unwrap();
+			let current_nodes = format!("\"{}\" [label=\"{:?}\"]\n{}\n{}", id, op_type, 
+				left_node.build_graphviz(), 
+				right_node.build_graphviz());
+			let current_left_connection = format!("\"{}\" -> \"{}\"", id, left_node.id);
+			let current_right_connection = format!("\"{}\" -> \"{}\"", id, right_node.id);
+			return format!("{}\n{}\n{}", current_nodes, current_left_connection, current_right_connection);
 		} else {
 			panic!("Invalid EXPR_TYPE: This should never happen");
 		}
@@ -89,6 +100,7 @@ pub enum StatementType {
 }
 
 pub struct StatementBlock {
+	id: String,
 	statement_type: StatementType,
 	assignment_id: Option<String>,
 	expression: Option<ExprNode>,
@@ -97,6 +109,7 @@ pub struct StatementBlock {
 impl StatementBlock {
 	pub fn init_with_assignment(assignment_id: String, expression: ExprNode) -> StatementBlock {
 		StatementBlock {
+			id: utility::get_new_uuid(),
 			statement_type: StatementType::AssignmentStatement,
 			assignment_id: Some(assignment_id),
 			expression: Some(expression),
@@ -110,9 +123,10 @@ impl Visualizer for StatementBlock {
 			let assignment_id = self.assignment_id.as_ref().unwrap();
 			let expression = self.expression.as_ref().unwrap();
 			return format!(
-				"{}\n{}",
-				format!("{}{}", assignment_id, "="),
-				expression.build_graphviz()
+				"{}\n{}\n{}",
+				format!("\"{}\" [label=\"Assign {}\"]", &self.id, assignment_id),
+				expression.build_graphviz(),
+				format!("\"{}\" -> \"{}\"", &self.id, expression.id)
 			);
 		}
 		panic!("Invalid STATEMENT_TYPE: This should never happen");
@@ -263,7 +277,7 @@ impl Visualizer for Program {
 		let blocks_ref = self.blocks.as_slice();
 		let mut result = String::new();
 		for block in blocks_ref {
-			result = format!("{}\n{}", result, block.build_graphviz());
+			result = format!("digraph g {{\n {}\n{} \n}}", result, block.build_graphviz());
 		}
 		result
 	}
