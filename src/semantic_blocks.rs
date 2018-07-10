@@ -1,5 +1,5 @@
-use visualizer::Visualizer;
 use utility;
+use visualizer::Visualizer;
 
 extern crate uuid;
 
@@ -7,7 +7,7 @@ extern crate uuid;
 pub enum ExprType {
 	Binary,
 	Literal,
-	Variable
+	Variable,
 }
 
 pub struct ExprNode {
@@ -71,24 +71,31 @@ impl Visualizer for ExprNode {
 		if self.expr_type == ExprType::Literal || self.expr_type == ExprType::Variable {
 			let data_type = match self.data_type.as_ref() {
 				Some(data_type) => &data_type,
-				None => &DataType::NoneType
+				None => &DataType::NoneType,
 			};
 			let no_value = "No Value".to_string();
 			let value = match self.value.as_ref() {
 				Some(value) => &value,
-				None => &no_value
+				None => &no_value,
 			};
 			return format!("\"{}\" [label=\"{}: {:?}\"]", id, value, data_type);
 		} else if self.expr_type == ExprType::Binary {
 			let op_type = self.operation_type.as_ref().unwrap();
 			let left_node = self.left_node.as_ref().unwrap();
 			let right_node = self.right_node.as_ref().unwrap();
-			let current_nodes = format!("\"{}\" [label=\"{:?}\"]\n{}\n{}", id, op_type, 
-				left_node.build_graphviz(), 
-				right_node.build_graphviz());
+			let current_nodes = format!(
+				"\"{}\" [label=\"{:?}\"]\n{}\n{}",
+				id,
+				op_type,
+				left_node.build_graphviz(),
+				right_node.build_graphviz()
+			);
 			let current_left_connection = format!("\"{}\" -> \"{}\"", id, left_node.id);
 			let current_right_connection = format!("\"{}\" -> \"{}\"", id, right_node.id);
-			return format!("{}\n{}\n{}", current_nodes, current_left_connection, current_right_connection);
+			return format!(
+				"{}\n{}\n{}",
+				current_nodes, current_left_connection, current_right_connection
+			);
 		} else {
 			panic!("Invalid EXPR_TYPE: This should never happen");
 		}
@@ -141,7 +148,7 @@ pub enum DataType {
 	IntegerType,
 	FloatType,
 	BooleanType,
-	NoneType
+	NoneType,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -225,8 +232,16 @@ impl Visualizer for LoopBlock {
 	}
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum BlockType {
+	StatementBlock,
+	LoopBlock,
+	FunctionBlock,
+}
+
 pub struct SemanticBlock {
 	id: String,
+	block_type: BlockType,
 	statement_block: Option<StatementBlock>,
 	loop_block: Option<LoopBlock>,
 	function_block: Option<FunctionBlock>,
@@ -236,6 +251,7 @@ impl SemanticBlock {
 	pub fn init_with_statement(statement_block: StatementBlock) -> SemanticBlock {
 		SemanticBlock {
 			id: utility::get_new_uuid(),
+			block_type: BlockType::StatementBlock,
 			statement_block: Some(statement_block),
 			loop_block: None,
 			function_block: None,
@@ -244,6 +260,7 @@ impl SemanticBlock {
 	pub fn init_with_loop(loop_block: LoopBlock) -> SemanticBlock {
 		SemanticBlock {
 			id: utility::get_new_uuid(),
+			block_type: BlockType::LoopBlock,
 			statement_block: None,
 			loop_block: Some(loop_block),
 			function_block: None,
@@ -252,6 +269,7 @@ impl SemanticBlock {
 	pub fn init_with_function(function_block: FunctionBlock) -> SemanticBlock {
 		SemanticBlock {
 			id: utility::get_new_uuid(),
+			block_type: BlockType::FunctionBlock,
 			statement_block: None,
 			loop_block: None,
 			function_block: Some(function_block),
@@ -263,7 +281,7 @@ impl Visualizer for SemanticBlock {
 	fn build_graphviz(&self) -> String {
 		if let Some(statement_block) = self.statement_block.as_ref() {
 			return statement_block.build_graphviz();
-		} 
+		}
 		panic!("Invalid SemanticBlock: This should never happen");
 	}
 }
@@ -282,29 +300,44 @@ impl Visualizer for Program {
 	fn build_graphviz(&self) -> String {
 		let blocks_ref = self.blocks.as_slice();
 		let mut result = String::new();
-		let mut last_id : Option<String> = None;
+		let mut last_id: Option<String> = None;
 		let mut pairs = Vec::<utility::Pair>::new();
 		for block in blocks_ref {
-			let id = &block.id;
-			result = format!("{}\n subgraph \"cluster_{}\" {{\n{}\n}}\n", result, id, block.build_graphviz());
+			let id = match block {
+				SemanticBlock {
+					block_type,
+					statement_block: Some(block_ref),
+					..
+				} if *block_type == BlockType::StatementBlock =>
+				{
+					block_ref.id.to_string()
+				}
+				_ => block.id.to_string(),
+			};
+			result = format!(
+				"{}\nsubgraph \"cluster_{}\" {{\n{}\n}}\n",
+				result,
+				id,
+				block.build_graphviz()
+			);
 			match last_id {
 				Some(last_id_match) => {
 					pairs.push(utility::Pair(last_id_match, id.to_string()));
-					last_id = Some(id.to_string());
-				},
+					last_id = Some(id);
+				}
 				None => {
 					pairs.push(utility::Pair("Program".to_string(), id.to_string()));
-					last_id = Some(id.to_string());
+					last_id = Some(id);
 				}
 			}
 		}
 		for pair in pairs {
 			match pair {
 				utility::Pair(one, two) => {
-					result = format!("{}\n \"{}\" -> \"{}\"", result, one, two);
+					result = format!("{}\n\"{}\" -> \"{}\"", result, one, two);
 				}
 			}
 		}
-		return format!("digraph g {{\n{}}}\n", result);
+		return format!("digraph g {{\n{}\n}}\n", result);
 	}
 }

@@ -19,6 +19,16 @@ macro_rules! report_unwrap_error {
 	}
 }
 
+macro_rules! safe_unwrap_id {
+	($context_var:ident) => {
+		if $context_var.get_lookahead() == TokenType::Identifier {
+			$context_var.get_token().get_lexeme()
+		} else {
+			String::new() // TODO: Still... what?
+		};
+	};
+}
+
 pub struct Parser {
 	location: usize,
 	tokens: Vec<Token>,
@@ -110,11 +120,7 @@ impl Parser {
 
 	fn parse_assignment_statement(&mut self) -> Result<StatementBlock, CompileError> {
 		log::log_debug("Parse assignment statement");
-		let id = if self.get_lookahead() == TokenType::Identifier {
-			self.get_token().get_lexeme()
-		} else {
-			String::new() // TODO: What?
-		};
+		let id = safe_unwrap_id!(self);
 
 		report_lookahead_error!(self.eat_lookahead(TokenType::Identifier));
 		self.eat_lookahead(TokenType::AssignmentOperator);
@@ -152,12 +158,7 @@ impl Parser {
 	fn parse_function_block(&mut self) -> Result<FunctionBlock, CompileError> {
 		log::log_debug("Parse function");
 		report_lookahead_error!(self.eat_lookahead(TokenType::FunctionKeyword));
-
-		let id = if self.get_lookahead() == TokenType::Identifier {
-			self.get_token().get_lexeme()
-		} else {
-			String::new() // TODO: Still... what?
-		};
+		let id = safe_unwrap_id!(self);
 
 		report_lookahead_error!(self.eat_lookahead(TokenType::Identifier));
 		let argument_list = report_unwrap_error!(self.parse_argument_list());
