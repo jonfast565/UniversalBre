@@ -6,6 +6,7 @@ use self::rustyline::Editor;
 use log;
 use parser;
 use scanner;
+use utility;
 
 use token::{Token, TokenType};
 use visualizer::Visualizer;
@@ -94,7 +95,7 @@ pub fn prompt_loop() {
                     let program = parser.parse();
                     match program {
                         Ok(program) => {
-                            log::log_info(&program.build_graphviz());
+                            let _ = utility::write_file(&"gviz.txt".to_string(), &program.build_graphviz());
                             log::log_info("CS Success!");
                         }
                         Err(contents) => {
