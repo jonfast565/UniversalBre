@@ -1,6 +1,8 @@
 use visualizer::Visualizer;
 use utility;
 
+extern crate uuid;
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum ExprType {
 	Binary,
@@ -280,10 +282,29 @@ impl Visualizer for Program {
 	fn build_graphviz(&self) -> String {
 		let blocks_ref = self.blocks.as_slice();
 		let mut result = String::new();
+		let mut last_id : Option<String> = None;
+		let mut pairs = Vec::<utility::Pair>::new();
 		for block in blocks_ref {
 			let id = &block.id;
-			result = format!("subgraph \"{}\" {{\n{}\n}}\n", id, block.build_graphviz());
+			result = format!("{}\n subgraph \"cluster_{}\" {{\n{}\n}}\n", result, id, block.build_graphviz());
+			match last_id {
+				Some(last_id_match) => {
+					pairs.push(utility::Pair(last_id_match, id.to_string()));
+					last_id = Some(id.to_string());
+				},
+				None => {
+					pairs.push(utility::Pair("Program".to_string(), id.to_string()));
+					last_id = Some(id.to_string());
+				}
+			}
 		}
-		return format!("digraph g {{\n{}\n}}\n", result);
+		for pair in pairs {
+			match pair {
+				utility::Pair(one, two) => {
+					result = format!("{}\n \"{}\" -> \"{}\"", result, one, two);
+				}
+			}
+		}
+		return format!("digraph g {{\n{}}}\n", result);
 	}
 }
