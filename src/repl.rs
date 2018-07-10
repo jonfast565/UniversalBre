@@ -96,7 +96,7 @@ pub fn prompt_loop() {
                     match program {
                         Ok(program) => {
                             let _ = utility::write_file(&"gviz.txt".to_string(), &program.build_graphviz());
-                            log::log_info("CS Success!");
+                            log::log_info("Success!");
                         }
                         Err(contents) => {
                             log::log_error(&format!("CE {}", contents.to_string()));
