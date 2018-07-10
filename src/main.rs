@@ -1,16 +1,15 @@
-
-mod log;
-mod error;
-mod utility;
-mod constants;
-mod command_line;
-mod repl;
-mod token;
 mod atom_status;
-mod scanner;
-mod visualizer;
-mod semantic_blocks;
+mod command_line;
+mod constants;
+mod error;
+mod log;
 mod parser;
+mod repl;
+mod scanner;
+mod semantic_blocks;
+mod token;
+mod utility;
+mod visualizer;
 
 fn main() {
     command_line::get_arguments();

@@ -4,22 +4,22 @@ use self::rustyline::error::ReadlineError;
 use self::rustyline::Editor;
 
 use log;
-use scanner;
 use parser;
+use scanner;
 
-use visualizer::Visualizer;
 use token::{Token, TokenType};
+use visualizer::Visualizer;
 
 struct ReplStatus {
     input: String,
-    interrupted: bool
+    interrupted: bool,
 }
 
 impl ReplStatus {
     fn init(input: String, interrupted: bool) -> ReplStatus {
         ReplStatus {
             input: input,
-            interrupted: interrupted
+            interrupted: interrupted,
         }
     }
 }
@@ -52,7 +52,7 @@ fn prompt() -> ReplStatus {
     }
 
     if !interrupted {
-        return ReplStatus::init(result, false)
+        return ReplStatus::init(result, false);
     }
 
     ReplStatus::init(String::new(), true)
@@ -64,7 +64,8 @@ fn print_tokens(token_list: Vec<Token>) {
         if tt == TokenType::Identifier
             || tt == TokenType::IntegerLiteral
             || tt == TokenType::FloatLiteral
-            || tt == TokenType::StringLiteral {
+            || tt == TokenType::StringLiteral
+        {
             println!("{:?}: {}", token.get_token_type(), token.get_lexeme());
         } else {
             println!("{:?}", token.get_token_type());
@@ -76,18 +77,18 @@ pub fn prompt_loop() {
     loop {
         let repl_status = prompt();
         if repl_status.interrupted {
-            break
+            break;
         } else {
             log::log_success(&format!("Scanning {}", repl_status.input));
-            if repl_status.input.is_empty() { 
+            if repl_status.input.is_empty() {
                 log::log_info("Input empty... try again.");
-                continue 
+                continue;
             }
 
             let mut scanner = scanner::Scanner::init(repl_status.input);
             let tokens = scanner.scan_all();
             match tokens {
-                Ok(token_list) => { 
+                Ok(token_list) => {
                     print_tokens(token_list.to_vec());
                     let mut parser = parser::Parser::init(token_list);
                     let program = parser.parse();
@@ -95,14 +96,14 @@ pub fn prompt_loop() {
                         Ok(program) => {
                             log::log_info(&program.build_graphviz());
                             log::log_info("CS Success!");
-                        },
+                        }
                         Err(contents) => {
                             log::log_error(&format!("CE {}", contents.to_string()));
                         }
                     }
-                },
-                Err(scan_error) => println!("CE {}", scan_error.get_error_message())
-            }      
+                }
+                Err(scan_error) => println!("CE {}", scan_error.get_error_message()),
+            }
         }
     }
 }

@@ -5,16 +5,21 @@ pub struct CompileError {
     location: usize,
     line: usize,
     column: usize,
-    error_message: String
+    error_message: String,
 }
 
 impl CompileError {
-    pub fn init(location: usize, line: usize, column: usize, error_message: String) -> CompileError {
+    pub fn init(
+        location: usize,
+        line: usize,
+        column: usize,
+        error_message: String,
+    ) -> CompileError {
         CompileError {
             location: location,
             line: line,
             column: column,
-            error_message: error_message
+            error_message: error_message,
         }
     }
 

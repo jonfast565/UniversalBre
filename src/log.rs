@@ -1,7 +1,7 @@
 extern crate termcolor;
 
-use std::io::Write;
 use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+use std::io::Write;
 
 fn get_true_white() -> Color {
     Color::Rgb(255, 255, 255)

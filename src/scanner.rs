@@ -1,6 +1,6 @@
-use token::{Token, TokenType};
 use atom_status::AtomStatus;
 use error::CompileError;
+use token::{Token, TokenType};
 
 macro_rules! seq_fn {
     ($seq_fn:ident, $context_var:ident, $sequence:expr, $enum:expr) => {
@@ -21,7 +21,7 @@ macro_rules! op_fn {
 macro_rules! scan_result {
     ($fn:ident, $context_var:ident) => {
         if let Ok(token) = $context_var.state.$fn() {
-            return Ok(token)
+            return Ok(token);
         }
     };
 }
@@ -31,7 +31,7 @@ struct ScanState {
     location: usize,
     line: usize,
     column: usize,
-    input: Vec<char>
+    input: Vec<char>,
 }
 
 impl ScanState {
@@ -40,7 +40,7 @@ impl ScanState {
             location: 0,
             line: 0,
             column: 0,
-            input: ScanState::input_to_char_vector(input)
+            input: ScanState::input_to_char_vector(input),
         }
     }
 
@@ -71,26 +71,26 @@ impl ScanState {
 
     fn char_at(&self) -> char {
         if self.out_of_range() {
-            return '\0'
+            return '\0';
         }
-        
+
         // TODO: Enable code for debugging, but make it switchable
         // log::log_debug(&format!("Current location is '{}'", self.location));
         // log::log_debug(&format!("Current char is '{}'", self.input[self.location]));
-        
+
         self.input[self.location]
     }
 
     fn char_at_index(&self, index: usize) -> char {
         if index >= self.input.len() {
-            return '\0'
+            return '\0';
         }
         self.input[index]
     }
 
     fn char_at_offset(&self, offset: usize) -> char {
         if self.location + offset >= self.input.len() {
-            return '\0'
+            return '\0';
         }
         self.input[self.location + offset]
     }
@@ -112,15 +112,14 @@ impl ScanState {
     }
 
     fn skip_whitespace(&mut self) {
-        // range check is critical if we're 
+        // range check is critical if we're
         // moving over array bounds indiscriminantly
         if self.out_of_range() {
-            return
+            return;
         }
 
-        let mut temp_ctr : usize = 0;
-        loop
-        {
+        let mut temp_ctr: usize = 0;
+        loop {
             let c = self.get_atom_at_offset(temp_ctr);
             if c.is_whitespace() {
                 temp_ctr += 1;
@@ -128,8 +127,7 @@ impl ScanState {
                     self.increment_line();
                     self.zero_column();
                 }
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -146,24 +144,37 @@ impl ScanState {
 
     // scan helpers
 
-    fn push_increment_scan(&mut self, result: &mut String, increment_counter: &mut usize, char_atom: &AtomStatus) {
+    fn push_increment_scan(
+        &mut self,
+        result: &mut String,
+        increment_counter: &mut usize,
+        char_atom: &AtomStatus,
+    ) {
         result.push(char_atom.get_atom());
         self.increment_location(1);
         *increment_counter += 1;
     }
 
-    fn scan_single_char_operator(&mut self, operator_char: char, token_type: TokenType) -> Result<Token, CompileError> {
+    fn scan_single_char_operator(
+        &mut self,
+        operator_char: char,
+        token_type: TokenType,
+    ) -> Result<Token, CompileError> {
         if self.char_at() != operator_char {
-            return Err(self.get_scan_error_details(
-                format!("{} not scanned", operator_char).to_string()))
+            return Err(
+                self.get_scan_error_details(format!("{} not scanned", operator_char).to_string())
+            );
         }
         self.increment_location(1);
-        Ok(self.get_token(
-            format!("{}", operator_char).to_string(), token_type))
+        Ok(self.get_token(format!("{}", operator_char).to_string(), token_type))
     }
 
-    fn scan_sequence(&mut self, keyword_id: &str, token_type: TokenType) -> Result<Token, CompileError>  {
-        let keyword_chars : Vec<char> = keyword_id.chars().collect();
+    fn scan_sequence(
+        &mut self,
+        keyword_id: &str,
+        token_type: TokenType,
+    ) -> Result<Token, CompileError> {
+        let keyword_chars: Vec<char> = keyword_id.chars().collect();
         let mut increment_counter = 0;
         let mut result = String::new();
 
@@ -175,8 +186,9 @@ impl ScanState {
 
             if self.char_at() != lowercase_char {
                 self.decrement_location(increment_counter);
-                return Err(self.get_scan_error_details(
-                format!("{} not scanned", keyword_id).to_string()))
+                return Err(
+                    self.get_scan_error_details(format!("{} not scanned", keyword_id).to_string())
+                );
             }
 
             let mut current_atom = self.get_atom();
@@ -186,11 +198,11 @@ impl ScanState {
         let last_char = self.get_atom();
         if !last_char.breaks_any() {
             return Err(self.get_scan_error_details(
-                format!("{} not scanned, id candidate", keyword_id).to_string()))
+                format!("{} not scanned, id candidate", keyword_id).to_string(),
+            ));
         }
 
-        Ok(self.get_token(
-            format!("{}", keyword_id).to_string(), token_type))
+        Ok(self.get_token(format!("{}", keyword_id).to_string(), token_type))
     }
 
     // literals
@@ -201,8 +213,7 @@ impl ScanState {
 
         if !first_char.is_digit() {
             // must 'lock in' the first character
-            return Err(self.get_scan_error_details(
-                format!("{} not scanned", "digit").to_string()))
+            return Err(self.get_scan_error_details(format!("{} not scanned", "digit").to_string()));
         }
 
         self.push_increment_scan(&mut result, &mut increment_counter, &first_char);
@@ -210,14 +221,13 @@ impl ScanState {
         loop {
             let next_char = self.get_atom();
             if next_char.breaks_any_integer() {
-                break
-            } 
-            else if !next_char.is_digit() {
+                break;
+            } else if !next_char.is_digit() {
                 self.decrement_location(increment_counter);
                 return Err(self.get_scan_error_details(
-                    format!("{} not scanned", "integer digit").to_string()))
-            }
-            else {
+                    format!("{} not scanned", "integer digit").to_string(),
+                ));
+            } else {
                 self.push_increment_scan(&mut result, &mut increment_counter, &next_char);
             }
         }
@@ -232,8 +242,8 @@ impl ScanState {
 
         if !first_char.breaks_any_string() {
             // must 'lock in' the first quote mark
-            return Err(self.get_scan_error_details(
-                format!("{} not scanned", "string delimiter").to_string()))
+            return Err(self
+                .get_scan_error_details(format!("{} not scanned", "string delimiter").to_string()));
         }
 
         self.push_increment_scan(&mut result, &mut increment_counter, &first_char);
@@ -241,14 +251,13 @@ impl ScanState {
         loop {
             let next_char = self.get_atom();
             if next_char.breaks_any_string() {
-                break
-            }
-            else if self.out_of_range() {
+                break;
+            } else if self.out_of_range() {
                 self.decrement_location(increment_counter);
                 return Err(self.get_scan_error_details(
-                    format!("{} runs off of code file", "string").to_string()))
-            } 
-            else {
+                    format!("{} runs off of code file", "string").to_string(),
+                ));
+            } else {
                 self.push_increment_scan(&mut result, &mut increment_counter, &next_char);
             }
         }
@@ -266,8 +275,9 @@ impl ScanState {
         let mut increment_counter = 0;
 
         if !first_char.is_identifier_char() {
-            return Err(self.get_scan_error_details(
-                format!("{} not scanned", "identifier").to_string()))
+            return Err(
+                self.get_scan_error_details(format!("{} not scanned", "identifier").to_string())
+            );
         }
 
         self.push_increment_scan(&mut result, &mut increment_counter, &first_char);
@@ -275,15 +285,14 @@ impl ScanState {
         loop {
             let next_char = self.get_atom();
             if next_char.breaks_any() {
-                break
-            } 
-            else if next_char.is_identifier_char() {
+                break;
+            } else if next_char.is_identifier_char() {
                 self.push_increment_scan(&mut result, &mut increment_counter, &next_char);
-            }
-            else {
+            } else {
                 self.decrement_location(increment_counter);
                 return Err(self.get_scan_error_details(
-                format!("unrecognized char {}", self.char_at()).to_string()))
+                    format!("unrecognized char {}", self.char_at()).to_string(),
+                ));
             }
         }
 
@@ -297,7 +306,8 @@ impl ScanState {
 
         if !first_char.is_digit() {
             return Err(self.get_scan_error_details(
-                format!("{} not scanned", "floating-point number").to_string()))
+                format!("{} not scanned", "floating-point number").to_string(),
+            ));
         }
 
         self.push_increment_scan(&mut result, &mut increment_counter, &first_char);
@@ -308,18 +318,16 @@ impl ScanState {
             let next_char = self.get_atom();
             if next_char.is_digit() {
                 self.push_increment_scan(&mut result, &mut increment_counter, &next_char);
-            }
-            else if next_char.is_dot() && precision_part == false {
+            } else if next_char.is_dot() && precision_part == false {
                 self.push_increment_scan(&mut result, &mut increment_counter, &next_char);
                 precision_part = true;
-            }
-            else if next_char.breaks_any_integer() {
-                break
-            } 
-            else {
+            } else if next_char.breaks_any_integer() {
+                break;
+            } else {
                 self.decrement_location(increment_counter);
                 return Err(self.get_scan_error_details(
-                format!("unrecognized char {}", self.char_at()).to_string()))
+                    format!("unrecognized char {}", self.char_at()).to_string(),
+                ));
             }
         }
 
@@ -327,46 +335,131 @@ impl ScanState {
     }
 
     // sequences
-    seq_fn!(scan_function_keyword, self, "fn", TokenType::FunctionKeyword);
+    seq_fn!(
+        scan_function_keyword,
+        self,
+        "fn",
+        TokenType::FunctionKeyword
+    );
     // loop keywords
-    seq_fn!(scan_infinite_keyword, self, "infinite", TokenType::InfiniteKeyword);
+    seq_fn!(
+        scan_infinite_keyword,
+        self,
+        "infinite",
+        TokenType::InfiniteKeyword
+    );
     seq_fn!(scan_break_keyword, self, "break", TokenType::BreakKeyword);
     // feature keywords
-    seq_fn!(scan_feature_keyword, self, "feature", TokenType::FeatureKeyword);
-    seq_fn!(scan_autobreak_keyword, self, "autobreak", TokenType::AutobreakKeyword);
+    seq_fn!(
+        scan_feature_keyword,
+        self,
+        "feature",
+        TokenType::FeatureKeyword
+    );
+    seq_fn!(
+        scan_autobreak_keyword,
+        self,
+        "autobreak",
+        TokenType::AutobreakKeyword
+    );
     seq_fn!(scan_on_keyword, self, "on", TokenType::OnKeyword);
     seq_fn!(scan_off_keyword, self, "off", TokenType::OffKeyword);
     // boolean equality operators
-    seq_fn!(scan_boolean_eq_operator, self, "==", TokenType::BooleanEqOperator);
-    seq_fn!(scan_boolean_ne_operator, self, "!=", TokenType::BooleanNeOperator);
+    seq_fn!(
+        scan_boolean_eq_operator,
+        self,
+        "==",
+        TokenType::BooleanEqOperator
+    );
+    seq_fn!(
+        scan_boolean_ne_operator,
+        self,
+        "!=",
+        TokenType::BooleanNeOperator
+    );
     // scoping operators
-    op_fn!(scan_scope_begin_operator, self, '{', TokenType::ScopeBeginOperator);
-    op_fn!(scan_scope_end_operator, self, '}', TokenType::ScopeEndOperator);
+    op_fn!(
+        scan_scope_begin_operator,
+        self,
+        '{',
+        TokenType::ScopeBeginOperator
+    );
+    op_fn!(
+        scan_scope_end_operator,
+        self,
+        '}',
+        TokenType::ScopeEndOperator
+    );
     // boolean and/or operators
-    seq_fn!(scan_boolean_and_operator, self, "&&", TokenType::BooleanAndOperator);
-    seq_fn!(scan_boolean_or_operator, self, "||", TokenType::BooleanOrOperator);
+    seq_fn!(
+        scan_boolean_and_operator,
+        self,
+        "&&",
+        TokenType::BooleanAndOperator
+    );
+    seq_fn!(
+        scan_boolean_or_operator,
+        self,
+        "||",
+        TokenType::BooleanOrOperator
+    );
     // boolean comparison operators
-    op_fn!(scan_boolean_gt_operator, self, '>', TokenType::BooleanGtOperator);
-    op_fn!(scan_boolean_lt_operator, self, '<', TokenType::BooleanLtOperator);
-    seq_fn!(scan_boolean_gte_operator, self, ">=", TokenType::BooleanGteOperator);
-    seq_fn!(scan_boolean_lte_operator, self, "<=", TokenType::BooleanLteOperator);
+    op_fn!(
+        scan_boolean_gt_operator,
+        self,
+        '>',
+        TokenType::BooleanGtOperator
+    );
+    op_fn!(
+        scan_boolean_lt_operator,
+        self,
+        '<',
+        TokenType::BooleanLtOperator
+    );
+    seq_fn!(
+        scan_boolean_gte_operator,
+        self,
+        ">=",
+        TokenType::BooleanGteOperator
+    );
+    seq_fn!(
+        scan_boolean_lte_operator,
+        self,
+        "<=",
+        TokenType::BooleanLteOperator
+    );
     // mathematical operators
     op_fn!(scan_plus_operator, self, '+', TokenType::PlusOperator);
     op_fn!(scan_minus_operator, self, '-', TokenType::MinusOperator);
-    op_fn!(scan_multiply_operator, self, '*', TokenType::MultiplyOperator);
+    op_fn!(
+        scan_multiply_operator,
+        self,
+        '*',
+        TokenType::MultiplyOperator
+    );
     op_fn!(scan_divide_operator, self, '/', TokenType::DivideOperator);
     op_fn!(scan_concat_operator, self, '~', TokenType::ConcatOperator);
-    op_fn!(scan_assignment_operator, self, '=', TokenType::AssignmentOperator);
+    op_fn!(
+        scan_assignment_operator,
+        self,
+        '=',
+        TokenType::AssignmentOperator
+    );
     // parenthesis / indexers
     op_fn!(scan_left_parenthesis, self, '(', TokenType::LeftParenthesis);
-    op_fn!(scan_right_parenthesis, self, ')', TokenType::RightParenthesis);
+    op_fn!(
+        scan_right_parenthesis,
+        self,
+        ')',
+        TokenType::RightParenthesis
+    );
     op_fn!(scan_left_indexer, self, '[', TokenType::LeftIndexer);
     op_fn!(scan_right_indexer, self, ']', TokenType::RightIndexer);
     // program delimiters
     op_fn!(scan_semicolon, self, ';', TokenType::Semicolon);
     op_fn!(scan_list_delimiter, self, ',', TokenType::ListDelimiter);
     op_fn!(scan_type_specifier, self, ':', TokenType::TypeSpecifier);
-    // special 
+    // special
     op_fn!(scan_end_of_file, self, '\0', TokenType::EndOfFile);
 
     // TODO: Is this method needed? can it be moved to the top?
@@ -376,21 +469,20 @@ impl ScanState {
 }
 
 pub struct Scanner {
-    state: ScanState
+    state: ScanState,
 }
 
 impl Scanner {
-    
-    pub fn init (input: String) -> Scanner {
+    pub fn init(input: String) -> Scanner {
         Scanner {
-            state: ScanState::init(input)
+            state: ScanState::init(input),
         }
     }
 
     fn scan_one(&mut self) -> Result<Token, CompileError> {
         // skip the whitespace
         self.state.skip_whitespace();
-        
+
         // end of file
         scan_result!(scan_end_of_file, self);
         // literals
@@ -437,14 +529,23 @@ impl Scanner {
         // identifier: must come afterwards
         scan_result!(scan_identifier, self);
 
-        let error_message = format!("Unrecognized character '{}'\nstarting at line {} column {}", 
-            self.state.char_at(), self.state.get_line(), self.state.get_column());
+        let error_message = format!(
+            "Unrecognized character '{}'\nstarting at line {} column {}",
+            self.state.char_at(),
+            self.state.get_line(),
+            self.state.get_column()
+        );
 
-        Err(CompileError::init(self.state.location, self.state.line, self.state.column, error_message))
+        Err(CompileError::init(
+            self.state.location,
+            self.state.line,
+            self.state.column,
+            error_message,
+        ))
     }
 
     pub fn scan_all(&mut self) -> Result<Vec<Token>, CompileError> {
-        let mut tokens : Vec<Token> = Vec::new();
+        let mut tokens: Vec<Token> = Vec::new();
 
         loop {
             let new_token = self.scan_one();
@@ -452,7 +553,7 @@ impl Scanner {
                 Err(scan_error) => return Err(scan_error),
                 Ok(scanned_token) => {
                     if scanned_token.get_token_type() == TokenType::EndOfFile {
-                        break
+                        break;
                     } else {
                         tokens.push(scanned_token)
                     }
