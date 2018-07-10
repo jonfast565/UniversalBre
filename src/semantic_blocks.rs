@@ -224,6 +224,7 @@ impl Visualizer for LoopBlock {
 }
 
 pub struct SemanticBlock {
+	id: String,
 	statement_block: Option<StatementBlock>,
 	loop_block: Option<LoopBlock>,
 	function_block: Option<FunctionBlock>,
@@ -232,6 +233,7 @@ pub struct SemanticBlock {
 impl SemanticBlock {
 	pub fn init_with_statement(statement_block: StatementBlock) -> SemanticBlock {
 		SemanticBlock {
+			id: utility::get_new_uuid(),
 			statement_block: Some(statement_block),
 			loop_block: None,
 			function_block: None,
@@ -239,6 +241,7 @@ impl SemanticBlock {
 	}
 	pub fn init_with_loop(loop_block: LoopBlock) -> SemanticBlock {
 		SemanticBlock {
+			id: utility::get_new_uuid(),
 			statement_block: None,
 			loop_block: Some(loop_block),
 			function_block: None,
@@ -246,6 +249,7 @@ impl SemanticBlock {
 	}
 	pub fn init_with_function(function_block: FunctionBlock) -> SemanticBlock {
 		SemanticBlock {
+			id: utility::get_new_uuid(),
 			statement_block: None,
 			loop_block: None,
 			function_block: Some(function_block),
@@ -258,7 +262,7 @@ impl Visualizer for SemanticBlock {
 		if let Some(statement_block) = self.statement_block.as_ref() {
 			return statement_block.build_graphviz();
 		} 
-		String::new()
+		panic!("Invalid SemanticBlock: This should never happen");
 	}
 }
 
@@ -277,8 +281,9 @@ impl Visualizer for Program {
 		let blocks_ref = self.blocks.as_slice();
 		let mut result = String::new();
 		for block in blocks_ref {
-			result = format!("digraph g {{\n {}\n{} \n}}", result, block.build_graphviz());
+			let id = &block.id;
+			result = format!("subgraph \"{}\" {{\n{}\n}}\n", id, block.build_graphviz());
 		}
-		result
+		return format!("digraph g {{\n{}\n}}\n", result);
 	}
 }
