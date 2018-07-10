@@ -2,6 +2,30 @@ use token::{Token, TokenType};
 use atom_status::AtomStatus;
 use error::CompileError;
 
+macro_rules! seq_fn {
+    ($seq_fn:ident, $context_var:ident, $sequence:expr, $enum:expr) => {
+        fn $seq_fn (&mut $context_var) -> Result<Token, CompileError> {
+            $context_var.scan_sequence($sequence, $enum)
+        }
+    };
+}
+
+macro_rules! op_fn {
+    ($op_fn:ident, $context_var:ident, $op:expr, $enum:expr) => {
+        fn $op_fn (&mut $context_var) -> Result<Token, CompileError> {
+            $context_var.scan_single_char_operator($op, $enum)
+        }
+    };
+}
+
+macro_rules! scan_result {
+    ($fn:ident, $context_var:ident) => {
+        if let Ok(token) = $context_var.state.$fn() {
+            return Ok(token)
+        }
+    };
+}
+
 #[derive(Debug, Clone)]
 struct ScanState {
     location: usize,
@@ -169,52 +193,7 @@ impl ScanState {
             format!("{}", keyword_id).to_string(), token_type))
     }
 
-    // scan methods
-
-    fn scan_function_keyword(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("fn", TokenType::FunctionKeyword)
-    }
-
-    // loops
-
-    fn scan_infinite_keyword(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("infinite", TokenType::InfiniteKeyword)
-    }
-
-    fn scan_break_keyword(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("break", TokenType::BreakKeyword)
-    }
-
-    // language features
-    
-    fn scan_feature_keyword(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("feature", TokenType::FeatureKeyword)
-    }
-
-    fn scan_autobreak_keyword(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("autobreak", TokenType::AutobreakKeyword)
-    }
-
-    fn scan_on_keyword(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("on", TokenType::OnKeyword)
-    }
-
-    fn scan_off_keyword(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("off", TokenType::OffKeyword)
-    }
-
-    // brackets
-
-    fn scan_begin_scope_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('{', TokenType::ScopeBeginOperator)
-    }
-
-    fn scan_end_scope_operator(&mut self) -> Result<Token, CompileError>  {
-        self.scan_single_char_operator('}', TokenType::ScopeEndOperator)
-    }
-
     // literals
-
     fn scan_integer_literal(&mut self) -> Result<Token, CompileError> {
         let mut result = String::new();
         let first_char = self.get_atom();
@@ -347,109 +326,49 @@ impl ScanState {
         Ok(self.get_token(result, TokenType::FloatLiteral))
     }
 
-    // boolean equality operators 
-
-    fn scan_boolean_eq_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("==", TokenType::BooleanEqOperator)
-    }
-
-    fn scan_boolean_ne_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("!=", TokenType::BooleanNeOperator)
-    }
-
+    // sequences
+    seq_fn!(scan_function_keyword, self, "fn", TokenType::FunctionKeyword);
+    // loop keywords
+    seq_fn!(scan_infinite_keyword, self, "infinite", TokenType::InfiniteKeyword);
+    seq_fn!(scan_break_keyword, self, "break", TokenType::BreakKeyword);
+    // feature keywords
+    seq_fn!(scan_feature_keyword, self, "feature", TokenType::FeatureKeyword);
+    seq_fn!(scan_autobreak_keyword, self, "autobreak", TokenType::AutobreakKeyword);
+    seq_fn!(scan_on_keyword, self, "on", TokenType::OnKeyword);
+    seq_fn!(scan_off_keyword, self, "off", TokenType::OffKeyword);
+    // boolean equality operators
+    seq_fn!(scan_boolean_eq_operator, self, "==", TokenType::BooleanEqOperator);
+    seq_fn!(scan_boolean_ne_operator, self, "!=", TokenType::BooleanNeOperator);
+    // scoping operators
+    op_fn!(scan_scope_begin_operator, self, '{', TokenType::ScopeBeginOperator);
+    op_fn!(scan_scope_end_operator, self, '}', TokenType::ScopeEndOperator);
     // boolean and/or operators
-
-    fn scan_boolean_and_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("&&", TokenType::BooleanAndOperator)
-    }
-
-    fn scan_boolean_or_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("||", TokenType::BooleanOrOperator)
-    }
-
+    seq_fn!(scan_boolean_and_operator, self, "&&", TokenType::BooleanAndOperator);
+    seq_fn!(scan_boolean_or_operator, self, "||", TokenType::BooleanOrOperator);
     // boolean comparison operators
-
-    fn scan_boolean_gt_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('>', TokenType::BooleanGtOperator)
-    }
-
-    fn scan_boolean_lt_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('<', TokenType::BooleanLtOperator)
-    }
-
-    fn scan_boolean_gte_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence(">=", TokenType::BooleanGteOperator)
-    }
-
-    fn scan_boolean_lte_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_sequence("<=", TokenType::BooleanLteOperator)
-    }
-
-    // operators
-
-    fn scan_plus_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('+', TokenType::PlusOperator)
-    }
-
-    fn scan_minus_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('-', TokenType::MinusOperator)
-    }
-
-    fn scan_multiply_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('*', TokenType::MultiplyOperator)
-    }
-
-    fn scan_divide_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('/', TokenType::DivideOperator)
-    }
-
-    fn scan_concat_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('~', TokenType::ConcatOperator)
-    }
-
-    fn scan_assignment_operator(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('=', TokenType::AssignmentOperator)
-    }
-
-    // parenthesis
-
-    fn scan_left_parenthesis(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('(', TokenType::LeftParenthesis)
-    }
-
-    fn scan_right_parenthesis(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator(')', TokenType::RightParenthesis)
-    }
-
-    fn scan_left_indexer(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('[', TokenType::LeftIndexer)
-    }
-
-    fn scan_right_indexer(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator(']', TokenType::RightIndexer)
-    }
-
+    op_fn!(scan_boolean_gt_operator, self, '>', TokenType::BooleanGtOperator);
+    op_fn!(scan_boolean_lt_operator, self, '<', TokenType::BooleanLtOperator);
+    seq_fn!(scan_boolean_gte_operator, self, ">=", TokenType::BooleanGteOperator);
+    seq_fn!(scan_boolean_lte_operator, self, "<=", TokenType::BooleanLteOperator);
+    // mathematical operators
+    op_fn!(scan_plus_operator, self, '+', TokenType::PlusOperator);
+    op_fn!(scan_minus_operator, self, '-', TokenType::MinusOperator);
+    op_fn!(scan_multiply_operator, self, '*', TokenType::MultiplyOperator);
+    op_fn!(scan_divide_operator, self, '/', TokenType::DivideOperator);
+    op_fn!(scan_concat_operator, self, '~', TokenType::ConcatOperator);
+    op_fn!(scan_assignment_operator, self, '=', TokenType::AssignmentOperator);
+    // parenthesis / indexers
+    op_fn!(scan_left_parenthesis, self, '(', TokenType::LeftParenthesis);
+    op_fn!(scan_right_parenthesis, self, ')', TokenType::RightParenthesis);
+    op_fn!(scan_left_indexer, self, '[', TokenType::LeftIndexer);
+    op_fn!(scan_right_indexer, self, ']', TokenType::RightIndexer);
     // program delimiters
+    op_fn!(scan_semicolon, self, ';', TokenType::Semicolon);
+    op_fn!(scan_list_delimiter, self, ',', TokenType::ListDelimiter);
+    op_fn!(scan_type_specifier, self, ':', TokenType::TypeSpecifier);
+    // special 
+    op_fn!(scan_end_of_file, self, '\0', TokenType::EndOfFile);
 
-    fn scan_semicolon(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator(';', TokenType::Semicolon)
-    }
-
-    fn scan_list_delimiter(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator(',', TokenType::ListDelimiter)
-    }
-
-    fn scan_type_specifier(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator(':', TokenType::TypeSpecifier)
-    }
-
-    // file delimiters
-
-    fn scan_end_of_file(&mut self) -> Result<Token, CompileError> {
-        self.scan_single_char_operator('\0', TokenType::EndOfFile)
-    }
-
-    // scan delimiters
     // TODO: Is this method needed? can it be moved to the top?
     fn out_of_range(&self) -> bool {
         self.location >= self.input.len()
@@ -470,172 +389,53 @@ impl Scanner {
 
     fn scan_one(&mut self) -> Result<Token, CompileError> {
         // skip the whitespace
-
         self.state.skip_whitespace();
         
         // end of file
-
-        if let Ok(token) = self.state.scan_end_of_file() {
-            return Ok(token)
-        }
-
-        // numeric literals
-
-        if let Ok(token) = self.state.scan_integer_literal() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_float_literal() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_string_literal() {
-            return Ok(token)
-        }
-
+        scan_result!(scan_end_of_file, self);
+        // literals
+        scan_result!(scan_integer_literal, self);
+        scan_result!(scan_float_literal, self);
+        scan_result!(scan_string_literal, self);
         // scoping operators
-
-        if let Ok(token) = self.state.scan_begin_scope_operator() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_end_scope_operator() {
-            return Ok(token)
-        }
-
+        scan_result!(scan_scope_begin_operator, self);
+        scan_result!(scan_scope_end_operator, self);
         // mathematical operators
-
-        if let Ok(token) = self.state.scan_plus_operator() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_minus_operator() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_multiply_operator() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_divide_operator() {
-            return Ok(token)
-        }
-
+        scan_result!(scan_plus_operator, self);
+        scan_result!(scan_minus_operator, self);
+        scan_result!(scan_multiply_operator, self);
+        scan_result!(scan_divide_operator, self);
         // string operators
-
-        if let Ok(token) = self.state.scan_concat_operator() {
-            return Ok(token)
-        }
-
-        // assingment operators
-
-        if let Ok(token) = self.state.scan_assignment_operator() {
-            return Ok(token)
-        }
-
+        scan_result!(scan_concat_operator, self);
+        // assignment operators
+        scan_result!(scan_assignment_operator, self);
         // grouping operators
-
-        if let Ok(token) = self.state.scan_left_parenthesis() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_right_parenthesis() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_left_indexer() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_right_indexer() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_semicolon() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_list_delimiter() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_type_specifier() {
-            return Ok(token)
-        }
-
+        scan_result!(scan_left_parenthesis, self);
+        scan_result!(scan_right_parenthesis, self);
+        scan_result!(scan_left_indexer, self);
+        scan_result!(scan_right_indexer, self);
+        scan_result!(scan_semicolon, self);
+        scan_result!(scan_list_delimiter, self);
+        scan_result!(scan_type_specifier, self);
         // boolean operators
-
-        if let Ok(token) = self.state.scan_boolean_eq_operator() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_boolean_ne_operator() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_boolean_and_operator() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_boolean_or_operator() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_boolean_gt_operator() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_boolean_lt_operator() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_boolean_gte_operator() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_boolean_lte_operator() {
-            return Ok(token)
-        }
-
+        scan_result!(scan_boolean_eq_operator, self);
+        scan_result!(scan_boolean_ne_operator, self);
+        scan_result!(scan_boolean_and_operator, self);
+        scan_result!(scan_boolean_or_operator, self);
+        scan_result!(scan_boolean_gt_operator, self);
+        scan_result!(scan_boolean_lt_operator, self);
+        scan_result!(scan_boolean_gte_operator, self);
+        scan_result!(scan_boolean_lte_operator, self);
         // language keywords
-
-        if let Ok(token) = self.state.scan_function_keyword() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_infinite_keyword() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_break_keyword() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_feature_keyword() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_autobreak_keyword() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_on_keyword() {
-            return Ok(token)
-        }
-
-        if let Ok(token) = self.state.scan_off_keyword() {
-            return Ok(token)
-        }
-
-        // language type keywords
-
-        // TODO: Implement language type keywords!
-
-        // identifier
-
-        if let Ok(token) = self.state.scan_identifier() {
-            return Ok(token)
-        }
+        scan_result!(scan_function_keyword, self);
+        scan_result!(scan_infinite_keyword, self);
+        scan_result!(scan_break_keyword, self);
+        scan_result!(scan_feature_keyword, self);
+        scan_result!(scan_autobreak_keyword, self);
+        scan_result!(scan_on_keyword, self);
+        scan_result!(scan_off_keyword, self);
+        // identifier: must come afterwards
+        scan_result!(scan_identifier, self);
 
         let error_message = format!("Unrecognized character '{}'\nstarting at line {} column {}", 
             self.state.char_at(), self.state.get_line(), self.state.get_column());
