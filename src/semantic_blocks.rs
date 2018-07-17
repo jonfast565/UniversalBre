@@ -338,6 +338,6 @@ impl Visualizer for Program {
                 }
             }
         }
-        return format!("digraph g {{\n{}\n}}\n", result);
+        return format!("digraph g {{\nrankdir=\"LR\";\n{}\n}}\n", result);
     }
 }
