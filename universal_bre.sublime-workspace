@@ -127,6 +127,32 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "/C/Users/jfast/Desktop/New folder/config.json",
+			"settings":
+			{
+				"buffer_size": 228,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/jfast/AppData/Roaming/npm/node_modules/sequelize-auto/node_modules/sequelize/lib/dialects/mssql/connection-manager.js",
+			"settings":
+			{
+				"buffer_size": 4366,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/Users/jfast/AppData/Roaming/npm/node_modules/sequelize-msnodesqlv8/node_modules/msnodesqlv8/lib/sqlserver.native.js",
+			"settings":
+			{
+				"buffer_size": 2225,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "Packages/Rust/Rust.sublime-build",
 	"build_system_choices":
@@ -180,6 +206,10 @@
 	},
 	"file_history":
 	[
+		"/C/Users/jfast/AppData/Roaming/npm/node_modules/sequelize-msnodesqlv8/node_modules/msnodesqlv8/lib/bin/sqlserverv8.node.v8.3.0.x64.node",
+		"/C/Users/jfast/Desktop/New folder/config.json",
+		"//prdncdrweb1/c$/Websites/www.ncdr.com/Status/newrelic.js",
+		"/C/buckaroo/buck-out/gen/__buckaroo__srcs",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/Cargo.toml",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/src/parser.rs",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/src/semantic_blocks.rs",
@@ -303,11 +333,7 @@
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/parser.h",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/token.rs",
 		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/repl.rs",
-		"//entbuild1/c$/BuildScripts/ProjectBuildScripts/example.cs",
-		"//entbuild1/c$/BuildScripts/ProjectBuildScripts/UnifiedPlatform-master-Ncdr.UnifiedPlatform.sln-Ncdr.UnifiedPlatform.Web.Mdt.csproj-Build.cake",
-		"//entbuild1/c$/BuildScripts/ProjectBuildScripts/UnifiedPlatform-master-Ncdr.UnifiedPlatform.sln-Ncdr.UnifiedPlatform.Web.Mdt.csproj-Deploy.ps1",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/RustCode/src/constants.rs",
-		"/C/Users/jfast/Desktop/Repos/UniversalBre/LegacyCpp/UniversalBre/scan_state.cpp"
+		"//entbuild1/c$/BuildScripts/ProjectBuildScripts/example.cs"
 	],
 	"find":
 	{
@@ -361,8 +387,97 @@
 			]
 		},
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "/C/Users/jfast/Desktop/New folder/config.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 228,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								69,
+								69
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/jfast/AppData/Roaming/npm/node_modules/sequelize-auto/node_modules/sequelize/lib/dialects/mssql/connection-manager.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4366,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								469,
+								469
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/Users/jfast/AppData/Roaming/npm/node_modules/sequelize-msnodesqlv8/node_modules/msnodesqlv8/lib/sqlserver.native.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2225,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								736,
+								736
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
 			]
 		}
 	],

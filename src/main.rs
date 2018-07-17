@@ -7,6 +7,7 @@ mod parser;
 mod repl;
 mod scanner;
 mod semantic_blocks;
+mod symbol_table;
 mod token;
 mod utility;
 mod visualizer;
