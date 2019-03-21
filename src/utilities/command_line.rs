@@ -31,7 +31,7 @@ pub fn get_arguments() -> CommandLineArguments {
         .get_matches();
 
     CommandLineArguments {
-        interactive: _matches.value_of("interactive").unwrap_or("true") == "true",
-        file_path: _matches.value_of("file_path").unwrap_or("true").to_string(),
+        interactive: _matches.value_of("interactive").unwrap_or("false") == "true",
+        file_path: _matches.value_of("file_path").unwrap_or("random.prg").to_string(),
     }
 }
