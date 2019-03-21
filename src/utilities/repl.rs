@@ -80,31 +80,35 @@ pub fn prompt_loop() {
         if repl_status.interrupted {
             break;
         } else {
-            log::log_success(&format!("Scanning {}", repl_status.input));
             if repl_status.input.is_empty() {
                 log::log_info("Input empty... try again.");
                 continue;
-            }
-
-            let mut scanner = scanner::Scanner::init(repl_status.input);
-            let tokens = scanner.scan_all();
-            match tokens {
-                Ok(token_list) => {
-                    print_tokens(token_list.to_vec());
-                    let mut parser = parser::Parser::init(token_list);
-                    let program = parser.parse();
-                    match program {
-                        Ok(program) => {
-                            let _ = utility::write_file(&"gviz.txt".to_string(), &program.build_graphviz());
-                            log::log_info("Success!");
-                        }
-                        Err(contents) => {
-                            log::log_error(&format!("CE {}", contents.to_string()));
-                        }
-                    }
-                }
-                Err(scan_error) => println!("CE {}", scan_error.get_error_message()),
+            } else {
+                compile(repl_status.input);
             }
         }
+    }
+}
+
+pub fn compile(input: String) -> () {
+    log::log_success(&format!("Scanning {}", input));
+    let mut scanner = scanner::Scanner::init(input);
+    let tokens = scanner.scan_all();
+    match tokens {
+        Ok(token_list) => {
+            print_tokens(token_list.to_vec());
+            let mut parser = parser::Parser::init(token_list);
+            let program = parser.parse();
+            match program {
+                Ok(program) => {
+                    let _ = utility::write_file(&"gviz.txt".to_string(), &program.build_graphviz());
+                    log::log_info("Success!");
+                }
+                Err(contents) => {
+                    log::log_error(&format!("CE {}", contents.to_string()));
+                }
+            }
+        }
+        Err(scan_error) => println!("CE {}", scan_error.get_error_message()),
     }
 }
