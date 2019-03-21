@@ -32,6 +32,6 @@ pub fn get_arguments() -> CommandLineArguments {
 
     CommandLineArguments {
         interactive: _matches.value_of("interactive").unwrap_or("false") == "true",
-        file_path: _matches.value_of("file_path").unwrap_or("random.prg").to_string(),
+        file_path: _matches.value_of("file_path").unwrap_or("C:\\Users\\Administrator\\Desktop\\Repos\\UniversalBre\\test_programs\\feature_test.prg").to_string(),
     }
 }

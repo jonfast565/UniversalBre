@@ -19,6 +19,7 @@ pub fn write_file(file_name: &String, file_string: &String) -> Result<()> {
 }
 
 pub fn read_file(file_name: &String) -> Result<String> {
+    format!("Opening: {}", file_name);
     let contents = fs::read_to_string(file_name)
         .expect("Something went wrong reading the file");
     Ok(contents)
