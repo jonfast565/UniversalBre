@@ -3,13 +3,13 @@ extern crate rustyline;
 use self::rustyline::error::ReadlineError;
 use self::rustyline::Editor;
 
-use log;
-use parser;
-use scanner;
-use utility;
+use utilities::log;
+use parser::parser;
+use scanner::scanner;
+use utilities::utility;
 
-use token::{Token, TokenType};
-use visualizer::Visualizer;
+use scanner::token::{Token, TokenType};
+use code_generation::visualizer::Visualizer;
 
 struct ReplStatus {
     input: String,

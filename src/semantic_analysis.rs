@@ -1,0 +1,9 @@
+pub mod program;
+pub mod semantic_blocks;
+pub mod expressions;
+pub mod statements;
+pub mod functions;
+pub mod loops;
+pub mod data_types;
+pub mod operation_types;
+pub mod symbol_table;
