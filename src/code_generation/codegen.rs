@@ -38,18 +38,18 @@ impl FasmGenerator {
         vec!(
             FasmInstruction {
                 operand: "mov".to_string(),
-                operator1: "eax".to_string(),
-                operator2: "ebx".to_string(),
+                first_operator: "eax".to_string(),
+                second_operator: "ebx".to_string(),
             },
             FasmInstruction {
                 operand: "mov".to_string(),
-                operator1: "eax".to_string(),
-                operator2: "5".to_string(),
+                first_operator: "eax".to_string(),
+                second_operator: "5".to_string(),
             },
             FasmInstruction {
                 operand: "mov".to_string(),
-                operator1: "5".to_string(),
-                operator2: "[ebp+4]".to_string(),
+                first_operator: "5".to_string(),
+                second_operator: "[ebp+4]".to_string(),
             })
     }
 }
