@@ -1,7 +1,7 @@
 use code_generation::visualizer::Visualizer;
-use semantic_analysis::statements::StatementBlock;
-use semantic_analysis::loops::LoopBlock;
 use semantic_analysis::functions::FunctionBlock;
+use semantic_analysis::loops::LoopBlock;
+use semantic_analysis::statements::StatementBlock;
 use utilities::utility;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -9,7 +9,7 @@ pub enum BlockType {
     StatementBlock,
     LoopBlock,
     FunctionBlock,
-    BreakBlock
+    BreakBlock,
 }
 
 pub struct SemanticBlock {
@@ -63,7 +63,11 @@ impl Visualizer for SemanticBlock {
     fn build_graphviz(&self) -> String {
         if let Some(statement_block) = self.statement_block.as_ref() {
             return statement_block.build_graphviz();
+        } else if let Some(loop_block) = self.loop_block.as_ref() {
+            return loop_block.build_graphviz();
+        } else if let Some(function_block) = self.function_block.as_ref() {
+            return function_block.build_graphviz();
         }
-        panic!("Invalid SemanticBlock: This should never happen");
+        panic!("This should never happen");
     }
 }

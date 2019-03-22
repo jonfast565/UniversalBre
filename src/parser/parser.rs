@@ -96,47 +96,44 @@ impl Parser {
 
     pub fn parse(&mut self) -> Result<Program, CompileError> {
         log::log_debug("Parse program");
-        let semantic_blocks = self.parse_unit();
-        self.eat_lookahead(TokenType::EndOfFile);
-        match semantic_blocks {
-            Ok(blocks) => Ok(Program::init(blocks)),
-            Err(error) => Err(error),
-        }
-    }
-
-    fn parse_unit(&mut self) -> Result<Vec<SemanticBlock>, CompileError> {
-        let mut semantic_blocks = Vec::<SemanticBlock>::new();
-        while //self.get_lookahead() != TokenType::EndOfFile
-            //&& 
-            self.get_lookahead() != TokenType::ScopeEndOperator
-        {
-            match self.get_lookahead() {
-                TokenType::Identifier => {
-                    let assignment_statement =
-                        report_unwrap_error!(self.parse_assignment_statement());
-                    semantic_blocks.push(SemanticBlock::init_with_statement(assignment_statement));
-                }
-                TokenType::InfiniteKeyword => {
-                    let infinite_loop = report_unwrap_error!(self.parse_infinite_loop());
-                    semantic_blocks.push(SemanticBlock::init_with_loop(infinite_loop));
-                }
-                TokenType::BreakKeyword => {
-                    report_unwrap_error!(self.parse_break_statement());
-                    semantic_blocks.push(SemanticBlock::init_with_break());
-                }
-                TokenType::FunctionKeyword => {
-                    let function_block = report_unwrap_error!(self.parse_function_block());
-                    semantic_blocks.push(SemanticBlock::init_with_function(function_block));
-                }
-                _ => {
-                    return Err(self.get_compile_error(format!(
-                        "Unit cannot begin with {}",
-                        self.get_lookahead()
-                    )));
-                }
+        let mut program_blocks = Vec::<SemanticBlock>::new();
+        while self.get_lookahead() != TokenType::EndOfFile {
+            let semantic_block = self.parse_unit();
+            match semantic_block {
+                Ok(block) => program_blocks.push(block),
+                Err(err) => return Err(err),
             }
         }
-        return Ok(semantic_blocks);
+        self.eat_lookahead(TokenType::EndOfFile);
+        Ok(Program::init(program_blocks))
+    }
+
+    fn parse_unit(&mut self) -> Result<SemanticBlock, CompileError> {
+        match self.get_lookahead() {
+            TokenType::Identifier => {
+                let assignment_statement =
+                    report_unwrap_error!(self.parse_assignment_statement());
+                Ok(SemanticBlock::init_with_statement(assignment_statement))
+            }
+            TokenType::InfiniteKeyword => {
+                let infinite_loop = report_unwrap_error!(self.parse_infinite_loop());
+                Ok(SemanticBlock::init_with_loop(infinite_loop))
+            }
+            TokenType::BreakKeyword => {
+                report_unwrap_error!(self.parse_break_statement());
+                Ok(SemanticBlock::init_with_break())
+            }
+            TokenType::FunctionKeyword => {
+                let function_block = report_unwrap_error!(self.parse_function_block());
+                Ok(SemanticBlock::init_with_function(function_block))
+            }
+            _ => {
+                return Err(self.get_compile_error(format!(
+                    "Unit cannot begin with {}",
+                    self.get_lookahead()
+                )));
+            }
+        }
     }
 
     fn parse_assignment_statement(&mut self) -> Result<StatementBlock, CompileError> {
@@ -144,7 +141,7 @@ impl Parser {
         let id = safe_unwrap_id!(self);
 
         report_lookahead_error!(self.eat_lookahead(TokenType::Identifier));
-        self.eat_lookahead(TokenType::AssignmentOperator);
+        report_lookahead_error!(self.eat_lookahead(TokenType::AssignmentOperator));
 
         let expression = report_unwrap_error!(self.parse_expression());
 
@@ -156,30 +153,28 @@ impl Parser {
         log::log_debug("Parse break statement");
 
         report_lookahead_error!(self.eat_lookahead(TokenType::BreakKeyword));
-        self.eat_lookahead(TokenType::BreakKeyword);
-
         report_lookahead_error!(self.eat_lookahead(TokenType::Semicolon));
+
         Ok(StatementBlock::init_with_break())
     }
 
     fn parse_infinite_loop(&mut self) -> Result<LoopBlock, CompileError> {
         log::log_debug("Parse infinite loop");
+        let mut loop_blocks = Vec::<SemanticBlock>::new();
 
         report_lookahead_error!(self.eat_lookahead(TokenType::InfiniteKeyword));
-        self.eat_lookahead(TokenType::InfiniteKeyword);
-
         report_lookahead_error!(self.eat_lookahead(TokenType::ScopeBeginOperator));
-        self.eat_lookahead(TokenType::ScopeBeginOperator);
 
-        let loop_blocks = self.parse_unit();
+        while self.get_lookahead() != TokenType::ScopeEndOperator {
+            let loop_block = self.parse_unit();
+            match loop_block {
+                Ok(block) => loop_blocks.push(block),
+                Err(err) => return Err(err),
+            }
+        }
 
         report_lookahead_error!(self.eat_lookahead(TokenType::ScopeEndOperator));
-        self.eat_lookahead(TokenType::ScopeEndOperator);
-
-        match loop_blocks {
-            Ok(blocks) => Ok(LoopBlock::init(LoopType::InfiniteLoop, blocks)),
-            Err(error) => Err(error),
-        }
+        Ok(LoopBlock::init(LoopType::InfiniteLoop, loop_blocks))
     }
 
     fn parse_argument_list(&mut self) -> Result<Vec<ArgumentBlock>, CompileError> {
@@ -211,12 +206,11 @@ impl Parser {
         let mut function_body = Vec::<SemanticBlock>::new();
         report_lookahead_error!(self.eat_lookahead(TokenType::ScopeBeginOperator));
         while self.get_lookahead() != TokenType::ScopeEndOperator {
-            match self.parse_assignment_statement() {
-                Ok(result_statement_body) => {
-                    function_body.push(SemanticBlock::init_with_statement(result_statement_body))
-                }
-                Err(contents) => return Err(contents),
-            };
+            let result_statement_body = self.parse_unit();
+            match result_statement_body {
+                Ok(body_statement) => function_body.push(body_statement),
+                Err(err) => return Err(err)
+            }
         }
 
         report_lookahead_error!(self.eat_lookahead(TokenType::ScopeEndOperator));
