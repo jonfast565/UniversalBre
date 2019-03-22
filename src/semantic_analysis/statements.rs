@@ -61,6 +61,6 @@ impl Visualizer for StatementBlock {
                 format!("\"{}\" -> \"{}\"", &self.id, expression.id)
             );
         }
-        panic!("Invalid STATEMENT_TYPE: This should never happen");
+        panic!("This should never happen");
     }
 }

@@ -29,3 +29,7 @@ fn blah (a, b, c) {
     d = a + b + c;
     return d;
 }
+
+g = true;
+h = true && false;
+i = g && h || i;
