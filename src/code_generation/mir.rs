@@ -1,6 +1,8 @@
 use semantic_analysis::program::Program;
 
-pub struct MirInstructionGenerator {}
+pub struct MirInstructionGenerator {
+    pub debug: bool,
+}
 
 pub struct MirInstructions {
     instructions: Vec<MirInstruction>,
@@ -11,12 +13,10 @@ pub struct MirInstruction {
     pub operand: MirInstructionOperand,
     pub first_arg_operator: Option<MirOperator>,
     pub second_arg_operator: Option<MirOperator>,
-    pub flags: MirFlags
+    pub flags: MirFlags,
 }
 
-impl MirInstruction {
-
-}
+impl MirInstruction {}
 
 pub enum MirInstructionOperand {
     Add,
@@ -34,18 +34,18 @@ pub struct MirFlags {
 }
 
 pub enum MirOperatorType {
-    String,
-    Boolean,
-    Integer,
-    Float,
+    StringType,
+    BooleanType,
+    IntegerType,
+    FloatType,
 }
 
 pub struct MirOperator {
-    pub operator_type: MirOperatorType
+    pub operator_type: MirOperatorType,
 }
 
 impl MirInstructionGenerator {
-    pub fn generate_mir(&self, p: &Program) -> MirInstructions {
+    pub fn generate_mir(&self, _p: &Program) -> MirInstructions {
         let result = Vec::<MirInstruction>::new();
         MirInstructions {
             instructions: result,

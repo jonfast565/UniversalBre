@@ -1,6 +1,7 @@
 use code_generation::mir::MirInstructions;
 
 pub struct FasmGenerator {
+    pub debug: bool
 }
 
 pub struct FasmDirective {
@@ -13,13 +14,13 @@ pub struct FasmComment {
 
 pub struct FasmInstruction {
     pub operand: String,
-    pub operator1: String,
-    pub operator2: String,
+    pub first_operator: String,
+    pub second_operator: String,
 }
 
 impl FasmInstruction {
     pub fn get_instruction_string(&self) -> String {
-        let result = self.operand.clone() + " " + &self.operator1.clone() + ", " + &self.operator2.clone();
+        let result = self.operand.clone() + " " + &self.first_operator.clone() + ", " + &self.second_operator.clone();
         result
     }
 }

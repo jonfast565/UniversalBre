@@ -107,10 +107,10 @@ pub fn compile(input: String) -> () {
                     let _ = utility::write_file(&"gviz.txt".to_string(), &program.build_graphviz());
 
                     // mir generator
-                    let mir_instructions = MirInstructionGenerator{}.generate_mir(&program);
-                    
+                    let mir_instructions = MirInstructionGenerator{ debug: true }.generate_mir(&program);
+
                     // assembly generator
-                    let asm_instructions = FasmGenerator{}.generate_asm(&mir_instructions);
+                    let asm_instructions = FasmGenerator{ debug: true }.generate_asm(&mir_instructions);
                     let _ = utility::write_file(&"asm.txt".to_string(), &asm_instructions);
 
                     log::log_info("Success!");
