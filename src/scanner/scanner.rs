@@ -1,5 +1,5 @@
-use scanner::token::{Token, TokenType};
 use scanner::atom_status::AtomStatus;
+use scanner::token::{Token, TokenType};
 use utilities::error::CompileError;
 
 macro_rules! seq_fn {
@@ -334,6 +334,20 @@ impl ScanState {
         Ok(self.get_token(result, TokenType::FloatLiteral))
     }
 
+    // other structured literals
+    seq_fn!(
+        scan_boolean_true_literal,
+        self,
+        "true",
+        TokenType::BooleanTrueLiteral
+    );
+    seq_fn!(
+        scan_boolean_false_literal,
+        self,
+        "false",
+        TokenType::BooleanFalseLiteral
+    );
+
     // sequences
     seq_fn!(
         scan_function_keyword,
@@ -495,6 +509,8 @@ impl Scanner {
         scan_result!(scan_integer_literal, self);
         scan_result!(scan_float_literal, self);
         scan_result!(scan_string_literal, self);
+        scan_result!(scan_boolean_true_literal, self);
+        scan_result!(scan_boolean_false_literal, self);
         // scoping operators
         scan_result!(scan_scope_begin_operator, self);
         scan_result!(scan_scope_end_operator, self);

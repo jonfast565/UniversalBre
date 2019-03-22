@@ -12,6 +12,8 @@ pub enum TokenType {
     StringLiteral,
     FloatLiteral,
     Identifier,
+    BooleanTrueLiteral,
+    BooleanFalseLiteral,
     // operators
     PlusOperator,
     MinusOperator,

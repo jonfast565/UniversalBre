@@ -437,6 +437,16 @@ impl Parser {
                 report_lookahead_error!(self.eat_lookahead(TokenType::StringLiteral));
                 Ok(ExprNode::init_as_variable(current_lexeme))
             }
+            TokenType::BooleanTrueLiteral => {
+                let current_lexeme = self.get_token().get_lexeme();
+                report_lookahead_error!(self.eat_lookahead(TokenType::BooleanTrueLiteral));
+                Ok(ExprNode::init_as_literal(current_lexeme, DataType::BooleanType))
+            }
+            TokenType::BooleanFalseLiteral => {
+                let current_lexeme = self.get_token().get_lexeme();
+                report_lookahead_error!(self.eat_lookahead(TokenType::BooleanFalseLiteral));
+                Ok(ExprNode::init_as_literal(current_lexeme, DataType::BooleanType))
+            }
             TokenType::MinusOperator => {
                 report_lookahead_error!(self.eat_lookahead(TokenType::MinusOperator));
                 // TODO: Fix this shit, we're appending contextual information in the parser
