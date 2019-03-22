@@ -6,10 +6,12 @@ use utilities::utility;
 pub enum StatementType {
     AssignmentStatement,
     BreakStatement,
+    ReturnStatement,
 }
 
 pub struct StatementBlock {
     pub id: String,
+    return_id: Option<String>,
     statement_type: StatementType,
     assignment_id: Option<String>,
     expression: Option<ExprNode>,
@@ -19,6 +21,7 @@ impl StatementBlock {
     pub fn init_with_assignment(assignment_id: String, expression: ExprNode) -> StatementBlock {
         StatementBlock {
             id: utility::get_new_uuid(),
+            return_id: None,
             statement_type: StatementType::AssignmentStatement,
             assignment_id: Some(assignment_id),
             expression: Some(expression),
@@ -28,7 +31,18 @@ impl StatementBlock {
     pub fn init_with_break() -> StatementBlock {
         StatementBlock {
             id: utility::get_new_uuid(),
+            return_id: None,
             statement_type: StatementType::BreakStatement,
+            assignment_id: None,
+            expression: None,
+        }
+    }
+
+    pub fn init_with_return(return_id: String) -> StatementBlock {
+        StatementBlock {
+            id: utility::get_new_uuid(),
+            return_id: Some(return_id),
+            statement_type: StatementType::ReturnStatement,
             assignment_id: None,
             expression: None,
         }

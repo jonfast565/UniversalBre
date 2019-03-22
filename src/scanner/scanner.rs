@@ -362,6 +362,12 @@ impl ScanState {
         "autobreak",
         TokenType::AutobreakKeyword
     );
+    seq_fn!(
+        scan_return_keyword,
+        self,
+        "return",
+        TokenType::ReturnKeyword
+    );
     seq_fn!(scan_on_keyword, self, "on", TokenType::OnKeyword);
     seq_fn!(scan_off_keyword, self, "off", TokenType::OffKeyword);
     // boolean equality operators
@@ -524,6 +530,7 @@ impl Scanner {
         scan_result!(scan_break_keyword, self);
         scan_result!(scan_feature_keyword, self);
         scan_result!(scan_autobreak_keyword, self);
+        scan_result!(scan_return_keyword, self);
         scan_result!(scan_on_keyword, self);
         scan_result!(scan_off_keyword, self);
         // identifier: must come afterwards

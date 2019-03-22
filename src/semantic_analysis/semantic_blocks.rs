@@ -10,6 +10,7 @@ pub enum BlockType {
     LoopBlock,
     FunctionBlock,
     BreakBlock,
+    ReturnBlock,
 }
 
 pub struct SemanticBlock {
@@ -52,6 +53,15 @@ impl SemanticBlock {
         SemanticBlock {
             id: utility::get_new_uuid(),
             block_type: BlockType::BreakBlock,
+            statement_block: None,
+            loop_block: None,
+            function_block: None,
+        }
+    }
+    pub fn init_with_return() -> SemanticBlock {
+        SemanticBlock {
+            id: utility::get_new_uuid(),
+            block_type: BlockType::ReturnBlock,
             statement_block: None,
             loop_block: None,
             function_block: None,

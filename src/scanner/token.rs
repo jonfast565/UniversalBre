@@ -54,6 +54,7 @@ pub enum TokenType {
     AutobreakKeyword,
     OnKeyword,
     OffKeyword,
+    ReturnKeyword,
 }
 
 

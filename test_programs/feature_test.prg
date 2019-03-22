@@ -27,4 +27,5 @@ f = "some other string value" ~ e;
 
 fn blah (a, b, c) {
     d = a + b + c;
+    return d;
 }

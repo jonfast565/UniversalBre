@@ -34,7 +34,7 @@ macro_rules! safe_unwrap_id {
         if $context_var.get_lookahead() == TokenType::Identifier {
             $context_var.get_token().get_lexeme()
         } else {
-            String::new() // TODO: Still... what?
+            panic!("Invalid lookahead");
         };
     };
 }
@@ -123,6 +123,10 @@ impl Parser {
                 report_unwrap_error!(self.parse_break_statement());
                 Ok(SemanticBlock::init_with_break())
             }
+            TokenType::ReturnKeyword => {
+                report_unwrap_error!(self.parse_return_statement());
+                Ok(SemanticBlock::init_with_return())
+            }
             TokenType::FunctionKeyword => {
                 let function_block = report_unwrap_error!(self.parse_function_block());
                 Ok(SemanticBlock::init_with_function(function_block))
@@ -156,6 +160,17 @@ impl Parser {
         report_lookahead_error!(self.eat_lookahead(TokenType::Semicolon));
 
         Ok(StatementBlock::init_with_break())
+    }
+
+    fn parse_return_statement(&mut self) -> Result<StatementBlock, CompileError> {
+        log::log_debug("Parse return statement");
+        report_lookahead_error!(self.eat_lookahead(TokenType::ReturnKeyword));
+
+        let id = safe_unwrap_id!(self);
+        report_lookahead_error!(self.eat_lookahead(TokenType::Identifier));
+        report_lookahead_error!(self.eat_lookahead(TokenType::Semicolon));
+
+        Ok(StatementBlock::init_with_return(id))
     }
 
     fn parse_infinite_loop(&mut self) -> Result<LoopBlock, CompileError> {
