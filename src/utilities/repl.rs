@@ -10,7 +10,8 @@ use utilities::utility;
 
 use scanner::token::{Token, TokenType};
 use code_generation::visualizer::Visualizer;
-use code_generation::codegen::IntelAsmGenerator;
+use code_generation::mir::MirInstructionGenerator;
+use code_generation::codegen::FasmGenerator;
 
 struct ReplStatus {
     input: String,
@@ -102,9 +103,16 @@ pub fn compile(input: String) -> () {
             let program = parser.parse();
             match program {
                 Ok(program) => {
-                    let asm_instructions = IntelAsmGenerator{}.generate_asm(&program);
-                    let _ = utility::write_file(&"asm.txt".to_string(), &asm_instructions);
+                    // graphviz output
                     let _ = utility::write_file(&"gviz.txt".to_string(), &program.build_graphviz());
+
+                    // mir generator
+                    let mir_instructions = MirInstructionGenerator{}.generate_mir(&program);
+                    
+                    // assembly generator
+                    let asm_instructions = FasmGenerator{}.generate_asm(&mir_instructions);
+                    let _ = utility::write_file(&"asm.txt".to_string(), &asm_instructions);
+
                     log::log_info("Success!");
                 }
                 Err(contents) => {

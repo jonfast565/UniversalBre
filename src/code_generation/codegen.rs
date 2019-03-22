@@ -1,23 +1,31 @@
-use semantic_analysis::program::Program;
+use code_generation::mir::MirInstructions;
 
-pub struct IntelAsmGenerator {
+pub struct FasmGenerator {
 }
 
-pub struct AsmInstruction {
+pub struct FasmDirective {
+    pub directive: String
+}
+
+pub struct FasmComment {
+    pub comment: String,
+}
+
+pub struct FasmInstruction {
     pub operand: String,
     pub operator1: String,
     pub operator2: String,
 }
 
-impl AsmInstruction {
+impl FasmInstruction {
     pub fn get_instruction_string(&self) -> String {
         let result = self.operand.clone() + " " + &self.operator1.clone() + ", " + &self.operator2.clone();
         result
     }
 }
 
-impl IntelAsmGenerator {
-    pub fn generate_asm(&self, p: &Program) -> String {
+impl FasmGenerator {
+    pub fn generate_asm(&self, p: &MirInstructions) -> String {
         let program_asm = self.generate_program_asm(p);
         program_asm.iter().fold(String::new(), | acc, x | {
             let instruction_string = x.get_instruction_string();
@@ -25,19 +33,19 @@ impl IntelAsmGenerator {
         })
     }
 
-    pub fn generate_program_asm(&self, p: &Program) -> Vec<AsmInstruction> {
+    pub fn generate_program_asm(&self, p: &MirInstructions) -> Vec<FasmInstruction> {
         vec!(
-            AsmInstruction {
+            FasmInstruction {
                 operand: "mov".to_string(),
                 operator1: "eax".to_string(),
                 operator2: "ebx".to_string(),
             },
-            AsmInstruction {
+            FasmInstruction {
                 operand: "mov".to_string(),
                 operator1: "eax".to_string(),
                 operator2: "5".to_string(),
             },
-            AsmInstruction {
+            FasmInstruction {
                 operand: "mov".to_string(),
                 operator1: "5".to_string(),
                 operator2: "[ebp+4]".to_string(),
