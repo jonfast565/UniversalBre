@@ -106,8 +106,9 @@ impl Parser {
 
     fn parse_unit(&mut self) -> Result<Vec<SemanticBlock>, CompileError> {
         let mut semantic_blocks = Vec::<SemanticBlock>::new();
-        while self.get_lookahead() != TokenType::EndOfFile
-            && self.get_lookahead() != TokenType::ScopeEndOperator
+        while //self.get_lookahead() != TokenType::EndOfFile
+            //&& 
+            self.get_lookahead() != TokenType::ScopeEndOperator
         {
             match self.get_lookahead() {
                 TokenType::Identifier => {

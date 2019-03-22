@@ -10,7 +10,11 @@ use utilities::repl;
 use utilities::constants;
 use utilities::utility;
 
-fn main() {
+use std::thread;
+
+const STACK_SIZE: usize = 4 * 1024 * 1024;
+
+fn run() {
     log::log_debug(constants::PROGRAM_HEADER);
     let args = command_line::get_arguments();
     if args.interactive {
@@ -22,4 +26,12 @@ fn main() {
         let contents = utility::read_file(&file_path).unwrap();
         repl::compile(contents);
     }
+} 
+
+fn main() {
+    let child = thread::Builder::new()
+        .stack_size(STACK_SIZE)
+        .spawn(run)
+        .unwrap();
+    child.join().unwrap();
 }
