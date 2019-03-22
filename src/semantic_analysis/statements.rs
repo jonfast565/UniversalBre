@@ -24,6 +24,15 @@ impl StatementBlock {
             expression: Some(expression),
         }
     }
+
+    pub fn init_with_break() -> StatementBlock {
+        StatementBlock {
+            id: utility::get_new_uuid(),
+            statement_type: StatementType::BreakStatement,
+            assignment_id: None,
+            expression: None,
+        }
+    }
 }
 
 impl Visualizer for StatementBlock {

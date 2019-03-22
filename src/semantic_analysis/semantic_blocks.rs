@@ -9,6 +9,7 @@ pub enum BlockType {
     StatementBlock,
     LoopBlock,
     FunctionBlock,
+    BreakBlock
 }
 
 pub struct SemanticBlock {
@@ -45,6 +46,15 @@ impl SemanticBlock {
             statement_block: None,
             loop_block: None,
             function_block: Some(function_block),
+        }
+    }
+    pub fn init_with_break() -> SemanticBlock {
+        SemanticBlock {
+            id: utility::get_new_uuid(),
+            block_type: BlockType::BreakBlock,
+            statement_block: None,
+            loop_block: None,
+            function_block: None,
         }
     }
 }

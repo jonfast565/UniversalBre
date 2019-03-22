@@ -2,13 +2,13 @@ use utilities::error::CompileError;
 use utilities::log;
 
 use semantic_analysis::data_types::DataType;
-use semantic_analysis::semantic_blocks::{SemanticBlock};
-use semantic_analysis::expressions::{ExprNode};
-use semantic_analysis::statements::{StatementBlock};
+use semantic_analysis::expressions::ExprNode;
 use semantic_analysis::functions::{ArgumentBlock, FunctionBlock};
 use semantic_analysis::loops::{LoopBlock, LoopType};
-use semantic_analysis::operation_types::{OperationType};
-use semantic_analysis::program::{Program};
+use semantic_analysis::operation_types::OperationType;
+use semantic_analysis::program::Program;
+use semantic_analysis::semantic_blocks::SemanticBlock;
+use semantic_analysis::statements::StatementBlock;
 
 use scanner::token::{Token, TokenType};
 
@@ -96,9 +96,19 @@ impl Parser {
 
     pub fn parse(&mut self) -> Result<Program, CompileError> {
         log::log_debug("Parse program");
+        let semantic_blocks = self.parse_unit();
+        self.eat_lookahead(TokenType::EndOfFile);
+        match semantic_blocks {
+            Ok(blocks) => Ok(Program::init(blocks)),
+            Err(error) => Err(error),
+        }
+    }
+
+    fn parse_unit(&mut self) -> Result<Vec<SemanticBlock>, CompileError> {
         let mut semantic_blocks = Vec::<SemanticBlock>::new();
-        let mut matched = true;
-        while self.get_lookahead() != TokenType::EndOfFile {
+        while self.get_lookahead() != TokenType::EndOfFile
+            && self.get_lookahead() != TokenType::ScopeEndOperator
+        {
             match self.get_lookahead() {
                 TokenType::Identifier => {
                     let assignment_statement =
@@ -109,24 +119,23 @@ impl Parser {
                     let infinite_loop = report_unwrap_error!(self.parse_infinite_loop());
                     semantic_blocks.push(SemanticBlock::init_with_loop(infinite_loop));
                 }
+                TokenType::BreakKeyword => {
+                    report_unwrap_error!(self.parse_break_statement());
+                    semantic_blocks.push(SemanticBlock::init_with_break());
+                }
                 TokenType::FunctionKeyword => {
                     let function_block = report_unwrap_error!(self.parse_function_block());
                     semantic_blocks.push(SemanticBlock::init_with_function(function_block));
                 }
                 _ => {
-                    matched = false;
+                    return Err(self.get_compile_error(format!(
+                        "Unit cannot begin with {}",
+                        self.get_lookahead()
+                    )));
                 }
             }
-
-            if !matched {
-                return Err(self.get_static_compile_error(
-                    "Cannot start with this statement type. Must be of id, loop, or function.",
-                ));
-            }
         }
-
-        self.eat_lookahead(TokenType::EndOfFile);
-        Ok(Program::init(semantic_blocks))
+        return Ok(semantic_blocks);
     }
 
     fn parse_assignment_statement(&mut self) -> Result<StatementBlock, CompileError> {
@@ -142,10 +151,34 @@ impl Parser {
         Ok(StatementBlock::init_with_assignment(id, expression))
     }
 
+    fn parse_break_statement(&mut self) -> Result<StatementBlock, CompileError> {
+        log::log_debug("Parse break statement");
+
+        report_lookahead_error!(self.eat_lookahead(TokenType::BreakKeyword));
+        self.eat_lookahead(TokenType::BreakKeyword);
+
+        report_lookahead_error!(self.eat_lookahead(TokenType::Semicolon));
+        Ok(StatementBlock::init_with_break())
+    }
+
     fn parse_infinite_loop(&mut self) -> Result<LoopBlock, CompileError> {
         log::log_debug("Parse infinite loop");
-        report_lookahead_error!(self.eat_lookahead(TokenType::Semicolon));
-        Ok(LoopBlock::init(LoopType::InfiniteLoop))
+
+        report_lookahead_error!(self.eat_lookahead(TokenType::InfiniteKeyword));
+        self.eat_lookahead(TokenType::InfiniteKeyword);
+
+        report_lookahead_error!(self.eat_lookahead(TokenType::ScopeBeginOperator));
+        self.eat_lookahead(TokenType::ScopeBeginOperator);
+
+        let loop_blocks = self.parse_unit();
+
+        report_lookahead_error!(self.eat_lookahead(TokenType::ScopeEndOperator));
+        self.eat_lookahead(TokenType::ScopeEndOperator);
+
+        match loop_blocks {
+            Ok(blocks) => Ok(LoopBlock::init(LoopType::InfiniteLoop, blocks)),
+            Err(error) => Err(error),
+        }
     }
 
     fn parse_argument_list(&mut self) -> Result<Vec<ArgumentBlock>, CompileError> {
@@ -418,9 +451,10 @@ impl Parser {
                         report_lookahead_error!(self.eat_lookahead(TokenType::IntegerLiteral));
                         Ok(ExprNode::init_as_variable(current_lexeme))
                     }
-                    _ => Err(
-                        self.get_static_compile_error("Negative subexpression not matched here")
-                    ),
+                    _ => {
+                        Err(self
+                            .get_static_compile_error("Negative subexpression not matched here"))
+                    }
                 }
             }
             _ => Err(self.get_static_compile_error(
