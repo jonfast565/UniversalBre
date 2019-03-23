@@ -41,8 +41,6 @@ pub enum MirInstructionOperand {
     Divide,
     Concat,
     CallFunction,
-    PushStack,
-    PopStack,
     JumpUnconditional,
     Label,
 }
