@@ -1,19 +1,27 @@
-use semantic_analysis::expressions::ExprNode;
+use semantic_analysis::expressions::{ExprNode, ExprType};
 use semantic_analysis::functions::FunctionBlock;
 use semantic_analysis::loops::LoopBlock;
 use semantic_analysis::program::Program;
 use semantic_analysis::semantic_blocks::{BlockType, SemanticBlock};
-use semantic_analysis::statements::StatementBlock;
+use semantic_analysis::statements::{AssignmentBlock, BreakBlock, ReturnBlock};
 
 pub struct MirInstructionGenerator {
     pub debug: bool,
 }
 
 pub struct MirInstructions {
-    instructions: Vec<MirInstructionBlock>,
+    blocks: Vec<MirInstructionBlock>,
 }
 
-pub struct MirInstructionBlock {}
+pub struct MirInstructionBlock {
+    instructions: Vec<MirInstruction>,
+}
+
+impl MirInstructionBlock {
+    pub fn has_instructions(&self) -> bool {
+        self.instructions.len() > 0
+    }
+}
 
 pub struct MirInstruction {
     pub label: Option<String>,
@@ -63,9 +71,7 @@ impl MirInstructionGenerator {
             result.append(&mut block_mir);
         }
 
-        MirInstructions {
-            instructions: result,
-        }
+        MirInstructions { blocks: result }
     }
 
     fn generate_block_mir(&self, s: SemanticBlock) -> Vec<MirInstructionBlock> {
@@ -75,15 +81,15 @@ impl MirInstructionGenerator {
             BlockType::AssignmentBlock => self.generate_assignment_mir(s.get_assignment_block()),
             BlockType::LoopBlock => self.generate_loop_mir(s.get_loop_block()),
             BlockType::FunctionBlock => self.generate_function_mir(s.get_function_block()),
-            BlockType::BreakBlock => self.generate_break_mir(s.get_assignment_block()),
-            BlockType::ReturnBlock => self.generate_return_mir(s.get_assignment_block()),
+            BlockType::BreakBlock => self.generate_break_mir(s.get_break_block()),
+            BlockType::ReturnBlock => self.generate_return_mir(s.get_return_block()),
         };
 
         result.append(&mut new_blocks);
         result
     }
 
-    fn generate_assignment_mir(&self, s: StatementBlock) -> Vec<MirInstructionBlock> {
+    fn generate_assignment_mir(&self, s: AssignmentBlock) -> Vec<MirInstructionBlock> {
         Vec::<MirInstructionBlock>::new()
     }
 
@@ -95,22 +101,33 @@ impl MirInstructionGenerator {
         Vec::<MirInstructionBlock>::new()
     }
 
-    fn generate_break_mir(&self, s: StatementBlock) -> Vec<MirInstructionBlock> {
+    fn generate_break_mir(&self, s: BreakBlock) -> Vec<MirInstructionBlock> {
         Vec::<MirInstructionBlock>::new()
     }
 
-    fn generate_return_mir(&self, s: StatementBlock) -> Vec<MirInstructionBlock> {
+    fn generate_return_mir(&self, s: ReturnBlock) -> Vec<MirInstructionBlock> {
         Vec::<MirInstructionBlock>::new()
     }
 
     fn generate_expression_mir(&self, s: ExprNode) -> Vec<MirInstructionBlock> {
         let mut result = Vec::<MirInstructionBlock>::new();
 
-        let mut new_blocks = match s.get_expr_type() {
+        let mut new_block = match s.get_expression_type() {
+            ExprType::Binary => {
+                let mut result = Vec::<MirInstruction>::new();
 
+                MirInstructionBlock {
+                    instructions: result,
+                }
+            }
+            _ => MirInstructionBlock {
+                instructions: Vec::<MirInstruction>::new(),
+            },
         };
 
-        result.append(&mut new_blocks);
+        if new_block.has_instructions() {
+            result.push(new_block);
+        }
         result
     }
 }

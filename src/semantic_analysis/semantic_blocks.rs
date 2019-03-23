@@ -1,7 +1,7 @@
 use code_generation::visualizer::Visualizer;
 use semantic_analysis::functions::FunctionBlock;
 use semantic_analysis::loops::LoopBlock;
-use semantic_analysis::statements::{AssignmentBlock, ReturnBlock, BreakBlock};
+use semantic_analysis::statements::{AssignmentBlock, BreakBlock, ReturnBlock};
 use utilities::utility;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -16,7 +16,7 @@ pub enum BlockType {
 #[derive(Clone, PartialEq)]
 pub struct SemanticBlock {
     pub id: String,
-    block_type: BlockType,
+    pub block_type: BlockType,
     pub assignment_block: Option<AssignmentBlock>,
     pub loop_block: Option<LoopBlock>,
     pub function_block: Option<FunctionBlock>,
@@ -36,6 +36,7 @@ impl SemanticBlock {
             return_block: None,
         }
     }
+
     pub fn init_loop(loop_block: LoopBlock) -> SemanticBlock {
         SemanticBlock {
             id: utility::get_new_uuid(),
@@ -47,6 +48,7 @@ impl SemanticBlock {
             return_block: None,
         }
     }
+
     pub fn init_function(function_block: FunctionBlock) -> SemanticBlock {
         SemanticBlock {
             id: utility::get_new_uuid(),
@@ -58,6 +60,7 @@ impl SemanticBlock {
             return_block: None,
         }
     }
+
     pub fn init_break(break_block: BreakBlock) -> SemanticBlock {
         SemanticBlock {
             id: utility::get_new_uuid(),
@@ -69,6 +72,7 @@ impl SemanticBlock {
             return_block: None,
         }
     }
+
     pub fn init_return(return_block: ReturnBlock) -> SemanticBlock {
         SemanticBlock {
             id: utility::get_new_uuid(),
@@ -80,21 +84,27 @@ impl SemanticBlock {
             return_block: Some(return_block),
         }
     }
+
     pub fn get_block_type(&self) -> BlockType {
         self.block_type.clone()
     }
+
     pub fn get_assignment_block(&self) -> AssignmentBlock {
         self.clone().assignment_block.unwrap()
     }
+
     pub fn get_function_block(&self) -> FunctionBlock {
         self.clone().function_block.unwrap()
     }
+
     pub fn get_loop_block(&self) -> LoopBlock {
         self.clone().loop_block.unwrap()
     }
+
     pub fn get_return_block(&self) -> ReturnBlock {
         self.clone().return_block.unwrap()
     }
+
     pub fn get_break_block(&self) -> BreakBlock {
         self.clone().break_block.unwrap()
     }

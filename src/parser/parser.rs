@@ -48,44 +48,6 @@ fn or_many(many_ors: Vec<bool>) -> bool {
     return result;
 }
 
-macro_rules! expr_chain {
-    ($self_var: expr, $name_str:literal, $lr_fn:expr) => {
-        log::log_debug($name_str);
-        let mut left_node = parse_error!($lr_fn);
-
-        while many_ors()
-            self.get_lookahead() == TokenType::BooleanGtOperator
-            || self.get_lookahead() == TokenType::BooleanGteOperator
-            || self.get_lookahead() == TokenType::BooleanLtOperator
-            || self.get_lookahead() == TokenType::BooleanLteOperator
-        {
-            let operation_type: OperationType;
-            match self.get_lookahead() {
-                TokenType::BooleanGtOperator => {
-                    eat_token!(self, TokenType::BooleanGtOperator);
-                    operation_type = OperationType::BooleanGtOperation;
-                }
-                TokenType::BooleanGteOperator => {
-                    eat_token!(self, TokenType::BooleanGteOperator);
-                    operation_type = OperationType::BooleanGteOperation;
-                }
-                TokenType::BooleanLtOperator => {
-                    eat_token!(self, TokenType::BooleanLtOperator);
-                    operation_type = OperationType::BooleanLtOperation;
-                }
-                TokenType::BooleanLteOperator => {
-                    eat_token!(self, TokenType::BooleanLteOperator);
-                    operation_type = OperationType::BooleanLteOperation;
-                }
-                _ => break,
-            }
-            let right_node = parse_error!($lr_fn);
-            left_node = ExprNode::init_binary(left_node, right_node, operation_type);
-        }
-        Ok(left_node)
-    }
-}
-
 pub struct Parser {
     location: usize,
     tokens: Vec<Token>,
