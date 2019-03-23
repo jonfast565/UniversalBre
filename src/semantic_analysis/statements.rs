@@ -5,53 +5,40 @@ use utilities::utility;
 #[derive(Debug, Clone, PartialEq)]
 pub enum StatementType {
     AssignmentStatement,
-    BreakStatement,
-    ReturnStatement,
+    BreakBlock,
+    ReturnBlock,
 }
 
-pub struct StatementBlock {
+pub trait StatementTypeTrait {
+    fn get_statement_type(&self) -> StatementType;
+}
+
+#[derive(Clone, PartialEq)]
+pub struct AssignmentBlock {
     pub id: String,
-    return_id: Option<String>,
-    statement_type: StatementType,
     assignment_id: Option<String>,
     expression: Option<ExprNode>,
 }
 
-impl StatementBlock {
-    pub fn init_with_assignment(assignment_id: String, expression: ExprNode) -> StatementBlock {
-        StatementBlock {
+impl AssignmentBlock {
+    pub fn init(assignment_id: String, expression: ExprNode) -> AssignmentBlock {
+        AssignmentBlock {
             id: utility::get_new_uuid(),
-            return_id: None,
-            statement_type: StatementType::AssignmentStatement,
             assignment_id: Some(assignment_id),
             expression: Some(expression),
         }
     }
+}
 
-    pub fn init_with_break() -> StatementBlock {
-        StatementBlock {
-            id: utility::get_new_uuid(),
-            return_id: None,
-            statement_type: StatementType::BreakStatement,
-            assignment_id: None,
-            expression: None,
-        }
-    }
-
-    pub fn init_with_return(return_id: String) -> StatementBlock {
-        StatementBlock {
-            id: utility::get_new_uuid(),
-            return_id: Some(return_id),
-            statement_type: StatementType::ReturnStatement,
-            assignment_id: None,
-            expression: None,
-        }
+impl StatementTypeTrait for AssignmentBlock {
+    fn get_statement_type(&self) -> StatementType {
+        StatementType::AssignmentStatement
     }
 }
 
-impl Visualizer for StatementBlock {
+impl Visualizer for AssignmentBlock {
     fn build_graphviz(&self) -> String {
-        if self.statement_type == StatementType::AssignmentStatement {
+        if self.get_statement_type() == StatementType::AssignmentStatement {
             let assignment_id = self.assignment_id.as_ref().unwrap();
             let expression = self.expression.as_ref().unwrap();
             return format!(
@@ -62,5 +49,45 @@ impl Visualizer for StatementBlock {
             );
         }
         panic!("This should never happen");
+    }
+}
+
+#[derive(Clone, PartialEq)]
+pub struct ReturnBlock {
+    pub id: String,
+    return_expression: Option<ExprNode>
+}
+
+impl ReturnBlock {
+    pub fn init(return_expression: ExprNode) -> ReturnBlock {
+        ReturnBlock {
+            id: utility::get_new_uuid(),
+            return_expression: Some(return_expression),
+        }
+    }
+}
+
+impl StatementTypeTrait for ReturnBlock {
+    fn get_statement_type(&self) -> StatementType {
+        StatementType::ReturnBlock
+    }
+}
+
+#[derive(Clone, PartialEq)]
+pub struct BreakBlock {
+    pub id: String
+}
+
+impl BreakBlock {
+    pub fn init() -> BreakBlock {
+        BreakBlock {
+            id: utility::get_new_uuid(),
+        }
+    }
+}
+
+impl StatementTypeTrait for BreakBlock {
+    fn get_statement_type(&self) -> StatementType {
+        StatementType::BreakBlock
     }
 }

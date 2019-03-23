@@ -10,6 +10,7 @@ pub enum ExprType {
     Variable,
 }
 
+#[derive(Clone, PartialEq)]
 pub struct ExprNode {
     pub id: String,
     expr_type: ExprType,
@@ -25,7 +26,7 @@ pub struct ExprNode {
 }
 
 impl ExprNode {
-    pub fn init_as_binary(
+    pub fn init_binary(
         left_node: ExprNode,
         right_node: ExprNode,
         operation_type: OperationType,
@@ -40,7 +41,7 @@ impl ExprNode {
             data_type: None,
         }
     }
-    pub fn init_as_literal(value: String, data_type: DataType) -> ExprNode {
+    pub fn init_literal(value: String, data_type: DataType) -> ExprNode {
         ExprNode {
             id: utility::get_new_uuid(),
             expr_type: ExprType::Literal,
@@ -52,7 +53,7 @@ impl ExprNode {
         }
     }
 
-    pub fn init_as_variable(value: String) -> ExprNode {
+    pub fn init_variable(value: String) -> ExprNode {
         ExprNode {
             id: utility::get_new_uuid(),
             expr_type: ExprType::Variable,
@@ -60,8 +61,12 @@ impl ExprNode {
             right_node: None,
             value: Some(value),
             operation_type: None,
-            data_type: None, //TODO: Not wise
+            data_type: None,
         }
+    }
+
+    pub fn get_expression_type(&self) -> ExprType {
+        self.expr_type.clone()
     }
 }
 

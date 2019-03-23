@@ -34,7 +34,7 @@ impl FasmGenerator {
         })
     }
 
-    pub fn generate_program_asm(&self, p: &MirInstructions) -> Vec<FasmInstruction> {
+    pub fn generate_program_asm(&self, _p: &MirInstructions) -> Vec<FasmInstruction> {
         vec!(
             FasmInstruction {
                 operand: "mov".to_string(),

@@ -1,5 +1,6 @@
 use code_generation::visualizer::Visualizer;
 use semantic_analysis::semantic_blocks::{SemanticBlock, BlockType};
+use semantic_analysis::statements::AssignmentBlock;
 use utilities::utility::{Pair};
 
 pub struct Program {
@@ -9,6 +10,9 @@ pub struct Program {
 impl Program {
     pub fn init(blocks: Vec<SemanticBlock>) -> Program {
         Program { blocks: blocks }
+    }
+    pub fn get_blocks(&self) -> Vec<SemanticBlock> {
+        self.blocks.clone()
     }
 }
 
@@ -22,9 +26,9 @@ impl Visualizer for Program {
             let id = match block {
                 SemanticBlock {
                     block_type,
-                    statement_block: Some(block_ref),
+                    assignment_block: Some(block_ref),
                     ..
-                } if *block_type == BlockType::StatementBlock =>
+                } if *block_type == BlockType::AssignmentBlock =>
                 {
                     block_ref.id.to_string()
                 }
