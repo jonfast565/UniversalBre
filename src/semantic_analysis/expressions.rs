@@ -68,6 +68,14 @@ impl ExprNode {
     pub fn get_expression_type(&self) -> ExprType {
         self.expr_type.clone()
     }
+
+    pub fn get_right_node(&self) -> Option<Box<ExprNode>> {
+        return self.right_node
+    }
+
+    pub fn get_left_node(&self) -> Option<Box<ExprNode>> {
+        return self.left_node
+    }
 }
 
 impl Visualizer for ExprNode {

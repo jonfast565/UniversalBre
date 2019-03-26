@@ -18,6 +18,12 @@ pub struct MirInstructionBlock {
 }
 
 impl MirInstructionBlock {
+    pub fn empty_block() -> MirInstructionBlock {
+        MirInstructionBlock {
+            instructions: Vec::<MirInstruction>::new()
+        }
+    }
+
     pub fn has_instructions(&self) -> bool {
         self.instructions.len() > 0
     }
@@ -128,6 +134,18 @@ impl MirInstructionGenerator {
     }
 
     fn generate_expression_mir(&self, s: ExprNode) -> MirInstructionBlock {
+
+        let left_block = match s.get_left_node() {
+            Some(left) => self.generate_expression_mir(*left),
+            None => MirInstructionBlock::empty_block()
+        };
+        
+        let right_block = match s.get_right_node() {
+            Some(right) => self.generate_expression_mir(*right),
+            None => MirInstructionBlock::empty_block()
+        };
+
+        
         match s.get_expression_type() {
             ExprType::Binary => {
                 let mut result = Vec::<MirInstruction>::new();
@@ -136,9 +154,7 @@ impl MirInstructionGenerator {
                     instructions: result,
                 }
             }
-            _ => MirInstructionBlock {
-                instructions: Vec::<MirInstruction>::new(),
-            },
+            _ => MirInstructionBlock::empty_block(),
         }
     }
 }
