@@ -27,6 +27,15 @@ impl MirInstructionBlock {
     pub fn has_instructions(&self) -> bool {
         self.instructions.len() > 0
     }
+
+    pub fn merge(&self, m: MirInstructionBlock) {
+        let mut gotten_instructions = m.get_instructions();
+        self.instructions.append(gotten_instructions);
+    }
+
+    fn get_instructions(&self) {
+        return self.instructions.clone()
+    }
 }
 
 pub struct MirInstruction {
