@@ -5,14 +5,17 @@ use semantic_analysis::program::Program;
 use semantic_analysis::semantic_blocks::{BlockType, SemanticBlock};
 use semantic_analysis::statements::{AssignmentBlock, BreakBlock, ReturnBlock};
 
+#[derive(Clone, PartialEq)]
 pub struct MirInstructionGenerator {
     pub debug: bool,
 }
 
+#[derive(Clone, PartialEq)]
 pub struct MirInstructions {
     blocks: Vec<MirInstructionBlock>,
 }
 
+#[derive(Clone, PartialEq)]
 pub struct MirInstructionBlock {
     instructions: Vec<MirInstruction>,
 }
@@ -28,16 +31,17 @@ impl MirInstructionBlock {
         self.instructions.len() > 0
     }
 
-    pub fn merge(&self, m: MirInstructionBlock) {
+    pub fn merge(&mut self, m: MirInstructionBlock) {
         let mut gotten_instructions = m.get_instructions();
-        self.instructions.append(gotten_instructions);
+        self.instructions.append(&mut gotten_instructions);
     }
 
-    fn get_instructions(&self) {
+    fn get_instructions(&self) -> Vec<MirInstruction> {
         return self.instructions.clone()
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct MirInstruction {
     pub label: Option<String>,
     pub result_operator: Option<MirOperator>,
@@ -49,6 +53,7 @@ pub struct MirInstruction {
 
 impl MirInstruction {}
 
+#[derive(Clone, PartialEq)]
 pub enum MirInstructionOperand {
     Add,
     Subtract,
@@ -60,10 +65,12 @@ pub enum MirInstructionOperand {
     Label,
 }
 
+#[derive(Clone, PartialEq)]
 pub struct MirFlags {
     pub requires_cast: bool,
 }
 
+#[derive(Clone, PartialEq)]
 pub enum MirOperatorType {
     StringType,
     BooleanType,
@@ -71,6 +78,7 @@ pub enum MirOperatorType {
     FloatType,
 }
 
+#[derive(Clone, PartialEq)]
 pub struct MirOperator {
     pub operator_type: MirOperatorType,
 }

@@ -70,11 +70,11 @@ impl ExprNode {
     }
 
     pub fn get_right_node(&self) -> Option<Box<ExprNode>> {
-        return self.right_node
+        return self.clone().right_node
     }
 
     pub fn get_left_node(&self) -> Option<Box<ExprNode>> {
-        return self.left_node
+        return self.clone().left_node
     }
 }
 
