@@ -1,6 +1,7 @@
 extern crate clap;
 
 use self::clap::{App /*, SubCommand */, Arg};
+use std::env;
 
 pub struct CommandLineArguments {
     pub interactive : bool,
@@ -30,8 +31,11 @@ pub fn get_arguments() -> CommandLineArguments {
         )
         .get_matches();
 
+    let current_path = env::current_dir().unwrap();
+    let test_program = format!("{}{}", current_path.to_str().unwrap(), "\\test_programs\\feature_test.prg");
+
     CommandLineArguments {
         interactive: _matches.value_of("interactive").unwrap_or("false") == "true",
-        file_path: _matches.value_of("file_path").unwrap_or("C:\\Users\\Administrator\\Desktop\\Repos\\UniversalBre\\test_programs\\feature_test.prg").to_string(),
+        file_path: _matches.value_of("file_path").unwrap_or(&test_program).to_string(),
     }
 }

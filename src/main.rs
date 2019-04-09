@@ -23,6 +23,7 @@ fn run() {
         log::log_success("Goodbye!");
     } else {
         let file_path = args.file_path;
+        println!("file_path is :{}", file_path);
         let contents = utility::read_file(&file_path).unwrap();
         repl::compile(contents);
     }
