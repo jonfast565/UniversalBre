@@ -167,8 +167,14 @@ impl MirInstructionGenerator {
         match s.get_expression_type() {
             ExprType::Binary => {
                 let mut result = Vec::<MirInstruction>::new();
-                result.append(&mut left_instruction_block.get_instructions());
-                result.append(&mut right_instruction_block.get_instructions());
+
+                // if s.get_left_node().is_leaf() {
+                //     result.append(&mut left_instruction_block.get_instructions());
+                // }
+
+                // if s.get_right_node().is_leaf() {
+                //     result.append(&mut right_instruction_block.get_instructions());
+                // }
 
                 MirInstructionBlock {
                     instructions: result,
