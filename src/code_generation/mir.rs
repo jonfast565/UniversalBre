@@ -61,6 +61,8 @@ pub enum MirInstructionOperand {
     Divide,
     Concat,
     CallFunction,
+    Push,
+    Pop,
     JumpUnconditional,
     Label,
 }
@@ -152,20 +154,21 @@ impl MirInstructionGenerator {
 
     fn generate_expression_mir(&self, s: ExprNode) -> MirInstructionBlock {
 
-        let left_block = match s.get_left_node() {
+        let left_instruction_block = match s.get_left_node() {
             Some(left) => self.generate_expression_mir(*left),
             None => MirInstructionBlock::empty_block()
         };
         
-        let right_block = match s.get_right_node() {
+        let right_instruction_block = match s.get_right_node() {
             Some(right) => self.generate_expression_mir(*right),
             None => MirInstructionBlock::empty_block()
         };
 
-        
         match s.get_expression_type() {
             ExprType::Binary => {
                 let mut result = Vec::<MirInstruction>::new();
+                result.append(&mut left_instruction_block.get_instructions());
+                result.append(&mut right_instruction_block.get_instructions());
 
                 MirInstructionBlock {
                     instructions: result,
