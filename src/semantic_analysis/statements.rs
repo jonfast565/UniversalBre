@@ -59,7 +59,7 @@ impl Visualizer for AssignmentBlock {
 #[derive(Clone, PartialEq)]
 pub struct ReturnBlock {
     pub id: String,
-    pub return_expression: Option<ExprNode>
+    pub return_expression: Option<ExprNode>,
 }
 
 impl ReturnBlock {
@@ -79,7 +79,7 @@ impl StatementTypeTrait for ReturnBlock {
 
 #[derive(Clone, PartialEq)]
 pub struct BreakBlock {
-    pub id: String
+    pub id: String,
 }
 
 impl BreakBlock {

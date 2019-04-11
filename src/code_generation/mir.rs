@@ -143,10 +143,8 @@ impl MirInstructionGenerator {
             MirInstructionGenerator::generate_expression_mir_internal(left_node, instructions);
             MirInstructionGenerator::generate_expression_mir_internal(right_node, instructions);
         } else if e.left_child_is_internal() && !e.right_child_is_internal() {
-            // left child is internal, get generated instructions
             MirInstructionGenerator::generate_expression_mir_internal(left_node, instructions);
         } else if !e.left_child_is_internal() && e.right_child_is_internal() {
-            // right child is internal, get instructions
             MirInstructionGenerator::generate_expression_mir_internal(right_node, instructions);
         }
 
@@ -154,7 +152,9 @@ impl MirInstructionGenerator {
         let right_node_internal = *(e.get_right_node().unwrap());
 
         instructions.push(MirInstructionGenerator::decode_internal(
-            &e, &left_node_internal, &right_node_internal,
+            &e,
+            &left_node_internal,
+            &right_node_internal,
         ));
     }
 

@@ -1,7 +1,7 @@
 use code_generation::visualizer::Visualizer;
-use semantic_analysis::semantic_blocks::{SemanticBlock, BlockType};
+use semantic_analysis::semantic_blocks::{BlockType, SemanticBlock};
 use semantic_analysis::statements::AssignmentBlock;
-use utilities::utility::{Pair};
+use utilities::utility::Pair;
 
 pub struct Program {
     blocks: Vec<SemanticBlock>,
@@ -28,10 +28,7 @@ impl Visualizer for Program {
                     block_type,
                     assignment_block: Some(block_ref),
                     ..
-                } if *block_type == BlockType::AssignmentBlock =>
-                {
-                    block_ref.id.to_string()
-                }
+                } if *block_type == BlockType::AssignmentBlock => block_ref.id.to_string(),
                 _ => block.id.to_string(),
             };
             result = format!(
