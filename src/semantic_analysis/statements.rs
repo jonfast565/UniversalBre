@@ -1,4 +1,4 @@
-use code_generation::visualizer::Visualizer;
+use code_generation::visualizer::{GraphvizFormatter, Visualizer};
 use semantic_analysis::expressions::ExprNode;
 use utilities::utility;
 
@@ -43,13 +43,13 @@ impl StatementTypeTrait for AssignmentBlock {
 impl Visualizer for AssignmentBlock {
     fn build_graphviz(&self) -> String {
         if self.get_statement_type() == StatementType::AssignmentStatement {
-            let assignment_id = self.assignment_id.as_ref().unwrap();
-            let expression = self.expression.as_ref().unwrap();
-            return format!(
-                "{}\n{}\n{}",
-                format!("\"{}\" [label=\"Assign {}\"]", &self.id, assignment_id),
-                expression.build_graphviz(),
-                format!("\"{}\" -> \"{}\"", &self.id, expression.id)
+            let id = &self.id;
+            let assignment_id = &self.assignment_id.unwrap();
+            let expression = &self.expression.unwrap();
+            return GraphvizFormatter::concat_three(
+                &GraphvizFormatter::build_node_label(id, assignment_id),
+                &expression.build_graphviz(),
+                &GraphvizFormatter::build_edge(id, &expression.id),
             );
         }
         panic!("This should never happen");

@@ -1,5 +1,6 @@
+use std::fmt;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum OperationType {
     BooleanOrOperation,
     BooleanAndOperation,
@@ -17,4 +18,10 @@ pub enum OperationType {
     SubtractionOperation,
     MultiplicationOperation,
     DivisionOperation,
+}
+
+impl fmt::Display for OperationType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
 }

@@ -1,6 +1,6 @@
-use code_generation::visualizer::Visualizer;
-use semantic_analysis::operation_types::OperationType;
+use code_generation::visualizer::{GraphvizFormatter, Visualizer};
 use semantic_analysis::data_types::DataType;
+use semantic_analysis::operation_types::OperationType;
 use utilities::utility;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -70,11 +70,11 @@ impl ExprNode {
     }
 
     pub fn get_right_node(&self) -> Option<Box<ExprNode>> {
-        return self.clone().right_node
+        self.clone().right_node
     }
 
     pub fn get_left_node(&self) -> Option<Box<ExprNode>> {
-        return self.clone().left_node
+        self.clone().left_node
     }
 
     pub fn is_leaf(&self) -> bool {
@@ -84,14 +84,14 @@ impl ExprNode {
     pub fn left_child_is_internal(&self) -> bool {
         match self.clone().left_node {
             Some(node) => !node.is_leaf(),
-            None => true
+            None => true,
         }
     }
 
     pub fn right_child_is_internal(&self) -> bool {
         match self.clone().right_node {
             Some(node) => !node.is_leaf(),
-            None => true
+            None => true,
         }
     }
 
@@ -114,37 +114,37 @@ impl ExprNode {
 
 impl Visualizer for ExprNode {
     fn build_graphviz(&self) -> String {
-        let id = &self.id;
+        let id = self.id;
         if self.expr_type == ExprType::Literal || self.expr_type == ExprType::Variable {
-            let data_type = match self.data_type.as_ref() {
-                Some(data_type) => &data_type,
-                None => &DataType::NoneType,
+            let data_type = match self.data_type {
+                Some(data_type) => data_type,
+                None => DataType::NoneType,
             };
             let no_value = "No Value".to_string();
-            let value = match self.value.as_ref() {
-                Some(value) => &value,
-                None => &no_value,
+            let value = match self.value {
+                Some(value) => value,
+                None => no_value,
             };
-            return format!("\"{}\" [label=\"{}: {:?}\"]", id, value, data_type);
+            return GraphvizFormatter::build_node_bilabel(&id, &value, &data_type.to_string());
         } else if self.expr_type == ExprType::Binary {
-            let op_type = self.operation_type.as_ref().unwrap();
-            let left_node = self.left_node.as_ref().unwrap();
-            let right_node = self.right_node.as_ref().unwrap();
-            let current_nodes = format!(
-                "\"{}\" [label=\"{:?}\"]\n{}\n{}",
-                id,
-                op_type,
-                left_node.build_graphviz(),
-                right_node.build_graphviz()
+            let op_type = self.operation_type.unwrap();
+            let left_node = self.left_node.unwrap();
+            let right_node = self.right_node.unwrap();
+            let current_nodes = GraphvizFormatter::build_binary_node(
+                &id,
+                &op_type.to_string(),
+                &left_node.build_graphviz(),
+                &right_node.build_graphviz(),
             );
-            let current_left_connection = format!("\"{}\" -> \"{}\"", id, left_node.id);
-            let current_right_connection = format!("\"{}\" -> \"{}\"", id, right_node.id);
-            return format!(
-                "{}\n{}\n{}",
-                current_nodes, current_left_connection, current_right_connection
+            let current_left_connection = GraphvizFormatter::build_edge(&id, &left_node.id);
+            let current_right_connection = GraphvizFormatter::build_edge(&id, &right_node.id);
+            return GraphvizFormatter::concat_three(
+                &current_nodes,
+                &current_left_connection,
+                &current_right_connection,
             );
         } else {
-            panic!("Invalid EXPR_TYPE: This should never happen");
+            panic!("Invalid ExprType: This should never happen");
         }
     }
 }
