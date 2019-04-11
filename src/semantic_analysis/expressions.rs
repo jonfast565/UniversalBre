@@ -76,6 +76,40 @@ impl ExprNode {
     pub fn get_left_node(&self) -> Option<Box<ExprNode>> {
         return self.clone().left_node
     }
+
+    pub fn is_leaf(&self) -> bool {
+        self.expr_type != ExprType::Binary
+    }
+
+    pub fn left_child_is_internal(&self) -> bool {
+        match self.clone().left_node {
+            Some(node) => !node.is_leaf(),
+            None => true
+        }
+    }
+
+    pub fn right_child_is_internal(&self) -> bool {
+        match self.clone().right_node {
+            Some(node) => !node.is_leaf(),
+            None => true
+        }
+    }
+
+    pub fn get_id(&self) -> String {
+        self.id.to_string()
+    }
+
+    pub fn get_type(&self) -> DataType {
+        self.clone().data_type.unwrap()
+    }
+
+    pub fn get_value(&self) -> String {
+        self.clone().value.unwrap()
+    }
+
+    pub fn get_operation_type(&self) -> OperationType {
+        self.clone().operation_type.unwrap()
+    }
 }
 
 impl Visualizer for ExprNode {

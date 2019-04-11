@@ -28,6 +28,10 @@ impl AssignmentBlock {
             expression: Some(expression),
         }
     }
+
+    pub fn get_expression(&self) -> Option<ExprNode> {
+        self.clone().expression
+    }
 }
 
 impl StatementTypeTrait for AssignmentBlock {
@@ -55,7 +59,7 @@ impl Visualizer for AssignmentBlock {
 #[derive(Clone, PartialEq)]
 pub struct ReturnBlock {
     pub id: String,
-    return_expression: Option<ExprNode>
+    pub return_expression: Option<ExprNode>
 }
 
 impl ReturnBlock {
