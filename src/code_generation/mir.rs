@@ -23,8 +23,10 @@ impl MirInstructions {
     pub fn print(&self) {
         let self_copy = self.clone();
         let blocks = self_copy.blocks;
+        let mut block_counter = 1;
         for block in blocks {
             let instructions = block.instructions;
+            println!("Block #{}:", block_counter);
             for instruction in instructions {
                 let result_operator = instruction.result_operator.unwrap().to_string();
                 let operation_type = instruction.operand.to_string();
@@ -35,6 +37,7 @@ impl MirInstructions {
                     operation_type, result_operator, first_arg_operator, second_arg_operator
                 );
             }
+            block_counter += 1;
             println!();
         }
     }
