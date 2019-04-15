@@ -6,7 +6,7 @@ pub enum DataType {
     IntegerType,
     FloatType,
     BooleanType,
-    NoneType,
+    Indeterminate,
 }
 
 impl fmt::Display for DataType {
