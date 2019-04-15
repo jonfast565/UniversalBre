@@ -32,6 +32,7 @@ fn run() {
 fn main() {
     let child = thread::Builder::new()
         .stack_size(STACK_SIZE)
+        .name("main".into())
         .spawn(run)
         .unwrap();
     child.join().unwrap();

@@ -24,7 +24,9 @@
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [],
+            "environment": [{
+                "RUST_BACKTRACE": "1"
+            }],
             "externalConsole": true
         }
     ]

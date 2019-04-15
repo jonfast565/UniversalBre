@@ -30,6 +30,7 @@ impl ExprNode {
         left_node: ExprNode,
         right_node: ExprNode,
         operation_type: OperationType,
+        data_type: DataType
     ) -> ExprNode {
         ExprNode {
             id: utility::get_new_uuid(),
@@ -53,7 +54,7 @@ impl ExprNode {
         }
     }
 
-    pub fn init_variable(value: String) -> ExprNode {
+    pub fn init_variable(value: String, data_type: DataType) -> ExprNode {
         ExprNode {
             id: utility::get_new_uuid(),
             expr_type: ExprType::Variable,
