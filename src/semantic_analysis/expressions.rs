@@ -39,7 +39,7 @@ impl ExprNode {
             right_node: Some(Box::new(right_node)),
             value: None,
             operation_type: Some(operation_type),
-            data_type: None,
+            data_type: Some(data_type),
         }
     }
     pub fn init_literal(value: String, data_type: DataType) -> ExprNode {
@@ -62,7 +62,7 @@ impl ExprNode {
             right_node: None,
             value: Some(value),
             operation_type: None,
-            data_type: None,
+            data_type: Some(data_type),
         }
     }
 
@@ -120,7 +120,7 @@ impl Visualizer for ExprNode {
         if self_copy.expr_type == ExprType::Literal || self_copy.expr_type == ExprType::Variable {
             let data_type = match self_copy.data_type {
                 Some(data_type) => data_type,
-                None => DataType::NoneType,
+                None => DataType::Indeterminate,
             };
             let no_value = "No Value".to_string();
             let value = match self_copy.value {

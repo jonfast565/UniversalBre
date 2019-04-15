@@ -256,8 +256,12 @@ impl Parser {
                 _ => break,
             }
             let right_node = parse_error!(self.parse_boolean_and_expression());
-            left_node =
-                ExprNode::init_binary(left_node, right_node, OperationType::BooleanOrOperation);
+            left_node = ExprNode::init_binary(
+                left_node,
+                right_node,
+                OperationType::BooleanOrOperation,
+                DataType::Indeterminate,
+            );
         }
         Ok(left_node)
     }
@@ -274,8 +278,12 @@ impl Parser {
                 _ => break,
             }
             let right_node = parse_error!(self.parse_boolean_comparison_expression());
-            left_node =
-                ExprNode::init_binary(left_node, right_node, OperationType::BooleanAndOperation);
+            left_node = ExprNode::init_binary(
+                left_node,
+                right_node,
+                OperationType::BooleanAndOperation,
+                DataType::Indeterminate,
+            );
         }
         Ok(left_node)
     }
@@ -310,7 +318,12 @@ impl Parser {
                 _ => break,
             }
             let right_node = parse_error!(self.parse_boolean_equality_expression());
-            left_node = ExprNode::init_binary(left_node, right_node, operation_type);
+            left_node = ExprNode::init_binary(
+                left_node,
+                right_node,
+                operation_type,
+                DataType::Indeterminate,
+            );
         }
         Ok(left_node)
     }
@@ -335,7 +348,12 @@ impl Parser {
                 _ => break,
             }
             let right_node = parse_error!(self.parse_concat_expression());
-            left_node = ExprNode::init_binary(left_node, right_node, operation_type);
+            left_node = ExprNode::init_binary(
+                left_node,
+                right_node,
+                operation_type,
+                DataType::Indeterminate,
+            );
         }
         Ok(left_node)
     }
@@ -352,8 +370,12 @@ impl Parser {
                 _ => break,
             }
             let right_node = parse_error!(self.parse_mathematical_expression());
-            left_node =
-                ExprNode::init_binary(left_node, right_node, OperationType::ConcatOperation);
+            left_node = ExprNode::init_binary(
+                left_node,
+                right_node,
+                OperationType::ConcatOperation,
+                DataType::Indeterminate,
+            );
         }
         Ok(left_node)
     }
@@ -379,7 +401,12 @@ impl Parser {
             }
 
             let right_node = parse_error!(self.parse_term());
-            left_node = ExprNode::init_binary(left_node, right_node, operation_type);
+            left_node = ExprNode::init_binary(
+                left_node,
+                right_node,
+                operation_type,
+                DataType::Indeterminate,
+            );
         }
         Ok(left_node)
     }
@@ -404,7 +431,12 @@ impl Parser {
                 _ => break,
             }
             let right_node = parse_error!(self.parse_factor());
-            left_node = ExprNode::init_binary(left_node, right_node, operation_type);
+            left_node = ExprNode::init_binary(
+                left_node,
+                right_node,
+                operation_type,
+                DataType::Indeterminate,
+            );
         }
         Ok(left_node)
     }
@@ -434,13 +466,19 @@ impl Parser {
     fn parse_identifier(&mut self) -> Result<ExprNode, CompileError> {
         let current_lexeme = self.get_token().get_lexeme();
         eat_token!(self, TokenType::Identifier);
-        Ok(ExprNode::init_variable(current_lexeme))
+        Ok(ExprNode::init_variable(
+            current_lexeme,
+            DataType::Indeterminate,
+        ))
     }
 
     fn parse_string_literal(&mut self) -> Result<ExprNode, CompileError> {
         let current_lexeme = self.get_token().get_lexeme();
         eat_token!(self, TokenType::StringLiteral);
-        Ok(ExprNode::init_variable(current_lexeme))
+        Ok(ExprNode::init_variable(
+            current_lexeme,
+            DataType::StringType,
+        ))
     }
 
     fn parse_boolean_true_literal(&mut self) -> Result<ExprNode, CompileError> {
