@@ -7,6 +7,8 @@ use semantic_analysis::program::Program;
 use semantic_analysis::semantic_blocks::{BlockType, SemanticBlock};
 use semantic_analysis::statements::{AssignmentBlock, BreakBlock, ReturnBlock};
 
+use std::fmt;
+
 #[derive(Clone, PartialEq)]
 pub struct MirInstructionGenerator {
     pub debug: bool,
@@ -17,30 +19,30 @@ pub struct MirInstructions {
     blocks: Vec<MirInstructionBlock>,
 }
 
+impl MirInstructions {
+    pub fn print(&self) {
+        let self_copy = self.clone();
+        let blocks = self_copy.blocks;
+        for block in blocks {
+            let instructions = block.instructions;
+            for instruction in instructions {
+                let result_operator = instruction.result_operator.unwrap().to_string();
+                let operation_type = instruction.operand.to_string();
+                let first_arg_operator = instruction.first_arg_operator.unwrap().to_string();
+                let second_arg_operator = instruction.second_arg_operator.unwrap().to_string();
+                println!(
+                    "({}) {} = {}, {}",
+                    operation_type, result_operator, first_arg_operator, second_arg_operator
+                );
+            }
+            println!();
+        }
+    }
+}
+
 #[derive(Clone, PartialEq)]
 pub struct MirInstructionBlock {
     instructions: Vec<MirInstruction>,
-}
-
-impl MirInstructionBlock {
-    pub fn empty_block() -> MirInstructionBlock {
-        MirInstructionBlock {
-            instructions: Vec::<MirInstruction>::new(),
-        }
-    }
-
-    pub fn has_instructions(&self) -> bool {
-        self.instructions.len() > 0
-    }
-
-    pub fn merge(&mut self, m: MirInstructionBlock) {
-        let mut gotten_instructions = m.get_instructions();
-        self.instructions.append(&mut gotten_instructions);
-    }
-
-    fn get_instructions(&self) -> Vec<MirInstruction> {
-        return self.instructions.clone();
-    }
 }
 
 #[derive(Clone, PartialEq)]
@@ -65,6 +67,26 @@ pub struct MirOperator {
     pub operator_type: DataType,
     pub literal_value: Option<String>,
     pub variable_identifier: Option<String>,
+}
+
+impl fmt::Display for MirOperator {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let self_copy = self.clone();
+        if let Some(value) = self_copy.literal_value {
+            return write!(
+                f,
+                "{}{}",
+                self_copy.operator_type.to_string(),
+                value
+            );
+        }
+        write!(
+            f,
+            "{}{}",
+            self_copy.operator_type.to_string(),
+            self_copy.variable_identifier.unwrap()
+        )
+    }
 }
 
 impl MirInstructionGenerator {
@@ -136,26 +158,28 @@ impl MirInstructionGenerator {
     }
 
     fn generate_expression_mir_internal(e: ExprNode, instructions: &mut Vec<MirInstruction>) {
-        let left_node = *(e.get_left_node().unwrap());
-        let right_node = *(e.get_right_node().unwrap());
-
         if e.left_child_is_internal() && e.right_child_is_internal() {
+            let left_node = *(e.get_left_node().unwrap());
+            let right_node = *(e.get_right_node().unwrap());
+
             MirInstructionGenerator::generate_expression_mir_internal(left_node, instructions);
             MirInstructionGenerator::generate_expression_mir_internal(right_node, instructions);
+
+            let left_node_internal = *(e.get_left_node().unwrap());
+            let right_node_internal = *(e.get_right_node().unwrap());
+
+            instructions.push(MirInstructionGenerator::decode_internal(
+                &e,
+                &left_node_internal,
+                &right_node_internal,
+            ));
         } else if e.left_child_is_internal() && !e.right_child_is_internal() {
+            let left_node = *(e.get_left_node().unwrap());
             MirInstructionGenerator::generate_expression_mir_internal(left_node, instructions);
         } else if !e.left_child_is_internal() && e.right_child_is_internal() {
+            let right_node = *(e.get_right_node().unwrap());
             MirInstructionGenerator::generate_expression_mir_internal(right_node, instructions);
         }
-
-        let left_node_internal = *(e.get_left_node().unwrap());
-        let right_node_internal = *(e.get_right_node().unwrap());
-
-        instructions.push(MirInstructionGenerator::decode_internal(
-            &e,
-            &left_node_internal,
-            &right_node_internal,
-        ));
     }
 
     fn decode_internal(e: &ExprNode, left: &ExprNode, right: &ExprNode) -> MirInstruction {

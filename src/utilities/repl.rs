@@ -108,6 +108,7 @@ pub fn compile(input: String) -> () {
 
                     // mir generator
                     let mir_instructions = MirInstructionGenerator{ debug: true }.generate_mir(&program);
+                    mir_instructions.print();
 
                     // assembly generator
                     let asm_instructions = FasmGenerator{ debug: true }.generate_asm(&mir_instructions);

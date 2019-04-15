@@ -260,7 +260,7 @@ impl Parser {
                 left_node,
                 right_node,
                 OperationType::BooleanOrOperation,
-                DataType::Indeterminate,
+                DataType::AnyType,
             );
         }
         Ok(left_node)
@@ -282,7 +282,7 @@ impl Parser {
                 left_node,
                 right_node,
                 OperationType::BooleanAndOperation,
-                DataType::Indeterminate,
+                DataType::AnyType,
             );
         }
         Ok(left_node)
@@ -322,7 +322,7 @@ impl Parser {
                 left_node,
                 right_node,
                 operation_type,
-                DataType::Indeterminate,
+                DataType::AnyType,
             );
         }
         Ok(left_node)
@@ -352,7 +352,7 @@ impl Parser {
                 left_node,
                 right_node,
                 operation_type,
-                DataType::Indeterminate,
+                DataType::AnyType,
             );
         }
         Ok(left_node)
@@ -374,7 +374,7 @@ impl Parser {
                 left_node,
                 right_node,
                 OperationType::ConcatOperation,
-                DataType::Indeterminate,
+                DataType::AnyType,
             );
         }
         Ok(left_node)
@@ -405,7 +405,7 @@ impl Parser {
                 left_node,
                 right_node,
                 operation_type,
-                DataType::Indeterminate,
+                DataType::AnyType,
             );
         }
         Ok(left_node)
@@ -435,7 +435,7 @@ impl Parser {
                 left_node,
                 right_node,
                 operation_type,
-                DataType::Indeterminate,
+                DataType::AnyType,
             );
         }
         Ok(left_node)
@@ -468,7 +468,7 @@ impl Parser {
         eat_token!(self, TokenType::Identifier);
         Ok(ExprNode::init_variable(
             current_lexeme,
-            DataType::Indeterminate,
+            DataType::AnyType,
         ))
     }
 

@@ -3,11 +3,19 @@ use semantic_analysis::data_types::DataType;
 use semantic_analysis::operation_types::OperationType;
 use utilities::utility;
 
+use std::fmt;
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum ExprType {
     Binary,
     Literal,
     Variable,
+}
+
+impl fmt::Display for ExprType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
 }
 
 #[derive(Clone, PartialEq)]
@@ -85,14 +93,14 @@ impl ExprNode {
     pub fn left_child_is_internal(&self) -> bool {
         match self.clone().left_node {
             Some(node) => !node.is_leaf(),
-            None => true,
+            None => false,
         }
     }
 
     pub fn right_child_is_internal(&self) -> bool {
         match self.clone().right_node {
             Some(node) => !node.is_leaf(),
-            None => true,
+            None => false,
         }
     }
 
@@ -111,6 +119,10 @@ impl ExprNode {
     pub fn get_operation_type(&self) -> OperationType {
         self.clone().operation_type.unwrap()
     }
+
+    pub fn print(&self) {
+        println!("Expr Node {}", self.expr_type.to_string());
+    }
 }
 
 impl Visualizer for ExprNode {
@@ -120,7 +132,7 @@ impl Visualizer for ExprNode {
         if self_copy.expr_type == ExprType::Literal || self_copy.expr_type == ExprType::Variable {
             let data_type = match self_copy.data_type {
                 Some(data_type) => data_type,
-                None => DataType::Indeterminate,
+                None => DataType::AnyType,
             };
             let no_value = "No Value".to_string();
             let value = match self_copy.value {
