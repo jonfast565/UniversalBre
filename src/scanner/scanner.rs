@@ -242,8 +242,9 @@ impl ScanState {
 
         if !first_char.breaks_any_string() {
             // must 'lock in' the first quote mark
-            return Err(self
-                .get_scan_error_details(format!("{} not scanned", "string delimiter").to_string()));
+            return Err(self.get_scan_error_details(
+                format!("{} not scanned", "string delimiter").to_string(),
+            ));
         }
 
         self.push_increment_scan(&mut result, &mut increment_counter, &first_char);

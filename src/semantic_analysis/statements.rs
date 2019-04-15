@@ -42,17 +42,18 @@ impl StatementTypeTrait for AssignmentBlock {
 
 impl Visualizer for AssignmentBlock {
     fn build_graphviz(&self) -> String {
-        if self.get_statement_type() == StatementType::AssignmentStatement {
-            let id = &self.id;
-            let assignment_id = &self.assignment_id.unwrap();
-            let expression = &self.expression.unwrap();
-            return GraphvizFormatter::concat_three(
-                &GraphvizFormatter::build_node_label(id, assignment_id),
-                &expression.build_graphviz(),
-                &GraphvizFormatter::build_edge(id, &expression.id),
-            );
+        let self_copy = self.clone();
+        if self_copy.get_statement_type() != StatementType::AssignmentStatement {
+            panic!("This should never happen");
         }
-        panic!("This should never happen");
+        let id = self_copy.id;
+        let assignment_id = self_copy.assignment_id.unwrap();
+        let expression = self_copy.expression.unwrap();
+        return GraphvizFormatter::concat_three(
+            &GraphvizFormatter::build_node_label(&id, &assignment_id),
+            &expression.build_graphviz(),
+            &GraphvizFormatter::build_edge(&id, &expression.id),
+        );
     }
 }
 

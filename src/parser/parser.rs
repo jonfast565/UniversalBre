@@ -140,8 +140,10 @@ impl Parser {
                 Ok(SemanticBlock::init_function(function_block))
             }
             _ => {
-                return Err(self
-                    .get_compile_error(format!("Unit cannot begin with {}", self.get_lookahead())));
+                return Err(self.get_compile_error(format!(
+                    "Unit cannot begin with {}",
+                    self.get_lookahead()
+                )));
             }
         }
     }

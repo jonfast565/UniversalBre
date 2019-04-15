@@ -114,22 +114,23 @@ impl ExprNode {
 
 impl Visualizer for ExprNode {
     fn build_graphviz(&self) -> String {
-        let id = self.id;
-        if self.expr_type == ExprType::Literal || self.expr_type == ExprType::Variable {
-            let data_type = match self.data_type {
+        let self_copy = self.clone();
+        let id = self_copy.id;
+        if self_copy.expr_type == ExprType::Literal || self_copy.expr_type == ExprType::Variable {
+            let data_type = match self_copy.data_type {
                 Some(data_type) => data_type,
                 None => DataType::NoneType,
             };
             let no_value = "No Value".to_string();
-            let value = match self.value {
+            let value = match self_copy.value {
                 Some(value) => value,
                 None => no_value,
             };
             return GraphvizFormatter::build_node_bilabel(&id, &value, &data_type.to_string());
-        } else if self.expr_type == ExprType::Binary {
-            let op_type = self.operation_type.unwrap();
-            let left_node = self.left_node.unwrap();
-            let right_node = self.right_node.unwrap();
+        } else if self_copy.expr_type == ExprType::Binary {
+            let op_type = self_copy.operation_type.unwrap();
+            let left_node = self_copy.left_node.unwrap();
+            let right_node = self_copy.right_node.unwrap();
             let current_nodes = GraphvizFormatter::build_binary_node(
                 &id,
                 &op_type.to_string(),
