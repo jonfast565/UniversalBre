@@ -4,18 +4,15 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-       /* {
-            "name": "(lldb) Launch",
-            "type": "cppdbg",
+       {
+            "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/target/debug/universal_bre",
+            "name": "Debug",
+            "program": "${workspaceRoot}/target/debug/${workspaceRootFolderName}",
             "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": true,
-            "MIMode": "lldb"
-        },*/
+            "cwd": "${workspaceRoot}/target/debug/",
+            "sourceLanguages": ["rust"]
+        },
         {
             "name": "(Windows) Launch",
             "type": "cppvsdbg",
