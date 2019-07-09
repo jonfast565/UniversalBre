@@ -6,6 +6,6 @@ authors = ["Jon Fast <jnfstdj656@gmail.com>"]
 [dependencies]
 termcolor = "1.0.4"
 clap = "2.33.0"
-rustyline = "3.0.0"
+rustyline = "5.0.0"
 mashup = "0.1.9"
 uuid = { version = "0.7.4", features = ["v4", "serde"] }
