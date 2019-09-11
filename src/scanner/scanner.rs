@@ -576,7 +576,7 @@ impl Scanner {
             match new_token {
                 Err(scan_error) => return Err(scan_error),
                 Ok(scanned_token) => {
-                    let token_match = *scanned_token.get_token_type() == TokenType::EndOfFile;
+                    let token_match = scanned_token.get_token_type() == TokenType::EndOfFile;
                     if token_match {
                         break;
                     } else {

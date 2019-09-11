@@ -25,7 +25,7 @@ impl MirInstructions {
         let blocks = &self.blocks;
         let mut block_counter = 1;
         for block in blocks {
-            let instructions = block.instructions;
+            let instructions = block.instructions.clone();
             println!("Block #{}:", block_counter);
             for instruction in instructions {
                 let result_operator = instruction.result_operator.unwrap().to_string();
@@ -86,7 +86,7 @@ impl fmt::Display for MirOperator {
             f,
             "{}{}",
             self.operator_type.to_string(),
-            self.variable_identifier.unwrap()
+            self.variable_identifier.as_ref().unwrap()
         )
     }
 }

@@ -80,11 +80,11 @@ impl ExprNode {
     }
 
     pub fn get_right_node(&self) -> Option<Arc<ExprNode>> {
-        self.right_node
+        self.right_node.clone()
     }
 
     pub fn get_left_node(&self) -> Option<Arc<ExprNode>> {
-        self.left_node
+        self.left_node.clone()
     }
 
     pub fn is_leaf(&self) -> bool {
@@ -110,15 +110,15 @@ impl ExprNode {
     }
 
     pub fn get_type(&self) -> Arc<DataType> {
-        self.data_type.unwrap()
+        self.data_type.clone().unwrap()
     }
 
     pub fn get_value(&self) -> String {
-        self.value.unwrap().to_string()
+        self.value.as_ref().unwrap().to_string()
     }
 
     pub fn get_operation_type(&self) -> Arc<OperationType> {
-        self.operation_type.unwrap()
+        self.operation_type.clone().unwrap()
     }
 
     pub fn print(&self) {

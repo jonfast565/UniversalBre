@@ -20,7 +20,7 @@ pub struct FasmInstruction {
 
 impl FasmInstruction {
     pub fn get_instruction_string(&self) -> String {
-        let result = self.operand
+        let result = self.operand.clone()
             + " "
             + &self.first_operator
             + ", "
