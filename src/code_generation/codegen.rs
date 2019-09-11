@@ -24,7 +24,7 @@ impl FasmInstruction {
             + " "
             + &self.first_operator
             + ", "
-            + &self.second_operator
+            + &self.second_operator;
         result
     }
 }

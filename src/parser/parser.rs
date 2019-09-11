@@ -1,6 +1,5 @@
 use utilities::error::CompileError;
 use utilities::log;
-use utilities::utility;
 
 use semantic_analysis::data_types::DataType;
 use semantic_analysis::expressions::ExprNode;
@@ -10,8 +9,9 @@ use semantic_analysis::operation_types::OperationType;
 use semantic_analysis::program::Program;
 use semantic_analysis::semantic_blocks::SemanticBlock;
 use semantic_analysis::statements::{AssignmentBlock, BreakBlock, ReturnBlock};
-
 use scanner::token::{Token, TokenType};
+
+use std::sync::Arc;
 
 macro_rules! eat_token {
     ($self_var: expr, $e:expr) => {
@@ -65,7 +65,7 @@ impl Parser {
         if self.location == self.tokens.len() {
             return TokenType::EndOfFile;
         }
-        self.tokens[self.location].get_token_type()
+        *self.tokens[self.location].get_token_type()
     }
 
     fn eat_lookahead(&mut self, token_type: TokenType) -> Option<CompileError> {
@@ -158,7 +158,7 @@ impl Parser {
         let expression = parse_error!(self.parse_expression());
 
         eat_token!(self, TokenType::Semicolon);
-        Ok(AssignmentBlock::init(id, expression))
+        Ok(AssignmentBlock::init(id.to_string(), expression))
     }
 
     fn parse_break_statement(&mut self) -> Result<BreakBlock, CompileError> {
@@ -177,7 +177,7 @@ impl Parser {
         let expression = parse_error!(self.parse_expression());
         eat_token!(self, TokenType::Semicolon);
 
-        Ok(ReturnBlock::init(expression))
+        Ok(ReturnBlock::init(Arc::new(expression)))
     }
 
     fn parse_infinite_loop(&mut self) -> Result<LoopBlock, CompileError> {
@@ -206,7 +206,7 @@ impl Parser {
             while self.get_lookahead() == TokenType::Identifier {
                 let id = self.get_token().get_lexeme();
                 eat_token!(self, TokenType::Identifier);
-                argument_list.push(ArgumentBlock::init(id));
+                argument_list.push(ArgumentBlock::init(id.to_string()));
 
                 if self.get_lookahead() != TokenType::RightParenthesis {
                     eat_token!(self, TokenType::ListDelimiter);
@@ -236,7 +236,7 @@ impl Parser {
         }
 
         eat_token!(self, TokenType::ScopeEndOperator);
-        Ok(FunctionBlock::init(id, argument_list, function_body))
+        Ok(FunctionBlock::init(id.to_string(), argument_list, function_body))
     }
 
     fn parse_expression(&mut self) -> Result<ExprNode, CompileError> {
@@ -449,52 +449,58 @@ impl Parser {
     }
 
     fn parse_integer_literal(&mut self) -> Result<ExprNode, CompileError> {
-        let current_lexeme = self.get_token().get_lexeme();
+        let current_token = self.get_token();
+        let current_lexeme = current_token.get_lexeme();
         eat_token!(self, TokenType::IntegerLiteral);
         Ok(ExprNode::init_literal(
-            current_lexeme,
+            current_lexeme.to_string(),
             DataType::IntegerType,
         ))
     }
 
     fn parse_float_literal(&mut self) -> Result<ExprNode, CompileError> {
-        let current_lexeme = self.get_token().get_lexeme();
+        let current_token = self.get_token();
+        let current_lexeme = current_token.get_lexeme();
         eat_token!(self, TokenType::FloatLiteral);
-        Ok(ExprNode::init_literal(current_lexeme, DataType::FloatType))
+        Ok(ExprNode::init_literal(current_lexeme.to_string(), DataType::FloatType))
     }
 
     fn parse_identifier(&mut self) -> Result<ExprNode, CompileError> {
-        let current_lexeme = self.get_token().get_lexeme();
+        let current_token = self.get_token();
+        let current_lexeme = current_token.get_lexeme();
         eat_token!(self, TokenType::Identifier);
         Ok(ExprNode::init_variable(
-            current_lexeme,
+            current_lexeme.to_string(),
             DataType::AnyType,
         ))
     }
 
     fn parse_string_literal(&mut self) -> Result<ExprNode, CompileError> {
-        let current_lexeme = self.get_token().get_lexeme();
+        let current_token = self.get_token();
+        let current_lexeme = current_token.get_lexeme();
         eat_token!(self, TokenType::StringLiteral);
         Ok(ExprNode::init_variable(
-            current_lexeme,
+            current_lexeme.to_string(),
             DataType::StringType,
         ))
     }
 
     fn parse_boolean_true_literal(&mut self) -> Result<ExprNode, CompileError> {
-        let current_lexeme = self.get_token().get_lexeme();
+        let current_token = self.get_token();
+        let current_lexeme = current_token.get_lexeme();
         eat_token!(self, TokenType::BooleanTrueLiteral);
         Ok(ExprNode::init_literal(
-            current_lexeme,
+            current_lexeme.to_string(),
             DataType::BooleanType,
         ))
     }
 
     fn parse_boolean_false_literal(&mut self) -> Result<ExprNode, CompileError> {
-        let current_lexeme = self.get_token().get_lexeme();
+        let current_token = self.get_token();
+        let current_lexeme = current_token.get_lexeme();
         eat_token!(self, TokenType::BooleanFalseLiteral);
         Ok(ExprNode::init_literal(
-            current_lexeme,
+            current_lexeme.to_string(),
             DataType::BooleanType,
         ))
     }
@@ -503,7 +509,7 @@ impl Parser {
         eat_token!(self, TokenType::MinusOperator);
         // TODO: Fix this shit, we're appending contextual information in the parser
         // as if it is scanning... dreadful.
-        let current_lexeme = format!("-{}", self.get_token().get_lexeme());
+        let _current_lexeme = format!("-{}", self.get_token().get_lexeme());
         match self.get_lookahead() {
             TokenType::IntegerLiteral => self.parse_integer_literal(),
             TokenType::FloatLiteral => self.parse_float_literal(),

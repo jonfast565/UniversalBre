@@ -63,11 +63,11 @@ fn prompt() -> ReplStatus {
 
 fn print_tokens(token_list: Vec<Token>) {
     for token in &token_list {
-        let tt = token.get_token_type().clone();
-        if tt == TokenType::Identifier
-            || tt == TokenType::IntegerLiteral
-            || tt == TokenType::FloatLiteral
-            || tt == TokenType::StringLiteral
+        let tt = &*token.get_token_type();
+        if *tt == TokenType::Identifier
+            || *tt == TokenType::IntegerLiteral
+            || *tt == TokenType::FloatLiteral
+            || *tt == TokenType::StringLiteral
         {
             println!("{:?}: {}", token.get_token_type(), token.get_lexeme());
         } else {

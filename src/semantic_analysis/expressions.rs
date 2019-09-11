@@ -4,6 +4,7 @@ use semantic_analysis::operation_types::OperationType;
 use utilities::utility;
 
 use std::fmt;
+use std::sync::Arc;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum ExprType {
@@ -24,13 +25,13 @@ pub struct ExprNode {
     expr_type: ExprType,
 
     // binary stuff
-    left_node: Option<&ExprNode>,
-    right_node: Option<&ExprNode>,
-    operation_type: Option<&OperationType>,
+    left_node: Option<Arc<ExprNode>>,
+    right_node: Option<Arc<ExprNode>>,
+    operation_type: Option<Arc<OperationType>>,
 
     // literals and variables
     value: Option<String>,
-    data_type: Option<DataType>,
+    data_type: Option<Arc<DataType>>,
 }
 
 impl ExprNode {
@@ -43,11 +44,11 @@ impl ExprNode {
         ExprNode {
             id: utility::get_new_uuid(),
             expr_type: ExprType::Binary,
-            left_node: Some(&left_node),
-            right_node: Some(&right_node),
+            left_node: Some(Arc::new(left_node)),
+            right_node: Some(Arc::new(right_node)),
             value: None,
-            operation_type: Some(&operation_type),
-            data_type: Some(&data_type),
+            operation_type: Some(Arc::new(operation_type)),
+            data_type: Some(Arc::new(data_type)),
         }
     }
     pub fn init_literal(value: String, data_type: DataType) -> ExprNode {
@@ -58,7 +59,7 @@ impl ExprNode {
             right_node: None,
             value: Some(value),
             operation_type: None,
-            data_type: Some(data_type),
+            data_type: Some(Arc::new(data_type)),
         }
     }
 
@@ -70,7 +71,7 @@ impl ExprNode {
             right_node: None,
             value: Some(value),
             operation_type: None,
-            data_type: Some(data_type),
+            data_type: Some(Arc::new(data_type)),
         }
     }
 
@@ -78,12 +79,12 @@ impl ExprNode {
         &self.expr_type
     }
 
-    pub fn get_right_node(&self) -> Option<&ExprNode> {
-        self.right_node.unwrap()
+    pub fn get_right_node(&self) -> Option<Arc<ExprNode>> {
+        self.right_node
     }
 
-    pub fn get_left_node(&self) -> Option<&ExprNode> {
-        self.left_node.unwrap()
+    pub fn get_left_node(&self) -> Option<Arc<ExprNode>> {
+        self.left_node
     }
 
     pub fn is_leaf(&self) -> bool {
@@ -108,16 +109,16 @@ impl ExprNode {
         self.id.to_string()
     }
 
-    pub fn get_type(&self) -> &DataType {
-        self.data_type
+    pub fn get_type(&self) -> Arc<DataType> {
+        self.data_type.unwrap()
     }
 
-    pub fn get_value(&self) -> &String {
-        &self.value
+    pub fn get_value(&self) -> String {
+        self.value.unwrap().to_string()
     }
 
-    pub fn get_operation_type(&self) -> &OperationType {
-        &self.operation_type
+    pub fn get_operation_type(&self) -> Arc<OperationType> {
+        self.operation_type.unwrap()
     }
 
     pub fn print(&self) {
@@ -132,7 +133,7 @@ impl Visualizer for ExprNode {
         if self_copy.expr_type == ExprType::Literal || self_copy.expr_type == ExprType::Variable {
             let data_type = match self_copy.data_type {
                 Some(data_type) => data_type,
-                None => DataType::AnyType,
+                None => Arc::new(DataType::AnyType),
             };
             let no_value = "No Value".to_string();
             let value = match self_copy.value {

@@ -1,6 +1,5 @@
 use code_generation::visualizer::Visualizer;
 use semantic_analysis::semantic_blocks::{BlockType, SemanticBlock};
-use semantic_analysis::statements::AssignmentBlock;
 use utilities::utility::Pair;
 
 pub struct Program {

@@ -191,7 +191,7 @@ impl ScanState {
                 );
             }
 
-            let mut current_atom = self.get_atom();
+            let current_atom = self.get_atom();
             self.push_increment_scan(&mut result, &mut increment_counter, &current_atom);
         }
 
@@ -576,7 +576,8 @@ impl Scanner {
             match new_token {
                 Err(scan_error) => return Err(scan_error),
                 Ok(scanned_token) => {
-                    if scanned_token.get_token_type() == TokenType::EndOfFile {
+                    let token_match = *scanned_token.get_token_type() == TokenType::EndOfFile;
+                    if token_match {
                         break;
                     } else {
                         tokens.push(scanned_token)

@@ -1,4 +1,5 @@
 use std::fmt;
+use std::sync::Arc;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum TokenType {
@@ -69,7 +70,7 @@ impl fmt::Display for TokenType {
 pub struct Token {
     line: usize,
     column: usize,
-    token_type: TokenType,
+    token_type: Arc<TokenType>,
     lexeme: String,
 }
 
@@ -78,17 +79,17 @@ impl Token {
         Token {
             line: line,
             column: column,
-            token_type: token_type,
+            token_type: Arc::new(token_type),
             lexeme: lexeme,
         }
     }
 
-    pub fn get_token_type(&self) -> &TokenType {
+    pub fn get_token_type(&self) -> Arc<TokenType> {
         self.token_type
     }
 
-    pub fn get_lexeme(&self) -> &String {
-        self.lexeme
+    pub fn get_lexeme(&self) -> String {
+        self.lexeme.to_string()
     }
 
     pub fn get_line(&self) -> usize {
