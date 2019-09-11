@@ -95,7 +95,7 @@ impl Parser {
         let compile_error: CompileError;
         if actual == expected {
             let debug_message = format!("{:?} found", expected);
-            log::log_debug(&debug_message);
+            dbg!(&debug_message);
             self.location += 1;
             return None;
         } else {
@@ -106,7 +106,7 @@ impl Parser {
     }
 
     pub fn parse(&mut self) -> Result<Program, CompileError> {
-        log::log_debug("Parse program");
+        dbg!("Parse program");
         let mut program_blocks = Vec::<SemanticBlock>::new();
         while self.get_lookahead() != TokenType::EndOfFile {
             let semantic_block = self.parse_unit();
@@ -151,7 +151,7 @@ impl Parser {
     }
 
     fn parse_assignment_statement(&mut self) -> Result<AssignmentBlock, CompileError> {
-        log::log_debug("Parse assignment statement");
+        dbg!("Parse assignment statement");
         let id = get_identifier!(self);
 
         eat_token!(self, TokenType::Identifier);
@@ -164,7 +164,7 @@ impl Parser {
     }
 
     fn parse_break_statement(&mut self) -> Result<BreakBlock, CompileError> {
-        log::log_debug("Parse break statement");
+        dbg!("Parse break statement");
 
         eat_token!(self, TokenType::BreakKeyword);
         eat_token!(self, TokenType::Semicolon);
@@ -173,7 +173,7 @@ impl Parser {
     }
 
     fn parse_return_statement(&mut self) -> Result<ReturnBlock, CompileError> {
-        log::log_debug("Parse return statement");
+        dbg!("Parse return statement");
         eat_token!(self, TokenType::ReturnKeyword);
 
         let expression = parse_error!(self.parse_expression());
@@ -183,7 +183,7 @@ impl Parser {
     }
 
     fn parse_infinite_loop(&mut self) -> Result<LoopBlock, CompileError> {
-        log::log_debug("Parse infinite loop");
+        dbg!("Parse infinite loop");
         let mut loop_blocks = Vec::<SemanticBlock>::new();
 
         eat_token!(self, TokenType::InfiniteKeyword);
@@ -220,7 +220,7 @@ impl Parser {
     }
 
     fn parse_function_block(&mut self) -> Result<FunctionBlock, CompileError> {
-        log::log_debug("Parse function");
+        dbg!("Parse function");
         eat_token!(self, TokenType::FunctionKeyword);
         let id = get_identifier!(self);
 
@@ -242,12 +242,12 @@ impl Parser {
     }
 
     fn parse_expression(&mut self) -> Result<ExprNode, CompileError> {
-        log::log_debug("Parse expression");
+        dbg!("Parse expression");
         self.parse_boolean_or_expression()
     }
 
     fn parse_boolean_or_expression(&mut self) -> Result<ExprNode, CompileError> {
-        log::log_debug("Parse boolean-or subexpr");
+        dbg!("Parse boolean-or subexpr");
         let mut left_node = parse_error!(self.parse_boolean_and_expression());
 
         while self.get_lookahead() == TokenType::BooleanOrOperator {
@@ -269,7 +269,7 @@ impl Parser {
     }
 
     fn parse_boolean_and_expression(&mut self) -> Result<ExprNode, CompileError> {
-        log::log_debug("Parse boolean-and subexpr");
+        dbg!("Parse boolean-and subexpr");
         let mut left_node = parse_error!(self.parse_boolean_comparison_expression());
 
         while self.get_lookahead() == TokenType::BooleanAndOperator {
@@ -291,7 +291,7 @@ impl Parser {
     }
 
     fn parse_boolean_comparison_expression(&mut self) -> Result<ExprNode, CompileError> {
-        log::log_debug("Parse boolean comparison subexpr");
+        dbg!("Parse boolean comparison subexpr");
         let mut left_node = parse_error!(self.parse_boolean_equality_expression());
 
         while self.get_lookahead() == TokenType::BooleanGtOperator
@@ -331,7 +331,7 @@ impl Parser {
     }
 
     fn parse_boolean_equality_expression(&mut self) -> Result<ExprNode, CompileError> {
-        log::log_debug("Parse boolean equality subexpr");
+        dbg!("Parse boolean equality subexpr");
         let mut left_node = parse_error!(self.parse_concat_expression());
 
         while self.get_lookahead() == TokenType::BooleanEqOperator
@@ -361,7 +361,7 @@ impl Parser {
     }
 
     fn parse_concat_expression(&mut self) -> Result<ExprNode, CompileError> {
-        log::log_debug("Parse concat subexpr");
+        dbg!("Parse concat subexpr");
         let mut left_node = parse_error!(self.parse_mathematical_expression());
 
         while self.get_lookahead() == TokenType::ConcatOperator {
@@ -383,7 +383,7 @@ impl Parser {
     }
 
     fn parse_mathematical_expression(&mut self) -> Result<ExprNode, CompileError> {
-        log::log_debug("Parse mathematical subexpr");
+        dbg!("Parse mathematical subexpr");
         let mut left_node = parse_error!(self.parse_term());
 
         while self.get_lookahead() == TokenType::PlusOperator
@@ -414,7 +414,7 @@ impl Parser {
     }
 
     fn parse_term(&mut self) -> Result<ExprNode, CompileError> {
-        log::log_debug("Parse term subexpr");
+        dbg!("Parse term subexpr");
         let mut left_node = parse_error!(self.parse_factor());
 
         while self.get_lookahead() == TokenType::MultiplyOperator
@@ -521,7 +521,7 @@ impl Parser {
     }
 
     fn parse_factor(&mut self) -> Result<ExprNode, CompileError> {
-        log::log_debug("Parse factor subexpr");
+        dbg!("Parse factor subexpr");
         match self.get_lookahead() {
             TokenType::LeftParenthesis => self.parse_nested_expression(),
             TokenType::IntegerLiteral => self.parse_integer_literal(),
