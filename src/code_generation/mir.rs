@@ -21,8 +21,7 @@ pub struct MirInstructions {
 
 impl MirInstructions {
     pub fn print(&self) {
-        let self_copy = self.clone();
-        let blocks = self_copy.blocks;
+        let blocks = &self.blocks;
         let mut block_counter = 1;
         for block in blocks {
             let instructions = block.instructions;
@@ -74,8 +73,7 @@ pub struct MirOperator {
 
 impl fmt::Display for MirOperator {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let self_copy = self.clone();
-        if let Some(value) = self_copy.literal_value {
+        if let Some(value) = &self.literal_value {
             return write!(
                 f,
                 "{}{}",

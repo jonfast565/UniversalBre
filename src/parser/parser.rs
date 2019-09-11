@@ -65,7 +65,7 @@ impl Parser {
         if self.location == self.tokens.len() {
             return TokenType::EndOfFile;
         }
-        self.tokens[self.location].get_token_type().clone()
+        self.tokens[self.location].get_token_type()
     }
 
     fn eat_lookahead(&mut self, token_type: TokenType) -> Option<CompileError> {
@@ -77,7 +77,7 @@ impl Parser {
         if self.location == self.tokens.len() {
             return Token::init(0, 0, TokenType::EndOfFile, String::new());
         }
-        self.tokens[self.location].clone()
+        self.tokens[self.location]
     }
 
     fn get_compile_error(&self, message: String) -> CompileError {

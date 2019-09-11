@@ -24,9 +24,9 @@ pub struct ExprNode {
     expr_type: ExprType,
 
     // binary stuff
-    left_node: Option<Box<ExprNode>>,
-    right_node: Option<Box<ExprNode>>,
-    operation_type: Option<OperationType>,
+    left_node: Option<&ExprNode>,
+    right_node: Option<&ExprNode>,
+    operation_type: Option<&OperationType>,
 
     // literals and variables
     value: Option<String>,
@@ -43,11 +43,11 @@ impl ExprNode {
         ExprNode {
             id: utility::get_new_uuid(),
             expr_type: ExprType::Binary,
-            left_node: Some(Box::new(left_node)),
-            right_node: Some(Box::new(right_node)),
+            left_node: Some(&left_node),
+            right_node: Some(&right_node),
             value: None,
-            operation_type: Some(operation_type),
-            data_type: Some(data_type),
+            operation_type: Some(&operation_type),
+            data_type: Some(&data_type),
         }
     }
     pub fn init_literal(value: String, data_type: DataType) -> ExprNode {
@@ -74,16 +74,16 @@ impl ExprNode {
         }
     }
 
-    pub fn get_expression_type(&self) -> ExprType {
-        self.expr_type.clone()
+    pub fn get_expression_type(&self) -> &ExprType {
+        &self.expr_type
     }
 
-    pub fn get_right_node(&self) -> Option<Box<ExprNode>> {
-        self.clone().right_node
+    pub fn get_right_node(&self) -> Option<&ExprNode> {
+        self.right_node.unwrap()
     }
 
-    pub fn get_left_node(&self) -> Option<Box<ExprNode>> {
-        self.clone().left_node
+    pub fn get_left_node(&self) -> Option<&ExprNode> {
+        self.left_node.unwrap()
     }
 
     pub fn is_leaf(&self) -> bool {
@@ -108,16 +108,16 @@ impl ExprNode {
         self.id.to_string()
     }
 
-    pub fn get_type(&self) -> DataType {
-        self.clone().data_type.unwrap()
+    pub fn get_type(&self) -> &DataType {
+        self.data_type
     }
 
-    pub fn get_value(&self) -> String {
-        self.clone().value.unwrap()
+    pub fn get_value(&self) -> &String {
+        &self.value
     }
 
-    pub fn get_operation_type(&self) -> OperationType {
-        self.clone().operation_type.unwrap()
+    pub fn get_operation_type(&self) -> &OperationType {
+        &self.operation_type
     }
 
     pub fn print(&self) {
