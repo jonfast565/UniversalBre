@@ -19,7 +19,7 @@ impl fmt::Display for ExprType {
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct ExprNode {
     pub id: String,
     expr_type: ExprType,
@@ -87,20 +87,20 @@ impl ExprNode {
         self.left_node.clone()
     }
 
-    pub fn is_leaf(&self) -> bool {
-        self.expr_type != ExprType::Binary
+    pub fn is_internal(&self) -> bool {
+        self.expr_type == ExprType::Binary
     }
 
     pub fn left_child_is_internal(&self) -> bool {
         match self.clone().left_node {
-            Some(node) => !node.is_leaf(),
+            Some(node) => node.expr_type == ExprType::Binary,
             None => false,
         }
     }
 
     pub fn right_child_is_internal(&self) -> bool {
         match self.clone().right_node {
-            Some(node) => !node.is_leaf(),
+            Some(node) => node.expr_type == ExprType::Binary,
             None => false,
         }
     }
@@ -119,10 +119,6 @@ impl ExprNode {
 
     pub fn get_operation_type(&self) -> Arc<OperationType> {
         self.operation_type.clone().unwrap()
-    }
-
-    pub fn print(&self) {
-        println!("Expr Node {}", self.expr_type.to_string());
     }
 }
 

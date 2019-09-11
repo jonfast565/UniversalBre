@@ -1,5 +1,4 @@
 use utilities::error::CompileError;
-use utilities::log;
 
 use semantic_analysis::data_types::DataType;
 use semantic_analysis::expressions::ExprNode;
@@ -38,14 +37,6 @@ macro_rules! get_identifier {
             panic!("Invalid lookahead");
         };
     };
-}
-
-fn or_many(many_ors: Vec<bool>) -> bool {
-    let mut result = false;
-    for or in many_ors {
-        result = result || or;
-    }
-    return result;
 }
 
 pub struct Parser {

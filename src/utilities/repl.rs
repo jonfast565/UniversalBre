@@ -69,9 +69,11 @@ fn print_tokens(token_list: Vec<Token>) {
             || tt == TokenType::FloatLiteral
             || tt == TokenType::StringLiteral
         {
-            println!("{:?}: {}", token.get_token_type(), token.get_lexeme());
+            let token_string = format!("{:?}: {}", token.get_token_type(), token.get_lexeme());
+            dbg!(token_string);
         } else {
-            println!("{:?}", token.get_token_type());
+            let token_type_string = format!("{:?}", token.get_token_type());
+            dbg!(token_type_string);
         }
     }
 }
@@ -105,15 +107,11 @@ pub fn compile(input: String) -> () {
                 Ok(program) => {
                     // graphviz output
                     let _ = utility::write_file(&"gviz.txt".to_string(), &program.build_graphviz());
-
                     // mir generator
                     let mir_instructions = MirInstructionGenerator{ debug: true }.generate_mir(&program);
-                    mir_instructions.print();
-
                     // assembly generator
                     let asm_instructions = FasmGenerator{ debug: true }.generate_asm(&mir_instructions);
                     let _ = utility::write_file(&"asm.txt".to_string(), &asm_instructions);
-
                     log::log_info("Success!");
                 }
                 Err(contents) => {

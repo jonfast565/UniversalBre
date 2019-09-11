@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+/*
 pub struct SymbolRecord {
     id: String,
     offset: u8,
@@ -32,4 +33,4 @@ impl SymbolTable {
         self.records.get(&name)
     }
 }
-
+*/

@@ -75,8 +75,8 @@ impl ScanState {
         }
 
         // TODO: Enable code for debugging, but make it switchable
-        // log::log_debug(&format!("Current location is '{}'", self.location));
-        // log::log_debug(&format!("Current char is '{}'", self.input[self.location]));
+        // dbg!(&format!("Current location is '{}'", self.location));
+        // dbg!(&format!("Current char is '{}'", self.input[self.location]));
 
         self.input[self.location]
     }
@@ -181,8 +181,8 @@ impl ScanState {
         for keyword_char in &keyword_chars {
             let lowercase_char = keyword_char.to_lowercase().next().unwrap();
 
-            // log::log_debug(&format!("Sequence char is '{}'", lowercase_char));
-            // log::log_debug(&format!("Current char is '{}'", self.char_at()));
+            // dbg!(&format!("Sequence char is '{}'", lowercase_char));
+            // dbg!(&format!("Current char is '{}'", self.char_at()));
 
             if self.char_at() != lowercase_char {
                 self.decrement_location(increment_counter);

@@ -4,8 +4,8 @@ use semantic_analysis::semantic_blocks::SemanticBlock;
 #[derive(Debug, Clone, PartialEq)]
 pub enum LoopType {
     InfiniteLoop,
-    ConditionalLoop,
-    ForLoop,
+    // ConditionalLoop,
+    // ForLoop,
 }
 
 #[derive(Clone, PartialEq)]

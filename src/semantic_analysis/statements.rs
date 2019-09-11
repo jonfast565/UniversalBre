@@ -34,6 +34,10 @@ impl AssignmentBlock {
     pub fn get_expression(&self) -> Option<Arc<ExprNode>> {
         self.expression.clone()
     }
+
+    pub fn get_assignment_id(&self) -> String {
+        self.assignment_id.clone().unwrap().to_string()
+    }
 }
 
 impl StatementTypeTrait for AssignmentBlock {
