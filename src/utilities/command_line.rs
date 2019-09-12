@@ -1,7 +1,5 @@
 extern crate clap;
-
-use self::clap::{App /*, SubCommand */, Arg};
-use std::env;
+use self::clap::{App, Arg};
 
 pub struct CommandLineArguments {
     pub interactive : bool,
