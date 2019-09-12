@@ -152,6 +152,7 @@ impl MirInstructionGenerator {
         if !e.is_internal() {
             return instructions;
         }
+        
         let left_node = e.get_left_node().unwrap();
         let right_node = e.get_right_node().unwrap();
 
