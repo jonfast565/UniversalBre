@@ -91,6 +91,20 @@ impl ExprNode {
         self.expr_type == ExprType::Binary
     }
 
+    pub fn has_left_child(&self) -> bool {
+        match self.left_node {
+            Some(_) => true,
+            None => false,
+        }
+    }
+
+    pub fn has_right_child(&self) -> bool {
+        match self.right_node {
+            Some(_) => true,
+            None => false,
+        }
+    }
+
     pub fn left_child_is_internal(&self) -> bool {
         match self.clone().left_node {
             Some(node) => node.expr_type == ExprType::Binary,

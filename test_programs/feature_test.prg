@@ -33,3 +33,5 @@ fn blah (a, b, c) {
 g = true;
 h = true && false;
 i = g && h || i;
+
+infinite {}

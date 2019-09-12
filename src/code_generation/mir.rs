@@ -143,37 +143,54 @@ impl MirInstructionGenerator {
     }
 
     fn generate_expression_mir(&self, e: Arc<ExprNode>) -> Vec<MirInstruction> {
-        let instructions = self.generate_expression_mir_internal(e);
-        instructions
-    }
-
-    fn generate_expression_mir_internal(&self, e: Arc<ExprNode>) -> Vec<MirInstruction> {
         let mut instructions = Vec::<MirInstruction>::new();
+
+        let expr_node_type = e.get_expression_type();
+        if *expr_node_type != ExprType::Binary && !e.has_left_child() && !e.has_right_child() {
+            let node_decode = self.decode_expr(e);
+            instructions.push(node_decode);
+            return instructions;
+        }
+
         if !e.is_internal() {
             return instructions;
         }
-        
-        let left_node = e.get_left_node().unwrap();
-        let right_node = e.get_right_node().unwrap();
 
         if e.left_child_is_internal() {
             let left_node_int = e.get_left_node().unwrap();
-            let mut left_instructions = self.generate_expression_mir_internal(left_node_int);
+            let mut left_instructions = self.generate_expression_mir(left_node_int);
             instructions.append(&mut left_instructions);
         }
 
         if e.right_child_is_internal() {
             let right_node_int = e.get_right_node().unwrap();
-            let mut right_instructions = self.generate_expression_mir_internal(right_node_int);
+            let mut right_instructions = self.generate_expression_mir(right_node_int);
             instructions.append(&mut right_instructions);
         }
 
-        let internal_instruction = self.decode_internal(e, left_node, right_node);
+        let left_node = e.get_left_node().unwrap();
+        let right_node = e.get_right_node().unwrap();
+        let internal_instruction = self.decode_expr_chain(e, left_node, right_node);
         instructions.push(internal_instruction);
         instructions
     }
 
-    fn decode_internal(
+    fn decode_expr(&self, e: Arc<ExprNode>) -> MirInstruction {
+        assert!(e.get_expression_type() != &ExprType::Binary);
+        let result_instruction = MirInstruction {
+            label: None,
+            result_operator: Some(self.decode_operand(e)),
+            operand: OperationType::NoOperation,
+            first_arg_operator: None,
+            second_arg_operator: None,
+            flags: MirFlags {
+                requires_cast: false,
+            },
+        };
+        result_instruction
+    }
+
+    fn decode_expr_chain(
         &self,
         e: Arc<ExprNode>,
         left: Arc<ExprNode>,

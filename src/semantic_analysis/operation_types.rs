@@ -18,6 +18,8 @@ pub enum OperationType {
     SubtractionOperation,
     MultiplicationOperation,
     DivisionOperation,
+
+    NoOperation
 }
 
 impl fmt::Display for OperationType {
