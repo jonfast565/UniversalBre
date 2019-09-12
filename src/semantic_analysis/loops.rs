@@ -8,7 +8,7 @@ pub enum LoopType {
     // ForLoop,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct LoopBlock {
     loop_type: LoopType,
     statement_list: Vec<SemanticBlock>,

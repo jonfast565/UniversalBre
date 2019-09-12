@@ -1,7 +1,7 @@
 use code_generation::visualizer::Visualizer;
 use semantic_analysis::semantic_blocks::SemanticBlock;
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct ArgumentBlock {
     name: String,
 }
@@ -12,7 +12,7 @@ impl ArgumentBlock {
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct FunctionBlock {
     name: String,
     arguments: Vec<ArgumentBlock>,

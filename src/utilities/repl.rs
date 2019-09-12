@@ -108,6 +108,7 @@ pub fn compile(input: String) -> () {
                     // graphviz output
                     let _ = utility::write_file(&"gviz.txt".to_string(), &program.build_graphviz());
                     // mir generator
+                    dbg!(&program);
                     let mir_instructions = MirInstructionGenerator{ debug: true }.generate_mir(&program);
                     // assembly generator
                     let asm_instructions = FasmGenerator{ debug: true }.generate_asm(&mir_instructions);

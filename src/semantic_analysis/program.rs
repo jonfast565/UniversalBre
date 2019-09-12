@@ -2,6 +2,7 @@ use code_generation::visualizer::Visualizer;
 use semantic_analysis::semantic_blocks::{BlockType, SemanticBlock};
 use utilities::utility::Pair;
 
+#[derive(Debug)]
 pub struct Program {
     blocks: Vec<SemanticBlock>,
 }

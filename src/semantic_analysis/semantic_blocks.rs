@@ -13,7 +13,7 @@ pub enum BlockType {
     ReturnBlock,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct SemanticBlock {
     pub id: String,
     pub block_type: BlockType,

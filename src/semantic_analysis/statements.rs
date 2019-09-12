@@ -15,7 +15,7 @@ pub trait StatementTypeTrait {
     fn get_statement_type(&self) -> StatementType;
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct AssignmentBlock {
     pub id: String,
     assignment_id: Option<String>,
@@ -63,7 +63,7 @@ impl Visualizer for AssignmentBlock {
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct ReturnBlock {
     pub id: String,
     pub return_expression: Option<Arc<ExprNode>>,
@@ -84,7 +84,7 @@ impl StatementTypeTrait for ReturnBlock {
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct BreakBlock {
     pub id: String,
 }
