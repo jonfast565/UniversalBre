@@ -30,6 +30,6 @@ pub fn get_arguments() -> CommandLineArguments {
 
     CommandLineArguments {
         interactive: matches.is_present("interactive"),
-        file_path: matches.value_of("file_path").unwrap_or("./test_programs/feature_test.prg").to_string(),
+        file_path: matches.value_of("file_path").unwrap_or("./test_programs/minimal_test.prg").to_string(),
     }
 }
