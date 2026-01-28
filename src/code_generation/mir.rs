@@ -219,11 +219,53 @@ impl MirInstructionGenerator {
                 literal_value: Some(e.get_value()),
                 variable_identifier: None,
             },
+            ExprType::Variable => {
+                let value = e.get_value();
+                if *e.get_type() == DataType::StringType && value.starts_with('\"') && value.ends_with('\"') {
+                    MirOperator {
+                        operator_type: *e.get_type(),
+                        literal_value: Some(value),
+                        variable_identifier: None,
+                    }
+                } else {
+                    MirOperator {
+                        operator_type: *e.get_type(),
+                        literal_value: None,
+                        variable_identifier: Some(value),
+                    }
+                }
+            }
             _ => MirOperator {
                 operator_type: *e.get_type(),
                 literal_value: None,
                 variable_identifier: Some(e.get_id()),
             },
         }
+    }
+}
+
+impl MirInstructions {
+    pub fn get_blocks(&self) -> Vec<MirInstructionBlock> {
+        self.blocks.clone()
+    }
+}
+
+impl MirVariableTarget {
+    pub fn get_assignment_var_id(&self) -> String {
+        self.assignment_var_id.clone()
+    }
+
+    pub fn get_assignment_var_name(&self) -> String {
+        self.assignment_var_name.clone()
+    }
+}
+
+impl MirInstructionBlock {
+    pub fn get_assignment_variable(&self) -> Option<MirVariableTarget> {
+        self.assignment_variable.clone()
+    }
+
+    pub fn get_instructions(&self) -> Vec<MirInstruction> {
+        self.instructions.clone()
     }
 }

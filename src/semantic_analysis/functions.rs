@@ -10,6 +10,10 @@ impl ArgumentBlock {
     pub fn init(name: String) -> ArgumentBlock {
         ArgumentBlock { name: name }
     }
+
+    pub fn get_name(&self) -> String {
+        self.name.clone()
+    }
 }
 
 #[derive(Clone, PartialEq, Debug)]
@@ -30,6 +34,18 @@ impl FunctionBlock {
             arguments: arguments,
             body: body,
         }
+    }
+
+    pub fn get_name(&self) -> String {
+        self.name.clone()
+    }
+
+    pub fn get_arguments(&self) -> Vec<ArgumentBlock> {
+        self.arguments.clone()
+    }
+
+    pub fn get_body(&self) -> Vec<SemanticBlock> {
+        self.body.clone()
     }
 }
 

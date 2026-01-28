@@ -21,6 +21,14 @@ impl LoopBlock {
             statement_list: statement_list,
         }
     }
+
+    pub fn get_loop_type(&self) -> LoopType {
+        self.loop_type.clone()
+    }
+
+    pub fn get_statement_list(&self) -> Vec<SemanticBlock> {
+        self.statement_list.clone()
+    }
 }
 
 impl Visualizer for LoopBlock {

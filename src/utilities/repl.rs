@@ -12,6 +12,7 @@ use scanner::token::{Token, TokenType};
 use code_generation::visualizer::Visualizer;
 use code_generation::mir::MirInstructionGenerator;
 use code_generation::codegen::FasmGenerator;
+use code_generation::llvm::LlvmGenerator;
 
 struct ReplStatus {
     input: String,
@@ -113,6 +114,9 @@ pub fn compile(input: String) -> () {
                     // assembly generator
                     let asm_instructions = FasmGenerator{ debug: true }.generate_asm(&mir_instructions);
                     let _ = utility::write_file(&"asm.txt".to_string(), &asm_instructions);
+                    // llvm generator
+                    let llvm_ir = LlvmGenerator { debug: true }.generate_ir(&program);
+                    let _ = utility::write_file(&"llvm.ll".to_string(), &llvm_ir);
                     log::log_info("Success!");
                 }
                 Err(contents) => {
